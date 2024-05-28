@@ -24,7 +24,7 @@
 
 	--page-padding: 7vw;
 	
-	--normal-height: 2.5rem;
+	--normal-height: 2.75rem;
 	--border-radius: 5px;
 
 	--border-width: 2px;

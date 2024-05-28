@@ -38,13 +38,13 @@ const slots = useSlots()
         </SystemP>
 
         <slot name="icon"></slot>
-        <Icon v-if="!slots.icon" :name="icon" size="1.4rem" :color="color"></Icon>
+        <Icon v-if="!slots.icon && icon" :name="icon" size="1.4rem" :color="color"></Icon>
     </SystemFlex>
 </template>
 
 <style scoped lang="scss">
 .button {
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 0 1.5em;
     height: var(--normal-height);
 
