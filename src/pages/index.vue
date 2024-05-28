@@ -2,8 +2,6 @@
 definePageMeta({
     layout: "navigation"
 })
-
-const auth = useAuth(true)
 </script>
 
 <template>

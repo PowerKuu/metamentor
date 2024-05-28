@@ -5,21 +5,42 @@ const locale = useLocale()
 <template>
     <SystemTopNav>
         <template #left>
-            <NuxtLink href="/sign">
+            <NuxtLink href="/">
                 <SystemFlex gap="0.5rem" align="center">
-                    <SystemP>
+                    <SystemP class="name">
                         {{ locale.name }}
                     </SystemP>
-                    -
-                    <SystemPSmall>
-                        SGS Marketing
-                    </SystemPSmall>
+
+                    <Icon color="var(--primary)" name="streamline:artificial-intelligence-spark-solid" size="1.5rem"></Icon>
                 </SystemFlex>
             </NuxtLink>
         </template>
 
         <template #right>
-            <SystemFlex align="center" gap="1rem">
+            <SystemFlex align="center" gap="1.5rem">
+                <NuxtLink href="/contact">
+                    <SystemP>
+                        Contact
+                    </SystemP>
+                </NuxtLink>
+
+                <NuxtLink href="/contact">
+                    <SystemP>
+                        About
+                    </SystemP>
+                </NuxtLink>
+
+                <NuxtLink href="/plans">
+                    <SystemP>
+                        Plans
+                    </SystemP>
+                </NuxtLink>
+                
+                <NuxtLink href="/chat">
+                    <SystemButton gap="0.5rem" icon="ic:baseline-message">
+                        Chat
+                    </SystemButton>
+                </NuxtLink>
                 <SystemUserIcon></SystemUserIcon>
             </SystemFlex>
         </template>
@@ -33,5 +54,10 @@ const locale = useLocale()
 <style scoped lang="scss">
 .wrapper {
     padding: 7rem var(--page-padding);
+}
+
+.name {
+    font-weight: 600;
+    color: var(--primary);
 }
 </style>
