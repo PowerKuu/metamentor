@@ -1,0 +1,33 @@
+{
+  "name": "metamentor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx serve ./.output/public",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.4.0",
+    "@prisma/client": "^5.14.0",
+    "@vueuse/components": "^10.9.0",
+    "@vueuse/nuxt": "^10.9.0",
+    "nuxt": "^3.10.3",
+    "nuxt-icon": "^0.6.9",
+    "sass": "^1.71.1",
+    "serve": "latest",
+    "vue": "^3.4.19",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.11",
+    "prisma": "^5.14.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
+  }
+}
