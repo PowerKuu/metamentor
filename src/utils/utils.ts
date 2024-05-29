@@ -1,11 +1,11 @@
 import { useLocale } from "~/locale/locale"
 import type { FunctionNames, Functions } from "@/server/server"
+import moment from "moment"
 
 // Add autoimport
 export { useLocale }
 export type ServerFunctionResult<T extends FunctionNames> = Awaited<ReturnType<Functions[T]>> | number
 export type NoServerFunctionErrors<T> = T extends number ? never : T
-
 
 export async function serverFunction<T extends FunctionNames>(operation: T, data: Parameters<Functions[T]>[0]): Promise<ServerFunctionResult<T>> {
     const returned = await fetch(`/api/${operation as string}`, {
@@ -75,3 +75,6 @@ export function useJsonStorage<T>(key: string, defaultValue: T) {
     return newListener
 }
 
+export function dateFromNow(date: Date) {
+    return moment(date).fromNow()
+}

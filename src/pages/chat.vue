@@ -1,22 +1,40 @@
 <script setup lang="ts">
+import type { Chat } from '@prisma/client'
+
 definePageMeta({
     layout: "navigation"
+})
+
+const chats = ref<Chat[]>([])
+
+chats.value.push({
+    id: "d",
+    name: "Chat 1",
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    
+    userId: "1",
+    modelId: "d"
 })
 </script>
 
 <template>
-    <SytemFlex class="sidebar border">
-        <SystemP>
-            Chat
-        </SystemP>
-    </SytemFlex>
+    <SystemFlex class="wrapper">
+        <SytemFlex class="sidebar border">
+            <ChatListItem v-for="chat in chats" :key="chat.id" :chat="chat" />
+        </SytemFlex>
+    </SystemFlex>
 </template>
 
 <style scoped lang="scss">
 .sidebar {
-    width: 20rem;
     height: 100%;
-    background: var(--background);
-    border-right: 1px solid var(--border);
+    padding: 0.5rem;
+}
+
+.wrapper {
+    height: 80vh;
+    min-height: 30rem;
+    flex: 1;
 }
 </style>

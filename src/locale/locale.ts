@@ -1,5 +1,7 @@
+import moment from "moment"
 import en from "./locales/en"
 //import no from "./locales/no"
+
 
 export type LocaleDataBlueprint = typeof en
 
@@ -44,7 +46,16 @@ export function useLocale() {
         lang.value = key
     })
 
-    return computed<LocaleDataBlueprint>(() => locales[lang.value].data)
+    if (!locales[lang.value]) lang.value = defaultLocaleKey
+
+    return computed<LocaleDataBlueprint>(() => {
+        const data = locales[lang.value].data
+
+        // Set moment locale (optional)
+        if (data.momentLocale) moment.locale(data.momentLocale)
+
+        return data
+    })
 }
 
 export async function detectLocaleKey() {
