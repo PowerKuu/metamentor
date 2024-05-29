@@ -1,4 +1,7 @@
 const en = {
+    momentLocale: "en",
+
+    
     next: "Next",
     back: "< Go back",
 

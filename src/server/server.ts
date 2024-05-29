@@ -3,6 +3,7 @@ import * as status_ from "./functions/status"
 
 export const prisma = new PrismaClient()
 
+
 export const functions = { ...status_ }
 
 export type Functions = typeof functions
