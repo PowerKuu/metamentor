@@ -37,7 +37,7 @@ const locale = useLocale()
                 </NuxtLink>
                 
                 <NuxtLink href="/chat">
-                    <SystemButton gap="0.5rem" icon="ic:baseline-message">
+                    <SystemButton gap="0.5rem" icon="material-symbols:chat-paste-go">
                         Chat
                     </SystemButton>
                 </NuxtLink>

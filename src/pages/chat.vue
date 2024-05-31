@@ -1,11 +1,38 @@
 <script setup lang="ts">
 import type { Chat } from '@prisma/client'
+import type { PersonProp, Widget  } from '@/components/system/SlickAvatar.vue'
 
 definePageMeta({
     layout: "navigation"
 })
 
 const chats = ref<Chat[]>([])
+
+const resizeElem = ref(null)
+const { height: resizeHeight } = useElementBounding(resizeElem)
+
+const resizeHeightOptions = {
+    min: 200,
+    max: 400,
+    initial: 300
+}
+
+const activeAvatar = ref<PersonProp>(null)
+
+let lastMouth: Widget<"mouth"> | null = null
+
+function openMouth() {
+    if (!activeAvatar.value) return
+
+    lastMouth = activeAvatar.value.mouth.widget
+    activeAvatar.value.mouth.widget = "laughing"
+}
+
+function closeMouth() {
+    if (!activeAvatar.value || !lastMouth) return
+
+    activeAvatar.value.mouth.widget = lastMouth
+}
 
 chats.value.push({
     id: "d",
@@ -16,13 +43,58 @@ chats.value.push({
     userId: "1",
     modelId: "d"
 })
+
+chats.value.push({
+    id: "e",
+    name: "Chat 2",
+    updatedAt: new Date(),
+    createdAt: new Date(),
+    
+    userId: "1",
+    modelId: "e"
+})
+
 </script>
 
 <template>
-    <SystemFlex class="wrapper">
-        <SytemFlex class="sidebar border">
-            <ChatListItem v-for="chat in chats" :key="chat.id" :chat="chat" />
-        </SytemFlex>
+    <SystemFlex grow="1" gap="1rem" class="wrapper">
+        <SystemFlex gap="1rem" direction="column" class="sidebar border">
+            <SystemFlex gap="0.5rem" direction="column">
+                <SystemInput value="" placeholder="Search">
+                    <template #icon>
+                        <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
+                    </template>
+                </SystemInput>
+
+                <SystemFlex gap="0.5rem" direction="column">
+                    <ChatListItem v-for="chat in chats" :key="chat.id" :chat="chat" />
+                </SystemFlex>
+            </SystemFlex>
+
+
+            <SystemButton class="seperator"justify="space-between" icon="material-symbols:chat-add-on">
+                New chat
+            </SystemButton>
+        </SystemFlex>
+
+        <SystemFlex direction="column" class="border chat" grow="1">
+            <SystemFlex grow="1" direction="column">
+                <SystemResizable handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
+                    <SystemFlex justify="center" class="model">
+                        <SystemSlickAvatar :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
+                    </SystemFlex>
+                </SystemResizable>
+
+                <SystemHDragbar></SystemHDragbar>
+            </SystemFlex>
+
+
+            <SystemFlex>
+                <SystemButton @click="openMouth">
+                    Test
+                </SystemButton>
+            </SystemFlex grow="1">
+        </SystemFlex>
     </SystemFlex>
 </template>
 
@@ -30,11 +102,27 @@ chats.value.push({
 .sidebar {
     height: 100%;
     padding: 0.5rem;
+
+    .seperator {
+        margin-top: auto;
+    }
 }
 
 .wrapper {
-    height: 80vh;
+    height: 85vh;
     min-height: 30rem;
+}
+
+
+.chat {
     flex: 1;
+    height: 100%;
+
+    .model-resize {
+        width: 100% !important;
+    }
+
+    .model {
+    }
 }
 </style>

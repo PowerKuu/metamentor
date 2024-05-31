@@ -106,6 +106,8 @@ onMounted(() => {
             @focusout="focusout"
             @input="emit(`input`)"
 
+            :data-has-icon="!!slots.icon"
+
             :name="name"
             :type="(type as any)"
             :min="min"
@@ -137,7 +139,7 @@ onMounted(() => {
     cursor: text;
 
     .input {
-        padding: 0.5rem 0.7rem;
+        padding: 0.5rem 1rem;
 
         width: 100%;
         height: 100%;
@@ -151,6 +153,14 @@ onMounted(() => {
         font-weight: inherit;
 
         outline: none;
+
+        &[data-has-icon="true"] {
+            padding-left: 0.5rem;
+
+            &:focus {
+                padding-left: 1rem;
+            }
+        }
 
         &:-webkit-autofill,
         &:-webkit-autofill:hover,
@@ -181,11 +191,18 @@ onMounted(() => {
 
     &[data-has-value="true"] {
         outline: none;
+
+        .icon {
+            display: none;
+        }
+
+        .input {
+            padding-left: 1rem;
+        }
     }
 
     .input::placeholder {
-        color: var(--text);
-        opacity: 0.3;
+        color: var(--weak-text);
     }
 }
 </style>
