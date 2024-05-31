@@ -20,6 +20,7 @@ model User {
   token     String   @unique @default(cuid())
 
   chats     Chat[]
+  chatModels ChatModel[]
 }
 
 model ChatModel {
@@ -28,7 +29,13 @@ model ChatModel {
   name      String
   system    String
 
+  icon      String
+
+  owner     User    @relation(fields: [ownerId], references: [id])
+  ownerId   String
+
   chats     Chat[]
+  messages  Message[]
 }
 
 model Chat {
@@ -42,18 +49,19 @@ model Chat {
   userId    String
 
   messages  Message[]
-
-  model    ChatModel @relation(fields: [modelId], references: [id])
-  modelId  String
+  models    ChatModel[]
 }
 
 model Message {
   id        String   @id @default(cuid())
   text      String
 
+  createdAt DateTime @default(now())
+
   chat      Chat   @relation(fields: [chatId], references: [id])
   chatId    String
 
-  sentByUser  Boolean
+  sentBy  ChatModel?   @relation(fields: [sentById], references: [id])
+  sentById String?
 }
 

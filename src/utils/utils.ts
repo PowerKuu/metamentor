@@ -78,3 +78,7 @@ export function useJsonStorage<T>(key: string, defaultValue: T) {
 export function dateFromNow(date: Date) {
     return moment(date).fromNow()
 }
+
+export function capatalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}

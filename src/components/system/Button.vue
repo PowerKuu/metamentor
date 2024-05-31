@@ -29,7 +29,7 @@ const slots = useSlots()
 
         class="button"
 
-        gap="0.25rem"
+        gap="0.5rem"
     >
         <SystemP class="text" :style="{
             color: props.color
@@ -45,7 +45,7 @@ const slots = useSlots()
 <style scoped lang="scss">
 .button {
     border-radius: var(--border-radius);
-    padding: 0 1.5em;
+    padding: 0 1em;
     height: var(--normal-height);
 
     user-select: none;

@@ -20,11 +20,12 @@
 	--background: #ffffff;
 	--neutral: #f9f8f7;
 	--text: #001C44;
+	--weak-text: #001c4474;
 	--error: #FF0000;
 
 	--page-padding: 7vw;
 	
-	--normal-height: 2.75rem;
+	--normal-height: 3rem;
 	--border-radius: 5px;
 
 	--border-width: 2px;
