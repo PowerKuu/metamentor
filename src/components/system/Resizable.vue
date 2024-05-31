@@ -112,6 +112,8 @@ const handleSizeCSS = computed(() => props.handleSize ? props.handleSize : "1rem
         position: absolute;
         width: 100%;
 
+        z-index: 10;
+
         bottom: calc(-1 * var(--handle-size) / 2);
 
         min-height: var(--handle-size);
@@ -132,6 +134,8 @@ const handleSizeCSS = computed(() => props.handleSize ? props.handleSize : "1rem
         content: "";
         position: absolute;
         height: 100%;
+
+        z-index: 10;
 
         right: calc(-1 * var(--handle-size) / 2);
 

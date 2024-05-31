@@ -75,6 +75,10 @@ html, body {
 	border-radius: var(--border-radius);
 }
 
+.hidden {
+	display: none;
+}
+
 a {
 	text-decoration: none;
 	color: inherit;

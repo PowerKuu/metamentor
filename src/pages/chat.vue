@@ -10,22 +10,32 @@ const chats = ref<Chat[]>([])
 
 const resizeElem = ref(null)
 const { height: resizeHeight } = useElementBounding(resizeElem)
+const { height: windowHeight } = useWindowSize()
 
-const resizeHeightOptions = {
-    min: 200,
-    max: 400,
-    initial: 300
-}
+const resizeHeightOptions = computed(() => {
+    console.log(windowHeight.value)
+    return {
+        min: 200,
+        max: Math.max(windowHeight.value / 2, 500),
+        initial: Math.max(windowHeight.value / 3, 300)
+    }
+})
+
+const modelAudio: HTMLAudioElement = new Audio()
 
 const activeAvatar = ref<PersonProp>(null)
-
 let lastMouth: Widget<"mouth"> | null = null
+
 
 function openMouth() {
     if (!activeAvatar.value) return
 
     lastMouth = activeAvatar.value.mouth.widget
-    activeAvatar.value.mouth.widget = "laughing"
+    activeAvatar.value.mouth.widget = "surprised"
+
+    test().then(() => {
+        closeMouth()
+    })
 }
 
 function closeMouth() {
@@ -41,7 +51,6 @@ chats.value.push({
     createdAt: new Date(),
     
     userId: "1",
-    modelId: "d"
 })
 
 chats.value.push({
@@ -50,10 +59,21 @@ chats.value.push({
     updatedAt: new Date(),
     createdAt: new Date(),
     
-    userId: "1",
-    modelId: "e"
+    userId: "1"
 })
 
+
+async function test() {
+    modelAudio.src = "/test.mp3"
+
+    modelAudio.play()
+
+    return new Promise<void>((resolve) => {
+        modelAudio.onended = () => {
+            resolve()
+        }
+    })
+}
 </script>
 
 <template>
@@ -80,12 +100,16 @@ chats.value.push({
         <SystemFlex direction="column" class="border chat" grow="1">
             <SystemFlex grow="1" direction="column">
                 <SystemResizable handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
-                    <SystemFlex justify="center" class="model">
-                        <SystemSlickAvatar :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
+                    <SystemFlex direction="column" align="center" class="model">
+                        <SystemSlickAvatar class="avatar":size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
+
+                        <KeepAlive>
+                            <AudioVisualizerBar :audio="modelAudio"></AudioVisualizerBar>
+                        </KeepAlive>
                     </SystemFlex>
                 </SystemResizable>
 
-                <SystemHDragbar></SystemHDragbar>
+                <SystemHDragbar class="dragbar"></SystemHDragbar>
             </SystemFlex>
 
 
@@ -122,7 +146,15 @@ chats.value.push({
         width: 100% !important;
     }
 
+    .dragbar {
+        z-index: 5;
+    }
+
     .model {
+        .avatar {
+            position: absolute;
+            z-index: 4;
+        }
     }
 }
 </style>
