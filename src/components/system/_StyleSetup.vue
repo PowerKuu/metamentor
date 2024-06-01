@@ -14,16 +14,16 @@
 
 
 :root {
-	--primary: rgb(55, 32, 227);
-	--weak-primary: rgb(244, 243, 255);
-	--secondary: #001C44;
+	--primary: black;
+	--weak-primary: red;
+	--secondary: black;
 	--background: #ffffff;
 	--neutral: #f9f8f7;
-	--text: #001C44;
-	--weak-text: #001c4474;
+	--text: black;
+	--weak-text: #29292974;
 	--error: #FF0000;
 
-	--page-padding: 7vw;
+	--page-padding: 8vw;
 	
 	--normal-height: 3rem;
 	--border-radius: 5px;
@@ -54,6 +54,10 @@ html, body {
 	white-space: nowrap;
 }
 
+.text-nowrap {
+	white-space: nowrap;
+}
+
 .text-underline {
 	text-decoration: underline;
 }
@@ -77,6 +81,10 @@ html, body {
 
 .hidden {
 	display: none;
+}
+
+.weak-text {
+	color: var(--weak-text) !important;
 }
 
 a {

@@ -11,11 +11,17 @@ const icon = ref(null)
 <template>
     <SystemFlex class="chat-list-item border" gap="2rem" align="center" justify="space-between">
         <SystemFlex gap="0.5rem" align="center">
-            <SystemSlickAvatar :size="60" v-model="icon"></SystemSlickAvatar>
+            <SystemSlickAvatar :size="60" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
 
             <SystemFlex direction="column">
-                <SystemP>{{ chat.name }}</SystemP>
-                <SystemPSmall class="date text-overflow">{{ dateFromNow(chat.updatedAt) }}</SystemPSmall>
+                <SystemFlex class="top-text" align="center">
+                    <SystemP class="name text-nowrap">{{ chat.name }}</SystemP>
+
+                    <SystemPSmall class="weak-text">(</SystemPSmall>
+                    <SystemPSmall class="weak-text text-overflow text-nowrap">Håkon kleven</SystemPSmall>
+                    <SystemPSmall class="weak-text">)</SystemPSmall>
+                </SystemFlex>
+                <SystemPSmall class="weak-text text-overflow text-nowrap">{{ dateFromNow(chat.updatedAt) }}</SystemPSmall>
             </SystemFlex>
         </SystemFlex>
 
@@ -34,17 +40,21 @@ const icon = ref(null)
     height: 4rem;
 
     &:hover {
-        background-color: var(--weak-primary)
+        background-color: var(--neutral)
     }
 
     border-radius: var(--border-radius);
 
-    .date {
-        color: var(--weak-text);
-    }
-
     .dots {
         font-size: 1.5rem;
+    }
+
+    .top-text {
+        max-width: 15rem;
+
+        .name {
+            margin-right: 0.25rem;
+        }
     }
 }
 </style>

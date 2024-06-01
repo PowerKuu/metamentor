@@ -34,8 +34,12 @@ const style = computed(() => {
 
 <style scoped lang="scss">
 .icon-button {    
-    height: var(--normal-height);
-    width: var(--normal-height);
+
+    max-height: var(--normal-height);
+    max-width: var(--normal-height);
+
+    min-height: var(--normal-height);
+    min-width: var(--normal-height);
 
     border: var(--border-width) solid var(--button-border);
     border-radius: var(--border-radius);
