@@ -21,6 +21,15 @@ model User {
 
   chats     Chat[]
   chatModels ChatModel[]
+
+  plan      Plan    @default(FREE)
+}
+
+enum Plan {
+  FREE
+  STARTER
+  PLUS
+  ENTERPRISE
 }
 
 model ChatModel {
@@ -64,4 +73,3 @@ model Message {
   sentBy  ChatModel?   @relation(fields: [sentById], references: [id])
   sentById String?
 }
-

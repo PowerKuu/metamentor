@@ -13,8 +13,8 @@
     width: 100%;
     height: 100%;
 
-    background: #ffffff;
-    opacity: 0.75;
+    background: var(--background);
+    opacity: 0.8;
 
     transform: translateZ(0);
     backface-visibility: hidden;

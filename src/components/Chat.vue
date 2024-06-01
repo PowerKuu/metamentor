@@ -77,6 +77,9 @@ const hasInput = computed(() => !!input.value)
 
         background-color: var(--background);
 
+        /* Fix small gap */
+        outline: solid 1px var(--background);
+
         .input {
             width: 100%;
         }
