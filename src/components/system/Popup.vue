@@ -24,7 +24,7 @@ function close() {
     <div class="popup-wrapper" :data-show="openModel" :data-initial="isInitialModel">
         <SystemOverlay class="overlay" @click="close"></SystemOverlay>
 
-        <SystemFlex class="popup">
+        <SystemFlex class="popup" align="center" justify="center">
             <slot></slot>
         </SystemFlex>
     </div>
