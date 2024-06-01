@@ -20,7 +20,7 @@
       rx="9"
       ry="13.5"
       transform="rotate(-6.77646 16.5301 30.4023)"
-      fill="black"
+      fill="$color"
     />
     <circle
       cx="79.0191"
@@ -35,7 +35,7 @@
       rx="9"
       ry="13.5"
       transform="rotate(-6.27568 80.5312 20.4021)"
-      fill="black"
+      fill="$color"
     />
   </g>
 </svg>

@@ -12,24 +12,72 @@ onMounted(() => {
     if (!visualizer.value) return
 
     const audioMotionAnalyzer = new AudioMotionAnalyzer(visualizer.value, {
+        mode: 2,
+        //lumiBars: true,
         source: props.audio,        
-        showScaleX: false
+        showScaleX: false,
+        showPeaks: false,
+        alphaBars: true,
+        barSpace: 0.1,
+
+        minDecibels: -120,
+        maxDecibels: -35,
+
+        "ansiBands": false,
+        "bgAlpha": 0.7,
+        "channelLayout": "single",
+        "colorMode": "bar-level",
+        "fadePeaks": false,
+        "fftSize": 8192,
+        "fillAlpha": 0.25,
+        "frequencyScale": "log",
+        "gravity": 3.8,
+        "ledBars": false,
+        "linearAmplitude": true,
+        "linearBoost": 1.6,
+        "lineWidth": 1.5,
+        "loRes": false,
+        "lumiBars": false,
+        "maxFPS": 0,
+        "maxFreq": 16000,
+        "minFreq": 30,
+        "mirror": 0,
+        "noteLabels": false,
+        "overlay": false,
+        "peakFadeTime": 750,
+        "peakHoldTime": 500,
+        "peakLine": false,
+        "radial": false,
+        "radialInvert": false,
+        "radius": 0.3,
+        "reflexAlpha": 1,
+        "reflexBright": 1,
+        "reflexFit": true,
+        "reflexRatio": 0.5,
+        "roundBars": true,
+        "showBgColor": true,
+        "showFPS": false,
+        "showScaleY": false,
+        "smoothing": 0.7,
+        "spinSpeed": 0,
+        "splitGradient": false,
+        "trueLeds": true,
+        "useCanvas": true,
+        "volume": 1,
+        "weightingFilter": "D"
     })
 
     function getCSSVariable(variable: string) {
         return getComputedStyle(document.body).getPropertyValue(variable)
     }
 
-    const colorFrom = getCSSVariable('--weak-primary')
-    const colorTo = getCSSVariable('--primary')
+    const color = getCSSVariable('--weak-text')
 
     
     audioMotionAnalyzer.registerGradient("gradient", {
         bgColor: '#ffffff',
-        colorStops: [       // list your gradient colors in this array (at least one color is required)
-        colorFrom,        // colors can be defined in any valid CSS format
-            { color: colorFrom, pos: .6 }, // in an object, use `pos` to adjust the offset (0 to 1) of a colorStop
-            { color: colorTo, level: .5 }  // use `level` to set the max bar amplitude (0 to 1) to use this color
+        colorStops: [
+            { color: color, level: .0 },  // use `level` to set the max bar amplitude (0 to 1) to use this color
         ]
     })
 

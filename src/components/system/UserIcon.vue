@@ -32,7 +32,7 @@ defineProps<{
         width: 100%;
         height: 100%;
 
-        background-color: var(--weak-primary);
+        background-color: var(--neutral);
     }
 }
 </style>

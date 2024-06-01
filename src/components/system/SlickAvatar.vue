@@ -7,6 +7,7 @@ const widgets = {
     eyebrows: ["down", "eyelashesdown", "eyelashesup", "up"],
     
     glasses: ["round", "square"],
+
     mouth: ["frown", "laughing", "nervous", "pucker", "sad", "smile", "smirk", "surprised"],
     nose: ["curve", "pointed", "round"],
     top: ["beanie", "clean", "danny", "fonze", "funny", "pixie", "punk", "turban", "wave"],
@@ -38,6 +39,8 @@ const widgetCache = new Map<string, string>()
 const props = defineProps<{
     modelValue: PersonProp
     size?: number
+    randomBlacklist?: Widget<WidgetType>[]
+    color?: string
 }>()
 
 const emit = defineEmits<{
@@ -72,7 +75,7 @@ function randomItem<T extends ArrayLike<any>>(array: T): T[number] {
 }
 
 function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
-    return randomItem(widgets[widgetType])
+    return randomItem(widgets[widgetType].filter((widget) => !props.randomBlacklist?.includes(widget)))
 }
 
 function getRandomPerson(): Person {
@@ -198,6 +201,7 @@ watchEffect(async () => {
             .slice(svg.indexOf(">", svg.indexOf("<svg")) + 1)
             .replace("</svg>", "")
             .replace(/\$fillColor/g, color)
+            .replace(/\$color/g, props.color || "black")
 
         return `
             <g id="vue-color-avatar-${widget}">
