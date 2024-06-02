@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Chat } from '@prisma/client'
+    import type { Chat } from '@prisma/client'
 import type { PersonProp, Widget  } from '@/components/system/SlickAvatar.vue'
 
 const resizeElem = ref(null)
@@ -67,7 +67,7 @@ async function test() {
             <SystemHDragbar class="dragbar"></SystemHDragbar>
         </SystemFlex>
 
-        <Chat></Chat>
+        <Chat @send="openMouth"></Chat>
     </SystemFlex>
 </template>
 

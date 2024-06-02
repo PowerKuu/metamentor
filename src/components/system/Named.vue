@@ -1,14 +1,18 @@
 <script setup lang="ts">
 defineProps<{
     name: string
+    tooltip?: string
 }>()
 </script>
 
 <template>
     <SystemFlex direction="column" gap="0.25rem">
-        <SystemPSmall>
-            {{ name }}
-        </SystemPSmall>
+        <SystemFlex gap="0.25rem" align="end">
+            <SystemPSmall class="weak-text">
+                {{ name }}
+            </SystemPSmall>
+            <SystemTooltip v-if="tooltip" :text="tooltip"></SystemTooltip>
+        </SystemFlex>
 
         <slot></slot>
     </SystemFlex>

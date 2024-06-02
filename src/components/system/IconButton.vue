@@ -68,5 +68,7 @@ const style = computed(() => {
     }
 
     padding: calc(var(--normal-height) * 0.2);
+
+    user-select: none;
 }
 </style>
