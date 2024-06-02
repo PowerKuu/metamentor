@@ -16,13 +16,16 @@
 
     cursor: pointer;
 
-    transition: background-color 0.2s;
+    transition: 0.2s;
 
     height: 20rem;
     width: 20rem;
 
+    border-style: dashed;
+
     &:hover {
         background-color: var(--neutral);
+        border-color: var(--weak-primary);
     }
 }
 </style>

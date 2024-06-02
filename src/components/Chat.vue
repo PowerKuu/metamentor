@@ -1,7 +1,11 @@
 <script setup lang="ts">
-const input = ref('')
+const input = ref("")
 
 const hasInput = computed(() => !!input.value)
+
+const emit = defineEmits<{
+    (e: "send", value: string): void
+}>()
 </script>
 
 <template>
@@ -34,6 +38,8 @@ const hasInput = computed(() => !!input.value)
                         :color="hasInput ? `var(--background)` : undefined"
                         :default-hover="false"
                         icon="material-symbols:send"
+
+                        @click="emit(`send`, input)"
                     >
                     </SystemIconButton>
 

@@ -3,14 +3,14 @@
 </script>
 
 <template>
-    <h3>
+    <h4>
         <slot></slot>
-    </h3>
+    </h4>
 </template>
 
 <style scoped lang="scss">
-h3 {
-    font-size: 1.5rem;
+h4 {
+    font-size: 1.3rem;
     color: var(--secondary);
     font-weight: 500;
 }

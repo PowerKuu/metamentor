@@ -29,7 +29,7 @@
     </mask>
     <g mask="url(#mask0)">
       <g style="mix-blend-mode: multiply">
-        <ellipse cx="124" cy="210" rx="59" ry="54" fill="$color" />
+        <ellipse cx="124" cy="210" rx="59" ry="54" fill="black" />
       </g>
     </g>
     <mask id="path-4-inside-1" fill="white">

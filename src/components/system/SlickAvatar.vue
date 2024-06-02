@@ -38,7 +38,7 @@ const widgetCache = new Map<string, string>()
 
 const props = defineProps<{
     modelValue: PersonProp
-    size?: number
+    size: number
     randomBlacklist?: Widget<WidgetType>[]
     color?: string
 }>()
@@ -77,6 +77,7 @@ function randomItem<T extends ArrayLike<any>>(array: T): T[number] {
 function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
     return randomItem(widgets[widgetType].filter((widget) => !props.randomBlacklist?.includes(widget)))
 }
+
 
 function getRandomPerson(): Person {
     const isBlackRace = randomItem([true, false] as const)
@@ -185,6 +186,8 @@ async function getPersonSVG(person: Person): Promise<Record<WidgetType, {
 const svgContent = ref<string | null>(null)
 const sizeCSS = computed<string>(() => props.size ? `${props.size}px` : "100px")
 
+const avatarID = crypto.randomUUID()
+
 watchEffect(async () => {
     // Use effect
     sizeCSS.value
@@ -202,9 +205,13 @@ watchEffect(async () => {
             .replace("</svg>", "")
             .replace(/\$fillColor/g, color)
             .replace(/\$color/g, props.color || "black")
+            // Replace all `url(#...)` with `url(#...${avatarID})`
+            .replace(/url\(#(.*?)\)/g, `url(#$1-${avatarID})`)
+            // Replace all `id="..."` with `id="...${avatarID}"`
+            .replace(/id="(.*?)"/g, `id="$1-${avatarID}"`)
 
         return `
-            <g id="vue-color-avatar-${widget}">
+            <g id="vue-color-avatar-${avatarID}">
                 ${content}
             </g>
         `
@@ -241,10 +248,6 @@ watchEffect(async () => {
 </template>
 
 <style scoped lang="scss">
-.clothes {
-    color: red;
-}
-
 .vue-color-avatar {
     position: relative;
     overflow: hidden;

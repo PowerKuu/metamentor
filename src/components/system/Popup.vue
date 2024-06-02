@@ -64,7 +64,7 @@ function close() {
 
     &[data-show="false"][data-initial="false"] {
         pointer-events: none; 
-        animation: fadeOut 0.5s forwards;
+        animation: fadeOut 0.2s forwards;
     }
 
     &[data-show="true"][data-initial="true"] {
@@ -72,7 +72,7 @@ function close() {
     }
 
     &[data-show="true"][data-initial="false"] {
-        animation: fadeIn 0.5s forwards;
+        animation: fadeIn 0.2s forwards;
     }
 }
 

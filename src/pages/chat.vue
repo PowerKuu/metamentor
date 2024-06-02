@@ -26,11 +26,11 @@ chats.value.push({
     userId: "1"
 })
 
-const openCreateChat = ref(false)
+const openNewChatPopup = ref(false)
 </script>
 
 <template>
-    <PopupCreateChat v-model:open=openCreateChat></PopupCreateChat>
+    <PopupNewChat v-model:open=openNewChatPopup></PopupNewChat>
 
     <SystemFlex grow="1" gap="0.5rem" class="wrapper">
         <SystemFlex gap="1rem" direction="column" class="sidebar border">
@@ -47,7 +47,7 @@ const openCreateChat = ref(false)
             </SystemFlex>
 
 
-            <SystemButton @click="openCreateChat = true" class="seperator"justify="space-between" icon="material-symbols:chat-add-on">
+            <SystemButton @click="openNewChatPopup = true" class="seperator"justify="space-between" icon="material-symbols:chat-add-on">
                 New chat
             </SystemButton>
         </SystemFlex>
