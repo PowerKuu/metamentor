@@ -1,9 +1,12 @@
 <script setup lang="ts">
 const props = defineProps<{
     open: boolean
+
+    newChat: boolean
 }>()
 
 const openModel = useModel(props, "open")
+const search = ref("")
 
 const options = ref<{
     id: string
@@ -115,9 +118,9 @@ function resetSelected() {
     <PopupEditModel :newModel="true" class="over-popup" v-model:open="openEditChatPopup"></PopupEditModel>
 
     <SystemPopupStandard maxWidth="37rem" heading="Browse models" subheading="Select one of the models below to create a new chat" v-model:open="openModel">
-        <SystemFlex gap="0.5rem" direction="column">
+        <SystemFlex class="browser" gap="0.5rem" direction="column">
             <SystemFlex gap="0.5rem">
-                <SystemInput class="search" value="" placeholder="Search">
+                <SystemInput class="search" v-model:value="search" placeholder="Search">
                     <template #icon>
                         <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
                     </template>
@@ -126,7 +129,11 @@ function resetSelected() {
             </SystemFlex>
 
             <SystemFlex class="cards border" gap="0.5rem" direction="column">
-                <SystemFlex 
+                <SystemFlex direction="column" class="no-models" v-if="options.length <= 0">
+                    <SystemPSmall class="weak-text">No models found {{ search ? `searching "${search}"` : ""}}</SystemPSmall>
+                    <SystemPSmall @click="openEditChat" class="link">Create a new model +</SystemPSmall>
+                </SystemFlex>
+                <SystemFlex
                     v-for="option of options" 
                     :data-disabeld="hasMaxSelected" 
                     :data-selected="option.selected" 
@@ -144,9 +151,9 @@ function resetSelected() {
                         </SystemFlex>
 
                         <SystemFlex class="card-options" gap="0.5rem">
-                            <Icon class="dots" name="mdi:dots-vertical"></Icon>
-                            <Icon v-if="option.selected" color="var(--primary)" class="dots" name="material-symbols:check-rounded"></Icon>
-                            <Icon v-else class="dots" name="material-symbols:add-rounded"></Icon>
+                            <Icon class="icon-option" name="mdi:dots-vertical"></Icon>
+                            <Icon v-if="option.selected" color="var(--primary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
+                            <Icon v-else class="icon-option" name="material-symbols:add-rounded"></Icon>
                         </SystemFlex>
                     </SystemFlex>
                 </SystemFlex>
@@ -155,9 +162,9 @@ function resetSelected() {
             <SystemFlex justify="space-between" align="center">
                 <SystemFlex gap="0.25rem">
                     <SystemPSmall class="weak-text">{{ options.filter(option => option.selected).length }} models selected (max 4)</SystemPSmall>
-                    <SystemPSmall @click="resetSelected" v-if="hasSelected" class="clear">Reset</SystemPSmall>
+                    <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                 </SystemFlex>
-                <SystemButton :disabled="!hasSelected">Create chat</SystemButton>
+                <SystemButton :disabled="!hasSelected">{{ newChat ? "Create chat" : "Save chat" }}</SystemButton>
             </SystemFlex>
         </SystemFlex>
 </SystemPopupStandard>
@@ -168,6 +175,14 @@ function resetSelected() {
     max-height: 30rem;
     overflow-y: auto;
     padding: 0.5rem;
+}
+
+.no-models {
+    padding: 0.5rem;
+}
+
+.browser {
+    width: 30rem;
 }
 
 .model-card {
@@ -203,7 +218,7 @@ function resetSelected() {
     user-select: none;
 }
 
-.dots {
+.icon-option {
     font-size: 1.5rem;
 
     cursor: pointer;
@@ -225,7 +240,7 @@ function resetSelected() {
     z-index: 1000;
 }
 
-.clear {
+.link {
     cursor: pointer;
     text-decoration: underline;
 }

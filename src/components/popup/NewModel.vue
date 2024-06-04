@@ -43,7 +43,6 @@ function openModelBrowser() {
 
 <template>
     <PopupEditModel :newModel="true" class="over-popup" v-model:open="openEditChatPopup"></PopupEditModel>
-    <PopupModelBrowser class="over-popup" v-model:open="openModelBrowserPopup"></PopupModelBrowser>
 
     <SystemPopupStandard heading="New chat" subheading="Choose one of the options below to create a new chat" v-model:open="openModel">
         <SystemFlex gap="0.5rem">
