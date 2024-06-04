@@ -25,7 +25,7 @@ const icon = ref(null)
             </SystemFlex>
         </SystemFlex>
 
-        <Icon class="dots" color="var(--secondary)" name="mdi:dots-vertical"></Icon>
+        <Icon class="dots" name="mdi:dots-vertical"></Icon>
     </SystemFlex>
 </template>
 
@@ -47,6 +47,16 @@ const icon = ref(null)
 
     .dots {
         font-size: 1.5rem;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+
+        color: var(--weak-primary);
+
+        &:hover {
+            color: var(--primary);
+        }
     }
 
     .top-text {

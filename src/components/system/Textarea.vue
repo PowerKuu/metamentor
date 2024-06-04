@@ -33,10 +33,5 @@ const model = useModel(props, "value")
         outline: none;
         border-color: var(--primary);
     }
-
-
-    &::placeholder {
-        color: var(--weak-text);
-    }
 }
 </style>

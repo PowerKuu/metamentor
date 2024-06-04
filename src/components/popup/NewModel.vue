@@ -7,11 +7,11 @@ const openModel = useModel(props, "open")
 
 const options = {
     fromTemplate: {
-        name: "From template",
+        name: "My models",
         icon: "mdi:text-box-multiple",
-        description: "Choose a model from our templates",
+        description: "Choose an existing model",
         iconSize: "1.8rem",
-        click: () => {}
+        click: () => openModelBrowser()
     },
     importFromFile: {
         name: "Import from file",
@@ -30,14 +30,20 @@ const options = {
 }
 
 const openEditChatPopup = ref(false)
+const openModelBrowserPopup = ref(false)
 
 function openEditChat() {
     openEditChatPopup.value = true
 }
+
+function openModelBrowser() {
+    openModelBrowserPopup.value = true
+}
 </script>
 
 <template>
-    <PopupEditModel :newModel="true" class="edit" v-model:open="openEditChatPopup"></PopupEditModel>
+    <PopupEditModel :newModel="true" class="over-popup" v-model:open="openEditChatPopup"></PopupEditModel>
+    <PopupModelBrowser class="over-popup" v-model:open="openModelBrowserPopup"></PopupModelBrowser>
 
     <SystemPopupStandard heading="New chat" subheading="Choose one of the options below to create a new chat" v-model:open="openModel">
         <SystemFlex gap="0.5rem">
@@ -60,7 +66,7 @@ function openEditChat() {
 </template>
 
 <style scoped lang="scss">
-.edit {
+.over-popup {
     z-index: 1000;
 }
 </style>
