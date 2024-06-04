@@ -12,7 +12,7 @@ const modelIcon = ref(null)
 <template>
     <SystemPopupStandard :heading="newModel ? `New model` : `Edit model`" subheading="Create your own model with the settings below" v-model:open="openModel">
         <SystemFlex class="edit-popup" gap="0.5rem" direction="column">
-            <SystemNamed name="Icon">
+            <SystemNamed tooltip="Icon to differentiate the model" name="Icon">
                 <SystemFlex class="border" align="center" justify="center">
                     <SystemSlickAvatar :size="225" v-model="modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
                     <SystemIconButton 
@@ -25,17 +25,21 @@ const modelIcon = ref(null)
                 </SystemFlex>
             </SystemNamed>
             
-            <SystemNamed name="Name" tooltip="The name of the model">
-                <SystemInput value=""></SystemInput>
+            <SystemNamed name="Name" tooltip="Name to differentiate the model">
+                <SystemInput placeholder="Jhon Doe"value=""></SystemInput>
             </SystemNamed>
             <SystemNamed name="Description (Optional)" tooltip="Describe what the model does and how it acts">
-                <SystemTextarea value=""></SystemTextarea>
+                <SystemTextarea placeholder="A sample model" value=""></SystemTextarea>
             </SystemNamed>
-            <SystemNamed name="Model" class="model">
-                <SystemTextarea value="" class="model-input"></SystemTextarea>
+            <SystemNamed name="Model" tooltip="Tell the model how it should act" class="model">
+                <SystemTextarea placeholder='Answer any question asked with: "I am a sample model"' value="" class="model-input"></SystemTextarea>
             </SystemNamed>
 
-            <SystemFlex>
+            <SystemFlex align="center" justify="space-between">
+                <SystemIconButton 
+                    icon="material-symbols:upload"
+
+                ></SystemIconButton>
                 <SystemButton>{{ newModel ? "Create" : "Save" }}</SystemButton>
             </SystemFlex>
         </SystemFlex>

@@ -200,9 +200,5 @@ onMounted(() => {
             padding-left: 1rem;
         }
     }
-
-    .input::placeholder {
-        color: var(--weak-text);
-    }
 }
 </style>

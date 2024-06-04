@@ -30,7 +30,7 @@ const openNewChatPopup = ref(false)
 </script>
 
 <template>
-    <PopupNewChat v-model:open=openNewChatPopup></PopupNewChat>
+    <PopupModelBrowser v-model:open=openNewChatPopup></PopupModelBrowser>
 
     <SystemFlex grow="1" gap="0.5rem" class="wrapper">
         <SystemFlex gap="1rem" direction="column" class="sidebar border">

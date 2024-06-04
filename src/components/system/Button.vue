@@ -5,6 +5,7 @@ const props = withDefaults(defineProps<{
     border?: string
 
     icon?: string
+    disabled?: boolean
 }>(), {
     background: "var(--primary)",
     color: "var(--background)",
@@ -30,6 +31,8 @@ const slots = useSlots()
         class="button"
 
         gap="0.5rem"
+
+        :data-disabled="props.disabled"
     >
         <SystemP class="text" :style="{
             color: props.color
@@ -63,7 +66,7 @@ const slots = useSlots()
         opacity: 0.8;
     }
 
-    &[disabled] {
+    &[data-disabled="true"] {
         opacity: 0.5;
         cursor: not-allowed;
     }

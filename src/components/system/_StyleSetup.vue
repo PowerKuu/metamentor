@@ -14,18 +14,18 @@
 
 
 :root {
-	--primary: black;
+	--primary: #18181b;
 	--weak-primary: #696969;
-	--secondary: black;
+	--secondary: #18181b;
 	--background: #ffffff;
 	--neutral: #f9f8f7;
-	--text: black;
+	--text: #18181b;
 	--weak-text: #696969;
 	--error: #FF0000;
 
 	--page-padding: 8vw;
 	
-	--normal-height: 3rem;
+	--normal-height: 2.8rem;
 	--border-radius: 5px;
 
 	--border-width: 2px;
@@ -46,6 +46,11 @@ html, body {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+*::placeholder {
+	color: var(--weak-text);
+	opacity: 0.7;
 }
 
 .text-overflow {
@@ -95,6 +100,19 @@ a {
 *[data-hide="true"] {
 	opacity: 0;
 	pointer-events: none;
+}
+
+.hide-overflow {
+    overflow-y: scroll; /* Add the ability to scroll the y axis */
+
+    /* Hide the scrollbar for Internet Explorer, Edge and Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    /* Hide the scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+       display: none;
+    }
 }
 
 /* custom scrollbar */

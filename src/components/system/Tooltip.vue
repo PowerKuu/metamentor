@@ -76,14 +76,14 @@ defineProps<{
     position: relative;
     cursor: pointer;
 
-    background-color: var(--secondary);
+    background-color: var(--weak-primary);
     padding: 0.1rem;
 
     border-radius: 50%;
 }
 
 .icon:hover {
-    opacity: 0.8;
+    background-color: var(--primary);
 }
 
 .icon:hover + .tooltip-container  {

@@ -239,8 +239,10 @@ watchEffect(async () => {
         ref="avatarRef"
         class="vue-color-avatar"
         :style="{
-            width: sizeCSS,
-            height: sizeCSS,
+            minWidth: sizeCSS,
+            minHeight: sizeCSS,
+            maxWidth: sizeCSS,
+            maxHeight: sizeCSS
         }"
     >
         <div class="avatar-payload" v-html="svgContent" />
