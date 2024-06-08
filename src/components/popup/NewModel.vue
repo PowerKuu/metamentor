@@ -66,6 +66,6 @@ function openModelBrowser() {
 
 <style scoped lang="scss">
 .over-popup {
-    z-index: 1000;
+    z-index: 105;
 }
 </style>

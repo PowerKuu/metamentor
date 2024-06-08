@@ -151,7 +151,9 @@ function resetSelected() {
                         </SystemFlex>
 
                         <SystemFlex class="card-options" gap="0.5rem">
-                            <Icon class="icon-option" name="mdi:dots-vertical"></Icon>
+                            <SystemDropdown>
+                                <Icon class="icon-option" name="mdi:dots-vertical"></Icon>
+                            </SystemDropdown>
                             <Icon v-if="option.selected" color="var(--primary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
                             <Icon v-else class="icon-option" name="material-symbols:add-rounded"></Icon>
                         </SystemFlex>
@@ -237,7 +239,7 @@ function resetSelected() {
 }
 
 .over-popup {
-    z-index: 1000;
+    z-index: 105;
 }
 
 .link {

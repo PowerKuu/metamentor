@@ -20,7 +20,7 @@
     padding: 1rem;
 
     background-color: var(--secondary);
-    z-index: 100;
+    z-index: 50;
 
     color: var(--background);
 }

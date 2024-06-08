@@ -39,7 +39,7 @@ function close() {
     transform: translate(-50%, -50%);
 
 
-    z-index: 1000;
+    z-index: 101;
 
     width: 90vw;
     max-width: v-bind(maxWidthCSS);
@@ -52,11 +52,11 @@ function close() {
 }
 
 .overlay {
-    z-index: 999;
+    z-index: 100;
 }
 
 .popup-wrapper {
-    z-index: 100;
+    z-index: 99;
 
     &[data-show="false"][data-initial="true"] {
         display: none;
