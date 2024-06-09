@@ -34,7 +34,6 @@ function close() {
 <style scoped lang="scss">
 .popup {
     padding: 1.5rem;
-    
     background-color: var(--background);
 }
 </style>
