@@ -1,30 +1,34 @@
 <script setup lang="ts">
 const openDropdown = ref(false)
+
+const element = ref<HTMLElement | null>(null)
 </script>
 
 <template>
-    <SystemFlex @click="openDropdown = !openDropdown">
+
+    <SystemFlex @click="openDropdown = !openDropdown" ref="element">
         <slot></slot>
     </SystemFlex>
-    
-    <SystemOverlay v-if="openDropdown" class="overlay" @click="openDropdown = false"></SystemOverlay>
 
-    <SystemFlex v-if="openDropdown" class="dropdown">
-        <SystemFlex class="dropdown-content">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
+    <SystemOverlay :open="openDropdown" @click="openDropdown = false"></SystemOverlay>
+
+    <SystemFade :open="openDropdown" class="dropdown">
+        <SystemFlex direction="column" class="dropdown-content border">
+            <slot name="dropdown"></slot>
         </SystemFlex>
-    </SystemFlex>
+    </SystemFade>
+
 </template>
 
 <style scoped lang="scss">
-.overlay {
-    z-index: 120;
-}
-
 .dropdown {
     position: absolute;
-    z-index: 121;
+    z-index: 200;
+
+    .dropdown-content {
+        background: var(--background);
+        
+        margin-top: 1.5rem;
+    }
 }
 </style>

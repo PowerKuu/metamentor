@@ -137,7 +137,7 @@ function resetSelected() {
                     v-for="option of options" 
                     :data-disabeld="hasMaxSelected" 
                     :data-selected="option.selected" 
-                    class="border model-card" 
+                    class="border model-card"
                     @click="toggleSelected(option)"
                 >
                     <SystemSlickAvatar class="avatar" :size="100" v-model="option.modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
@@ -150,9 +150,16 @@ function resetSelected() {
                             <SystemPSmall class="weak-text hide-overflow">{{ option.description }}</SystemPSmall>
                         </SystemFlex>
 
-                        <SystemFlex class="card-options" gap="0.5rem">
+                        <SystemFlex class="card-options">
                             <SystemDropdown>
                                 <Icon class="icon-option" name="mdi:dots-vertical"></Icon>
+
+                                <template #dropdown>
+                                    <SystemFlex class="dropdown-item" v-for="i of 10" align="center" justify="space-between" gap="1rem">
+                                        <SystemP class="text-overflow">Item 1</SystemP>
+                                        <Icon name="akar-icons:chevron-right" class="weak-text"></Icon>
+                                    </SystemFlex>
+                                </template>
                             </SystemDropdown>
                             <Icon v-if="option.selected" color="var(--primary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
                             <Icon v-else class="icon-option" name="material-symbols:add-rounded"></Icon>
@@ -245,5 +252,16 @@ function resetSelected() {
 .link {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.dropdown-item {
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 1rem;
+
+
+    &:hover {
+        background: var(--neutral);
+    }
 }
 </style>
