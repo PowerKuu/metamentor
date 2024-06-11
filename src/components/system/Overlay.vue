@@ -2,7 +2,7 @@
 const props = defineProps<{
     open: boolean
     zIndex?: number
-    background?: string
+    transparent?: boolean
 }>()
 
 const zIndexCSS = computed(() => props.zIndex ? props.zIndex : 50)
@@ -14,23 +14,24 @@ const emit = defineEmits<{
 function click(event: Event) {
     if (event.target !== event.currentTarget) return
 
-    emit(`click`)
+    emit("click")
 }
-
-
 </script>
 
 <template>
-    <SystemFade :open="open">
-        <SystemFlex :data-background="background" @click="click" class="overlay" align="center" justify="center">
-            <slot></slot>
-        </SystemFlex>
-    </SystemFade>
+    <Teleport to="body">
+        <SystemFade class="fade" :open="open">
+            <SystemFlex :data-transparent="transparent" @click="click" class="overlay" align="center" justify="center">
+                <slot></slot>
+            </SystemFlex>
+        </SystemFade>
+    </Teleport>
 </template>
 
 <style scoped lang="scss">
 .overlay {
-    position: absolute;
+    position: fixed;
+
     top: 0;
     left: 0;
     width: 100%;
@@ -40,12 +41,16 @@ function click(event: Event) {
 
     transform: translateZ(0);
     backface-visibility: hidden;
-    z-index: v-bind(zIndexCSS);
 
     cursor: initial;
 
-    &[data-background="false"] {
+    &[data-transparent="true"] {
         background: none !important;
     }
+}
+
+.fade {
+    position: relative;
+    z-index: v-bind(zIndexCSS);
 }
 </style>

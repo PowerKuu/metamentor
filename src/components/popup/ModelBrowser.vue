@@ -8,85 +8,25 @@ const props = defineProps<{
 const openModel = useModel(props, "open")
 const search = ref("")
 
+//const dropdownOpenId = ref<string | null>(null)
+
 const options = ref<{
     id: string
     name: string
     description: string
     modelIcon: any
 
-    selected?: boolean
+    selected: boolean
+    dropdownOpen: boolean
 }[]>([
     {
         id: "1",
         name: "My AI Anna",
         description: "Anny is a chatbot that can help you with your daily tasks",
         modelIcon: null,
-    },
-    {
-        id : "2",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "3",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null
-    },
-    {
-        id: "1",
-        name: "My AI Anna",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "2",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "3",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null
-    },
-    {
-        id: "1",
-        name: "My AI Anna",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "2",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "3",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null
-    },
-    {
-        id: "1",
-        name: "My AI Anna",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "2",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null,
-    },
-    {
-        id : "3",
-        name: "Anny",
-        description: "Anny is a chatbot that can help you with your daily tasks",
-        modelIcon: null
+
+        selected: false,
+        dropdownOpen: false
     }
 ])
 
@@ -98,12 +38,13 @@ const hasSelected = computed(() => selectedOptions.value.length > 0)
 const hasMaxSelected = computed(() => selectedOptions.value.length >= maxSelected)
 
 const openEditChatPopup = ref(false)
+const openDeleteModelPopup = ref(false)
 
 function openEditChat() {
     openEditChatPopup.value = true
 }
 
-function toggleSelected(option: typeof options.value[0]) {
+function filterClickAndToggleSelected(event: Event, option: typeof options.value[0]) {
     if (hasMaxSelected.value && !option.selected) return
 
     option.selected = !option.selected
@@ -115,7 +56,8 @@ function resetSelected() {
 </script>
 
 <template>
-    <PopupEditModel :newModel="true" class="over-popup" v-model:open="openEditChatPopup"></PopupEditModel>
+    <PopupEditModel :newModel="true" v-model:open="openEditChatPopup"></PopupEditModel>
+    <PopupConfirm subheading="Are you sure you want to delete this model?" v-model:open="openDeleteModelPopup"></PopupConfirm>
 
     <SystemPopupStandard maxWidth="37rem" heading="Browse models" subheading="Select one of the models below to create a new chat" v-model:open="openModel">
         <SystemFlex class="browser" gap="0.5rem" direction="column">
@@ -133,12 +75,13 @@ function resetSelected() {
                     <SystemPSmall class="weak-text">No models found {{ search ? `searching "${search}"` : ""}}</SystemPSmall>
                     <SystemPSmall @click="openEditChat" class="link">Create a new model +</SystemPSmall>
                 </SystemFlex>
+
                 <SystemFlex
                     v-for="option of options" 
                     :data-disabeld="hasMaxSelected" 
                     :data-selected="option.selected" 
                     class="border model-card"
-                    @click="toggleSelected(option)"
+                    @click="(event: Event) => filterClickAndToggleSelected(event, option)"
                 >
                     <SystemSlickAvatar class="avatar" :size="100" v-model="option.modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
                     
@@ -151,17 +94,37 @@ function resetSelected() {
                         </SystemFlex>
 
                         <SystemFlex class="card-options">
-                            <SystemDropdown>
-                                <Icon class="icon-option" name="mdi:dots-vertical"></Icon>
+                            <SystemDropdown v-model:open="option.dropdownOpen">
+                                <Icon :data-open="option.dropdownOpen" class="icon-option dropdown-icon" name="mdi:dots-vertical"></Icon>
 
-                                <template #dropdown>
-                                    <SystemFlex class="dropdown-item" v-for="i of 10" align="center" justify="space-between" gap="1rem">
-                                        <SystemP class="text-overflow">Item 1</SystemP>
-                                        <Icon name="akar-icons:chevron-right" class="weak-text"></Icon>
+                                <template #content>
+                                    <SystemFlex direction="column">
+                                        <SystemDropdownOption 
+                                            icon="material-symbols:edit-rounded" 
+                                            @click="option.dropdownOpen = false"
+                                        >
+                                            Edit
+                                        </SystemDropdownOption>
+
+                                        <SystemDropdownOption 
+                                            icon="material-symbols:download-rounded" 
+                                            @click="option.dropdownOpen = false"
+                                        >
+                                            Download
+                                        </SystemDropdownOption>
+
+                                        <SystemDropdownOption 
+                                            :delete="true" 
+                                            icon="material-symbols:delete-outline-rounded" 
+                                            @click="option.dropdownOpen = false"
+                                        >
+                                            Delete
+                                        </SystemDropdownOption>
                                     </SystemFlex>
                                 </template>
                             </SystemDropdown>
-                            <Icon v-if="option.selected" color="var(--primary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
+                            
+                            <Icon v-if="option.selected" color="var(--secondary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
                             <Icon v-else class="icon-option" name="material-symbols:add-rounded"></Icon>
                         </SystemFlex>
                     </SystemFlex>
@@ -183,6 +146,7 @@ function resetSelected() {
 .cards {
     max-height: 30rem;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 0.5rem;
 }
 
@@ -237,31 +201,20 @@ function resetSelected() {
     color: var(--weak-primary);
 
     &:hover {
-        color: var(--primary);
+        color: var(--secondary);
     }
+}
+
+.dropdown-icon[data-open="true"] {
+    color: var(--secondary);
 }
 
 .search {
     width: 100%;
 }
 
-.over-popup {
-    z-index: 105;
-}
-
 .link {
     cursor: pointer;
     text-decoration: underline;
-}
-
-.dropdown-item {
-    cursor: pointer;
-    transition: 0.2s;
-    padding: 1rem;
-
-
-    &:hover {
-        background: var(--neutral);
-    }
 }
 </style>

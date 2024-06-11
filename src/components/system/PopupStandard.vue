@@ -5,6 +5,7 @@ const props = defineProps<{
 
     open: boolean
     maxWidth?: string
+    zIndex?: number
 }>()
 
 const openModel = useModel(props, "open")
@@ -15,7 +16,7 @@ function close() {
 </script>
 
 <template>
-    <SystemPopup v-model:open="openModel" :maxWidth="maxWidth ?? `50rem`">
+    <SystemPopup v-model:open="openModel" :zIndex="zIndex" :maxWidth="maxWidth ?? `50rem`">
         <SystemFlex direction="column" class="popup border" gap="1rem">
             <SystemFlex justify="space-between" align="center">
                 <SystemFlex direction="column">

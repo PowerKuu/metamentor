@@ -14,14 +14,14 @@
 
 
 :root {
-	--primary: #18181b;
-	--weak-primary: #696969;
-	--secondary: #18181b;
+	--primary: #473864;
+	--weak-primary: #89858d;
+	--secondary: #1c1824;
 	--background: #ffffff;
-	--neutral: #f9f8f7;
-	--text: #18181b;
-	--weak-text: #696969;
-	--error: #FF0000;
+	--neutral: #f8f7f9;
+	--text: #1c1824;
+	--weak-text: #89858d;
+	--error: #d22222;
 
 	--page-padding: 8vw;
 	

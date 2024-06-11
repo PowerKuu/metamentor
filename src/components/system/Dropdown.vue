@@ -1,34 +1,56 @@
 <script setup lang="ts">
-const openDropdown = ref(false)
 
+const props = defineProps<{
+    open: boolean
+}>()
+
+const openModel = useModel(props, "open")
 const element = ref<HTMLElement | null>(null)
+const { bottom, left } = useElementBounding(element)
+
+function close() {
+    openModel.value = false
+}
+
+function toggle(event: Event) {
+    console.log("toggle")
+    event.stopPropagation()
+
+    openModel.value = !openModel.value
+}
+
+const margin = 10
 </script>
 
 <template>
+    <div class="dropdown" :data-open="open">
+        <div class="element" ref="element" @click="toggle">
+            <slot></slot>
+        </div>
 
-    <SystemFlex @click="openDropdown = !openDropdown" ref="element">
-        <slot></slot>
-    </SystemFlex>
-
-    <SystemOverlay :open="openDropdown" @click="openDropdown = false"></SystemOverlay>
-
-    <SystemFade :open="openDropdown" class="dropdown">
-        <SystemFlex direction="column" class="dropdown-content border">
-            <slot name="dropdown"></slot>
-        </SystemFlex>
-    </SystemFade>
-
+        <SystemOverlay :transparent="true" :zIndex="140" :open="openModel" @click="close">
+            <SystemFlex 
+                class="dropdown-content" 
+                direction="column"
+                :style="{
+                    top: `${bottom + margin}px`,
+                    left: `${left}px`
+                }"
+            >
+                <slot name="content"></slot>
+            </SystemFlex>
+        </SystemOverlay>
+    </div>
 </template>
 
 <style scoped lang="scss">
-.dropdown {
-    position: absolute;
-    z-index: 200;
 
-    .dropdown-content {
-        background: var(--background);
-        
-        margin-top: 1.5rem;
-    }
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    position: absolute;
+
 }
 </style>
