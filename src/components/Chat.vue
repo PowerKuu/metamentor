@@ -38,8 +38,9 @@ const emit = defineEmits<{
                         :color="hasInput ? `var(--background)` : undefined"
                         :default-hover="false"
                         icon="material-symbols:send"
+                        :disabled="!hasInput"
 
-                        @click="emit(`send`, input)"
+                        @click="() => { if (hasInput) emit(`send`, input) }"
                     >
                     </SystemIconButton>
 

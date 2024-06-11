@@ -237,7 +237,7 @@ watchEffect(async () => {
 <template>
     <div
         ref="avatarRef"
-        class="vue-color-avatar"
+        class="slick-avatar"
         :style="{
             minWidth: sizeCSS,
             minHeight: sizeCSS,
@@ -250,13 +250,11 @@ watchEffect(async () => {
 </template>
 
 <style scoped lang="scss">
-.vue-color-avatar {
+.slick-avatar {
     position: relative;
     overflow: hidden;
 
     .avatar-payload {
-        position: relative;
-        z-index: 2;
         width: 100%;
         height: 100%;
     }

@@ -7,6 +7,7 @@ const props = withDefaults(defineProps<{
     border?: string
 
     defaultHover?: boolean
+    disabled?: boolean
 }>(), {
     color: "var(--primary)",
     background: "var(--background)",
@@ -27,7 +28,7 @@ const style = computed(() => {
 </script>
 
 <template>
-    <SystemFlex class="icon-button" :style="style" :data-default="props.defaultHover">
+    <SystemFlex class="icon-button" :data-disabled="disabled" :style="style" :data-default="props.defaultHover">
         <Icon class="icon" color="var(--icon-color)" :name="icon"></Icon>
     </SystemFlex>
 </template>
@@ -49,17 +50,24 @@ const style = computed(() => {
 
     transition: 0.2s;
 
-    &[data-default="true"]:hover {
+    &[data-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    &:not([data-disabled="true"]) {
+        &[data-default="true"]:hover {
         background-color: var(--icon-color);
         border-color: var(--icon-color);
 
-        .icon {
-            color: var(--background) !important;
+            .icon {
+                color: var(--background) !important;
+            }
         }
-    }
 
-    &[data-default="false"]:hover {
-        opacity: 0.8;
+        &[data-default="false"]:hover {
+            opacity: 0.8;
+        }
     }
 
     .icon {

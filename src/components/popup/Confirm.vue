@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
+    subheading: string
     open: boolean
 }>()
 
@@ -7,7 +8,7 @@ const openModel = useModel(props, "open")
 </script>
 
 <template>
-    <SystemPopupStandard heading="New chat" subheading="Choose one of the options below to create a new chat" v-model:open="openModel">
+    <SystemPopupStandard :zIndex="120" heading="Confirm" :subheading="subheading" v-model:open="openModel">
         <SystemFlex gap="0.5rem">
 
         </SystemFlex>

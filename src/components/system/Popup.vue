@@ -4,6 +4,8 @@ const props = defineProps<{
 
     maxWidth?: string
     disable?: boolean
+
+    zIndex?: number
 }>()
 
 const openModel = useModel(props, "open")
@@ -17,7 +19,7 @@ function close() {
 </script>
 
 <template>
-    <SystemOverlay :open="openModel" :zIndex="100" @click="close">
+    <SystemOverlay :open="openModel" :zIndex="zIndex ?? 100" @click="close">
         <SystemFlex class="popup" align="center" justify="center">
             <slot></slot>
         </SystemFlex>
@@ -31,10 +33,8 @@ function close() {
     align-items: center;
     justify-content: center;
 }
-.popup {
-    z-index: 101;
 
-    width: 90vw;
+.popup {
     max-width: v-bind(maxWidthCSS);
 }
 

@@ -15,8 +15,6 @@ watch(() => props.open, () => isInitial.value = false)
 
 <style scoped lang="scss">
 .fade {
-    z-index: 101;
-
     &[data-show="false"][data-initial="true"] {
         display: none;
     }

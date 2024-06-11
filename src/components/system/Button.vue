@@ -4,6 +4,8 @@ const props = withDefaults(defineProps<{
     color?: string
     border?: string
 
+    borderHover?: string
+
     icon?: string
     disabled?: boolean
 }>(), {
@@ -17,6 +19,10 @@ const borderCSS = computed(() => {
 })
 
 const slots = useSlots()
+
+const customHover = computed(() => {
+    return !!props.borderHover
+})
 </script>
 
 <template>
@@ -33,6 +39,7 @@ const slots = useSlots()
         gap="0.5rem"
 
         :data-disabled="props.disabled"
+        :data-custom-hover="customHover"
     >
         <SystemP class="text" :style="{
             color: props.color
@@ -62,13 +69,19 @@ const slots = useSlots()
         white-space: nowrap;
     }
 
-    &:hover {
-        opacity: 0.8;
-    }
-
     &[data-disabled="true"] {
         opacity: 0.5;
         cursor: not-allowed;
+    }
+
+    &:not([data-disabled="true"]) {
+        &[data-custom-hover="false"]:hover {
+            opacity: 0.8;
+        }
+
+        &[data-custom-hover="true"]:hover {
+            border-color: v-bind(borderHover) !important;
+        }
     }
 }
 </style>

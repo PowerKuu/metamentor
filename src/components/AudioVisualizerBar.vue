@@ -14,7 +14,7 @@ onMounted(() => {
     const audioMotionAnalyzer = new AudioMotionAnalyzer(visualizer.value, {
         mode: 2,
         //lumiBars: true,
-        source: props.audio,        
+        source: props.audio,
         showScaleX: false,
         showPeaks: false,
         alphaBars: true,
@@ -71,7 +71,7 @@ onMounted(() => {
         return getComputedStyle(document.body).getPropertyValue(variable)
     }
 
-    const color = getCSSVariable('--weak-text')
+    const color = getCSSVariable('--primary')
 
     
     audioMotionAnalyzer.registerGradient("gradient", {

@@ -6,6 +6,7 @@ defineProps<{
 }>()
 
 const icon = ref(null)
+const dropdownOpen = ref(false)
 </script>
 
 <template>
@@ -25,7 +26,35 @@ const icon = ref(null)
             </SystemFlex>
         </SystemFlex>
 
-        <Icon class="dots" name="mdi:dots-vertical"></Icon>
+        <SystemDropdown v-model:open="dropdownOpen">
+            <Icon :data-open="dropdownOpen" class="dots" name="mdi:dots-vertical"></Icon>
+
+            <template #content>
+                <SystemFlex direction="column">
+                    <SystemDropdownOption 
+                        icon="material-symbols:edit-rounded" 
+                        @click="dropdownOpen = false"
+                    >
+                        Edit
+                    </SystemDropdownOption>
+
+                    <SystemDropdownOption 
+                        icon="mdi:share" 
+                        @click="dropdownOpen = false"
+                    >
+                        Share
+                    </SystemDropdownOption>
+
+                    <SystemDropdownOption
+                        :delete="true" 
+                        icon="material-symbols:delete-outline-rounded" 
+                        @click="dropdownOpen = false"
+                    >
+                        Delete
+                    </SystemDropdownOption>
+                </SystemFlex>
+            </template>
+        </SystemDropdown>
     </SystemFlex>
 </template>
 
@@ -55,7 +84,11 @@ const icon = ref(null)
         color: var(--weak-primary);
 
         &:hover {
-            color: var(--primary);
+            color: var(--secondary);
+        }
+
+        &[data-open="true"] {
+            color: var(--secondary);
         }
     }
 
