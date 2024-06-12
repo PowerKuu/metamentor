@@ -5,70 +5,76 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+    id    String @id @default(cuid())
+    name  String
+    email String @unique
 
-  token     String   @unique @default(cuid())
+    token String @unique
 
-  chats     Chat[]
-  chatModels ChatModel[]
+    chats      Chat[]
+    chatModels ChatModel[]
 
-  plan      Plan    @default(FREE)
+    messages Message[]
+
+    plan Plan @default(FREE)
 }
 
 enum Plan {
-  FREE
-  STARTER
-  PLUS
-  ENTERPRISE
+    FREE
+    STARTER
+    PLUS
+    ENTERPRISE
 }
 
 model ChatModel {
-  id        String   @id @default(cuid())
+    id String @id @default(cuid())
 
-  name      String
-  system    String
+    name   String
+    system String
 
-  icon      String
+    icon String
 
-  owner     User    @relation(fields: [ownerId], references: [id])
-  ownerId   String
+    owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+    ownerId String?
 
-  chats     Chat[]
-  messages  Message[]
+    chats    Chat[]
+    messages Message[]
 }
 
 model Chat {
-  id        String   @id @default(cuid())
-  name     String
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+    id   String @id @default(cuid())
+    name String
 
-  users     User[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 
-  messages  Message[]
-  models    ChatModel[]
+    users User[]
+
+    messages Message[]
+    models   ChatModel[]
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  text      String
+    id   String @id @default(cuid())
+    text String
 
-  createdAt DateTime @default(now())
+    createdAt DateTime @default(now())
 
-  chat      Chat   @relation(fields: [chatId], references: [id])
-  chatId    String
+    chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId String
 
-  sentBy  ChatModel?   @relation(fields: [sentById], references: [id])
-  sentById String?
+    sentByModel   ChatModel? @relation(fields: [sentByModelId], references: [id], onDelete: Cascade)
+    sentByModelId String?
+
+    sentByUser   User?   @relation(fields: [sentByUserId], references: [id], onDelete: Cascade)
+    sentByUserId String?
 }

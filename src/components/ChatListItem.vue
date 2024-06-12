@@ -7,9 +7,20 @@ defineProps<{
 
 const icon = ref(null)
 const dropdownOpen = ref(false)
+
+const openDeleteModelPopup = ref(false)
+const openShareChatPopup = ref(false)
 </script>
 
 <template>
+    <PopupConfirm heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="openDeleteModelPopup">
+        <SystemP>Are you sure you want to leave this chat?</SystemP>
+        <SystemP>You <SystemPBold>cannot join</SystemPBold> this chat again unless invited back.</SystemP>
+    </PopupConfirm>
+
+    <PopupShareChat v-model:open="openShareChatPopup"></PopupShareChat>
+    
+
     <SystemFlex class="chat-list-item border" gap="2rem" align="center" justify="space-between">
         <SystemFlex gap="0.5rem" align="center">
             <SystemSlickAvatar :size="60" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
@@ -40,7 +51,10 @@ const dropdownOpen = ref(false)
 
                     <SystemDropdownOption 
                         icon="mdi:share" 
-                        @click="dropdownOpen = false"
+                        @click="() => {
+                            dropdownOpen = false
+                            openShareChatPopup = true
+                        }"
                     >
                         Share
                     </SystemDropdownOption>
@@ -48,9 +62,12 @@ const dropdownOpen = ref(false)
                     <SystemDropdownOption
                         :delete="true" 
                         icon="material-symbols:delete-outline-rounded" 
-                        @click="dropdownOpen = false"
+                        @click="() => {
+                            dropdownOpen = false
+                            openDeleteModelPopup = true
+                        }"
                     >
-                        Delete
+                        Leave
                     </SystemDropdownOption>
                 </SystemFlex>
             </template>

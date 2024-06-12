@@ -6,15 +6,23 @@ const hasInput = computed(() => !!input.value)
 const emit = defineEmits<{
     (e: "send", value: string): void
 }>()
+
+const openDeleteModelPopup = ref(false)
 </script>
 
 <template>
+    <PopupConfirm heading="Reset chat" subheading="Select one of the buttons below to confirm" v-model:open="openDeleteModelPopup">
+        <SystemP>Are you sure you want to reset this chat?</SystemP>
+        <SystemP>Everyone's chat history will be <SystemPBold>permently deleted</SystemPBold>.</SystemP>
+    </PopupConfirm>
+
     <SystemFlex grow="1" class="chat-wrapper" direction="column">
         <SystemFlex class="chat" justify="end" grow="1">
             <SystemFlex class="reset-button-wrapper" justify="end">
                 <SystemIconButton
                     class="reset-button"
                     icon="material-symbols:refresh-rounded"
+                    @click="() => openDeleteModelPopup = true"
                 ></SystemIconButton>
             </SystemFlex>
             
@@ -22,7 +30,6 @@ const emit = defineEmits<{
                 <SystemFlex class="messages" grow="1" direction="column" gap="0.5rem">
                     <ChatMessage :sent="true"></ChatMessage>
                     <ChatMessage :sent="false"></ChatMessage>
-
                 </SystemFlex>
 
                 <SystemFlex gap="0.5rem" class="chat-input" :data-has-input="hasInput">
