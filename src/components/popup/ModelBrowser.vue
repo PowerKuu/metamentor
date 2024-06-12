@@ -57,7 +57,10 @@ function resetSelected() {
 
 <template>
     <PopupEditModel :newModel="true" v-model:open="openEditChatPopup"></PopupEditModel>
-    <PopupConfirm subheading="Are you sure you want to delete this model?" v-model:open="openDeleteModelPopup"></PopupConfirm>
+    <PopupConfirm heading="Delete model" subheading="Select one of the buttons below to confirm" v-model:open="openDeleteModelPopup">
+        <SystemP>Are you sure you want to permanently delete this model?</SystemP>
+        <SystemP>This action is <SystemPBold>irreversible</SystemPBold>.</SystemP>
+    </PopupConfirm>
 
     <SystemPopupStandard maxWidth="37rem" heading="Browse models" subheading="Select one of the models below to create a new chat" v-model:open="openModel">
         <SystemFlex class="browser" gap="0.5rem" direction="column">
@@ -116,7 +119,10 @@ function resetSelected() {
                                         <SystemDropdownOption 
                                             :delete="true" 
                                             icon="material-symbols:delete-outline-rounded" 
-                                            @click="option.dropdownOpen = false"
+                                            @click="() => {
+                                                openDeleteModelPopup = true
+                                                option.dropdownOpen = false
+                                            }"
                                         >
                                             Delete
                                         </SystemDropdownOption>

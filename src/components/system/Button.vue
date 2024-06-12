@@ -32,7 +32,8 @@ const customHover = computed(() => {
             border: borderCSS
         }"
 
-        align="center"  
+        align="center"
+        justify="space-between"
 
         class="button"
 

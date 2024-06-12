@@ -15,12 +15,12 @@
 
 :root {
 	--primary: #473864;
-	--weak-primary: #89858d;
+	--weak-primary: #8c8b8d;
 	--secondary: #1c1824;
 	--background: #ffffff;
 	--neutral: #f8f7f9;
 	--text: #1c1824;
-	--weak-text: #89858d;
+	--weak-text: #8c8b8d;
 	--error: #d22222;
 
 	--page-padding: 8vw;
