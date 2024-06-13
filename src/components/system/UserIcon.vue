@@ -1,13 +1,14 @@
 <script setup lang="ts">
 defineProps<{
     url?: string
+    icon?: string
 }>()
 </script>
 
 <template>
     <SystemFlex align="center" justify="center" gap="0.5rem" class="system-icon border">
         <img class="img" v-if="url" :src="url" alt="">
-        <Icon color="var(--primary)" class="icon" v-else name="material-symbols:person"></Icon>
+        <Icon color="var(--primary)" class="icon" v-else :name="icon ?? `material-symbols:person`"></Icon>
     </SystemFlex>
 </template>
 
@@ -33,6 +34,7 @@ defineProps<{
         height: 100%;
 
         background-color: var(--neutral);
+        padding: 0.25rem;
     }
 }
 </style>

@@ -1,158 +1,47 @@
 <script setup lang="ts">
-import { OnClickOutside } from "@vueuse/components"
-
-export type SelectOption = {
+interface SelectOption {
     label: string,
-    img?: string,
-    value: string | number
+    value: string,
+    icon?: string
 }
 
 const props = defineProps<{
     options: SelectOption[],
-    value: SelectOption | null
-
-    placeholder?: string
-    search?: string
-
-    disableSearch?: boolean
-
-    requireSelection?: boolean
+    selected: SelectOption
 }>()
 
-const model = useModel(props, "value")
-const open = ref(false)
+const selectedModel = useModel(props, "selected")
 
-const searchModel = useModel(props, "search")
-
-
-const searchOptions = computed(() => {
-    if (props.disableSearch) return props.options
-
-    const filtered = props.options.filter(
-        (option) => {
-            if (!searchModel.value) return true
-            return option.label.toLowerCase().includes(searchModel.value.toLowerCase())
-        }
-    )
-
-    return filtered
-})
-
-function setModel(option: SelectOption) {
-    open.value = false
-    model.value = option
-}
-
-function inputSearch() {
-    model.value = null
-}
-
-watch(model, (newValue) => {
-    if (!newValue) return
-    searchModel.value = newValue.label
-})
-
-if (props.value) {
-    searchModel.value = props.value.label
-}
+const dropdownOpen = ref(false)
 </script>
 
 <template>
-    <OnClickOutside @trigger="open = false">
-        <SystemFlex class="selector" direction="column">
-            <SystemInput @input="inputSearch" :focus="open" @focusin="open = true" :preventValid="!model && requireSelection" class="input" :placeholder="placeholder" v-model:value="searchModel">
-                <template #icon>
-                    <NuxtImg v-if="model?.img" :src="model?.img" class="option-icon" />
-                    <Icon v-else name="material-symbols:search" color="var(--secondary)" class="search-icon" />
-                </template>
-            </SystemInput>
-
-            <SystemFlex class="options-wrapper" v-if="open && searchOptions.length > 0">
-                <SystemFlex class="options" direction="column">
-                    <SystemFlex v-for="option in searchOptions" @click="setModel(option)" :key="option.value" class="option" align="center" gap="1rem">
-                        <SystemFlex v-if="option.img" class="selection-img" align="center" justify="center">
-                            <NuxtImg class="option-icon" :src="option.img" height="1.5rem" loading="lazy"/>
-                        </SystemFlex>
-
-                        <SystemP>{{ option.label }}</SystemP>
-                    </SystemFlex>
-                </SystemFlex>
-            </SystemFlex>
+    <SystemDropdown v-model:open="dropdownOpen">
+        <SystemFlex class="test" :data-open="dropdownOpen" align="center">
+            <SystemP>{{ selectedModel.label }}</SystemP>
+            <Icon size="1.5rem" color="var(--secondary)" name="material-symbols:arrow-drop-down-rounded"></Icon>
         </SystemFlex>
-    </OnClickOutside>
+
+        <template #content>
+            <SystemDropdownOption v-for="option of options" :icon="option.icon" @click="() => {
+                selectedModel = option
+                dropdownOpen = false
+            }">
+                <SystemP>{{ option.label }}</SystemP>
+            </SystemDropdownOption>
+        </template>
+    </SystemDropdown>
 </template>
 
 <style scoped lang="scss">
+.test {
+    border-radius: var(--border-radius);
+    transition: 0.2s;
 
-.selector {
-    .input {
-        position: relative;
-        z-index: 8;
-    }
-}
+    padding: 0.5rem 1rem;
 
-.options-wrapper {
-    --options-height: 12.5rem;
-
-    display: flex;
-    flex-direction: column;
-
-    position: relative;
-
-    .options {
-        margin-top: 0.5rem;
-        
-        position: absolute;
-
-        z-index: 9;
-        
-        border-radius: var(--border-radius);
-        border: solid var(--border-width) var(--neutral) !important;
-        background: var(--background);
-
-        max-height: var(--options-height);
-
-        overflow-y: auto;
-        overflow-x: hidden;
-
-        max-width: 100%;
-        width: 100%;
-
-        :nth-last-child(-n+1) {
-            border-bottom: none;
-        }
-    }
-}
-
-.search-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-
-    opacity: 0.4;
-}
-
-
-.option-icon {
-    width: 1.5rem;
-    max-height: 1.5rem;
-}
-
-.option {
-    bottom: 0;
-    display: flex;
-    align-items: center;
-
-    border-bottom: solid 1px var(--neutral);
-    padding-left: 0.5rem;
-
-    min-height: var(--normal-height);
-
-    white-space: nowrap;
-    cursor: pointer;
-
-    &:hover {
+    &:hover, &[data-open="true"] {
         background-color: var(--neutral);
-        border-color: var(--secondary);
     }
 }
 </style>

@@ -19,14 +19,14 @@ function toggle(event: Event) {
     openModel.value = !openModel.value
 }
 
-const margin = 10
+const margin = 5
 </script>
 
 <template>
-    <div class="dropdown" :data-open="open">
-        <div class="element" ref="element" @click="toggle">
+    <SystemFlex class="dropdown" :data-open="open" align="center">
+        <SystemFlex align="center" justify="center" class="element" ref="element" @click="toggle">
             <slot></slot>
-        </div>
+        </SystemFlex>
 
         <SystemOverlay :transparent="true" :zIndex="140" :open="openModel" @click="close">
             <SystemFlex 
@@ -40,10 +40,14 @@ const margin = 10
                 <slot name="content"></slot>
             </SystemFlex>
         </SystemOverlay>
-    </div>
+    </SystemFlex>
 </template>
 
 <style scoped lang="scss">
+.element {
+    cursor: pointer;
+    user-select: none
+}
 
 .dropdown {
     position: relative;
