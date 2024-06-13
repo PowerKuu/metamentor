@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-    icon: string
+    icon?: string
     delete?: boolean
 }>()
 </script>
@@ -10,7 +10,7 @@ defineProps<{
         <SystemP>
             <slot></slot>
         </SystemP>
-        <Icon class="dropdown-option-icon" :name="icon"></Icon>
+        <Icon class="dropdown-option-icon" :name="icon ?? ``"></Icon>
     </SystemFlex>
 </template>
 
