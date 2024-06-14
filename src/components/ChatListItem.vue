@@ -59,6 +59,13 @@ const openShareChatPopup = ref(false)
                         Share
                     </SystemDropdownOption>
 
+                    <SystemDropdownOption 
+                        icon="material-symbols:copy-all-rounded"
+                        @click="dropdownOpen = false"
+                    >
+                        Duplicate
+                    </SystemDropdownOption>
+
                     <SystemDropdownOption
                         :delete="true" 
                         icon="material-symbols:delete-outline-rounded" 

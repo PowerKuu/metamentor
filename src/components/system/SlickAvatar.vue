@@ -81,7 +81,7 @@ function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
 
 function getRandomPerson(): Person {
     const isBlackRace = randomItem([true, false] as const)
-    const hasSpecialHair = randomItem([false, false, true] as const)
+    const hasSpecialHair = randomItem([false, false, false, false, false, false, true] as const)
     const hasEarrings = randomItem([false, false, true] as const)
     const hasGlasses = randomItem([false, false, true] as const)
     const hasTop = randomItem([true, true, true, true, false] as const)
@@ -149,6 +149,8 @@ function getRandomPerson(): Person {
 
     person.face.color = skinColor
     person.ears.color = skinColor
+
+    console.log(hasSpecialHair)
 
     if (!hasSpecialHair) {
         person.eyebrows.color = hairColor
