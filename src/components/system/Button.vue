@@ -11,7 +11,6 @@ const props = withDefaults(defineProps<{
 }>(), {
     background: "var(--primary)",
     color: "var(--background)",
-    icon: "ic:baseline-keyboard-arrow-right",
 })
 
 const borderCSS = computed(() => {

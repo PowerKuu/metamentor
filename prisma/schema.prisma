@@ -61,6 +61,11 @@ model Chat {
 
     messages Message[]
     models   ChatModel[]
+
+    copyOf Chat? @relation("ChatToChat", fields: [copyOfId], references: [id], onDelete: SetNull)
+    copyOfId String?
+
+    copies Chat[] @relation("ChatToChat")
 }
 
 model Message {
