@@ -27,6 +27,33 @@ const options = ref<{
 
         selected: false,
         dropdownOpen: false
+    },
+    {
+        id: "1",
+        name: "My AI Anna",
+        description: "Anny is a chatbot that can help you with your daily tasks",
+        modelIcon: null,
+
+        selected: false,
+        dropdownOpen: false
+    },
+    {
+        id: "1",
+        name: "My AI Anna",
+        description: "Anny is a chatbot that can help you with your daily tasks",
+        modelIcon: null,
+
+        selected: false,
+        dropdownOpen: false
+    },
+    {
+        id: "1",
+        name: "My AI Anna",
+        description: "Anny is a chatbot that can help you with your daily tasks",
+        modelIcon: null,
+
+        selected: false,
+        dropdownOpen: false
     }
 ])
 
@@ -73,7 +100,7 @@ function resetSelected() {
                 <SystemButton icon="material-symbols:add-rounded" @click="openEditChat">Add model</SystemButton>
             </SystemFlex>
 
-            <SystemFlex class="cards border" gap="0.5rem" direction="column">
+            <SystemFlex class="cards border" direction="column">
                 <SystemFlex direction="column" class="no-models" v-if="options.length <= 0">
                     <SystemPSmall class="weak-text">No models found {{ search ? `searching "${search}"` : ""}}</SystemPSmall>
                     <SystemPSmall @click="openEditChat" class="link">Create a new model +</SystemPSmall>
@@ -83,7 +110,7 @@ function resetSelected() {
                     v-for="option of options" 
                     :data-disabeld="hasMaxSelected" 
                     :data-selected="option.selected" 
-                    class="border model-card"
+                    class="model-card"
                     @click="(event: Event) => filterClickAndToggleSelected(event, option)"
                 >
                     <SystemSlickAvatar class="avatar" :size="100" v-model="option.modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
@@ -153,7 +180,6 @@ function resetSelected() {
     max-height: 30rem;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0.5rem;
 }
 
 .no-models {
@@ -167,8 +193,11 @@ function resetSelected() {
 .model-card {
     cursor: pointer;
     transition: 0.2s;
-    &:hover {
-        background: var(--neutral);
+    
+    border-bottom: var(--border-width) solid var(--neutral);
+
+    &:last-child {
+        border: 0;
     }
 
     .card-contents {
@@ -184,7 +213,6 @@ function resetSelected() {
 
     &[data-selected="true"] {
         background: var(--neutral);
-        border-color: var(--weak-primary);
     }
 
     &:not([data-selected="true"]) {

@@ -5,21 +5,40 @@ const props = defineProps<{
 }>()
 
 const openModel = useModel(props, "open")
+
+// Fix this ref
 const element = ref<HTMLElement | null>(null)
-const { bottom, left } = useElementBounding(element)
+
+const bottom = ref(0)
+const left = ref(0)
 
 function close() {
     openModel.value = false
 }
 
 function toggle(event: Event) {
-    console.log("toggle")
     event.stopPropagation()
 
     openModel.value = !openModel.value
 }
 
 const margin = 5
+
+// Add debounce and only on openModels
+onMounted(() => {
+    window.addEventListener("resize", () => {
+        if (openModel.value) {
+            console.log("resize", element.value)
+
+            const rect = element.value?.getBoundingClientRect()
+
+            if (rect) {
+                bottom.value = rect.bottom
+                left.value = rect.left
+            }
+        }
+    })
+})
 </script>
 
 <template>

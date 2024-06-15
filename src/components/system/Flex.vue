@@ -11,7 +11,7 @@ interface Props {
     
     grow: string,
     
-    height: string
+    height: string,
     width: string
 }
 
