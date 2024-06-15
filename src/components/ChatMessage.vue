@@ -1,14 +1,16 @@
 <script setup lang="ts">
 defineProps<{
     sent: boolean
+    sentIcon?: string
 }>()
 
 const avatar = ref(null)
 </script>
 
 <template>
-    <SystemFlex class="chat-message" :direction="sent ? `row-reverse` : `row`" align="end">
-        <SystemSlickAvatar :size="60" class="avatar" v-model="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+    <SystemFlex class="chat-message" :direction="sent ? `row-reverse` : `row`" align="end" :gap="sent ? `0.25rem` : `0`">
+        <SystemSlickAvatar v-if="!sent" :size="60" class="avatar" v-model="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+        <SystemUserIcon v-else :url="sentIcon" background="var(--background)"></SystemUserIcon>
 
         <SystemFlex class="message" direction="column" gap="0.5rem">
             <SystemPBold class="text">You</SystemPBold>

@@ -7,23 +7,12 @@ defineProps<{
 
 const icon = ref(null)
 const dropdownOpen = ref(false)
-
-const openDeleteModelPopup = ref(false)
-const openShareChatPopup = ref(false)
 </script>
 
 <template>
-    <PopupConfirm heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="openDeleteModelPopup">
-        <SystemP>Are you sure you want to leave this chat?</SystemP>
-        <SystemP>You <SystemPBold>cannot join</SystemPBold> this chat again unless invited back.</SystemP>
-    </PopupConfirm>
-
-    <PopupShareChat v-model:open="openShareChatPopup"></PopupShareChat>
-    
-
-    <SystemFlex class="chat-list-item border" gap="2rem" align="center" justify="space-between">
+    <SystemFlex class="chat-list-item" gap="2rem" align="center" justify="space-between">
         <SystemFlex gap="0.5rem" align="center">
-            <SystemSlickAvatar :size="60" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+            <SystemSlickAvatar :size="62" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
 
             <SystemFlex direction="column">
                 <SystemFlex class="top-text" align="center">
@@ -53,7 +42,7 @@ const openShareChatPopup = ref(false)
                         icon="mdi:share" 
                         @click="() => {
                             dropdownOpen = false
-                            openShareChatPopup = true
+                            //openShareChatPopup = true
                         }"
                     >
                         Share
@@ -71,7 +60,7 @@ const openShareChatPopup = ref(false)
                         icon="material-symbols:delete-outline-rounded" 
                         @click="() => {
                             dropdownOpen = false
-                            openDeleteModelPopup = true
+                            //openDeleteModelPopup = true
                         }"
                     >
                         Leave
@@ -84,7 +73,7 @@ const openShareChatPopup = ref(false)
 
 <style scoped lang="scss">
 .chat-list-item {
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s;
 
@@ -92,11 +81,11 @@ const openShareChatPopup = ref(false)
 
     height: 4rem;
 
+    border-bottom: var(--border-width) solid var(--neutral);
+
     &:hover {
         background-color: var(--neutral)
     }
-
-    border-radius: var(--border-radius);
 
     .dots {
         font-size: 1.5rem;

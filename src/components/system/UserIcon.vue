@@ -1,8 +1,11 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
     url?: string
     icon?: string
+    background?: string
 }>()
+
+const backgroundCSS = computed(() => props.background ?? `var(--neutral)`)
 </script>
 
 <template>
@@ -17,23 +20,19 @@ defineProps<{
     width: 2.75rem;
     height: 2.75rem;
 
-    &:hover {
-        cursor: pointer;
-    }
-
+    border-color: v-bind(backgroundCSS);
 
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-    
     }
 
     .icon {
         width: 100%;
         height: 100%;
 
-        background-color: var(--neutral);
+        background-color: v-bind(backgroundCSS);
         padding: 0.25rem;
     }
 }

@@ -1,8 +1,12 @@
 <script setup lang="ts">
-    import type { Chat } from '@prisma/client'
+import type { Chat } from '@prisma/client'
 import type { PersonProp, Widget  } from '@/components/system/SlickAvatar.vue'
 
 const resizeElem = ref(null)
+
+
+
+// Add debounce
 const { height: resizeHeight } = useElementBounding(resizeElem)
 const { height: windowHeight } = useWindowSize()
 

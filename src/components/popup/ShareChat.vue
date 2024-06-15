@@ -20,12 +20,12 @@ const hasValidInput = computed(() => {
     return input.value.length > 0 && input.value.includes("@") && input.value.includes(".")
 })
 
-const copyIcon = ref("material-symbols:copy-all-rounded")
+const copyIcon = ref("ic:round-insert-link")
 
 function copyLink() {
     copyIcon.value = "material-symbols:check-rounded"
     setTimeout(() => {
-        copyIcon.value = "material-symbols:copy-all-rounded"
+        copyIcon.value = "ic:round-insert-link"
     }, 1000)
 }
 
@@ -39,14 +39,14 @@ const openDeleteModelPopup = ref(false)
     </PopupConfirm>
 
     <SystemPopupStandard heading='Share «Chat name»' subheading="Share chat and get live " v-model:open="openModel">
-        <SystemFlex class="share" gap="1rem" direction="column">
+        <SystemFlex class="share" gap="0.5rem" direction="column">
             <SystemFlex gap="0.5rem">
                 <SystemInput grow="1" placeholder="joe@doe.com" v-model:value="input"></SystemInput>
                 <SystemButton :disabled="!hasValidInput" icon="material-symbols:send-rounded">Invite</SystemButton>
             </SystemFlex>
 
-            <SystemFlex class="users" direction="column" gap="1rem">
-                <SystemFlex v-for="i of 7" gap="1rem" justify="space-between">
+            <SystemFlex class="users border" direction="column">
+                <SystemFlex v-for="i of 7" class="user" gap="1rem" justify="space-between">
                     <SystemFlex gap="1rem">
                         <SystemUserIcon icon="material-symbols:group"></SystemUserIcon>
                         <SystemFlex direction="column" justify="center">
@@ -61,10 +61,10 @@ const openDeleteModelPopup = ref(false)
                 </SystemFlex>
             </SystemFlex>
 
-            <SystemFlex direction="column" gap="0.5rem"> 
+            <SystemFlex gap="0.5rem" align="center" justify="space-between"> 
                 <SystemPSmall class="weak-text">1 users invited (max 4)</SystemPSmall>
 
-                <SystemFlex justify="space-between">
+                <SystemFlex gap="0.5rem">
                     <SystemFlex>
                         <SystemButton
                             background="var(--background)" 
@@ -88,15 +88,17 @@ const openDeleteModelPopup = ref(false)
 
 <style scoped lang="scss">
 .share {
-    width: 30rem;
+    width: 32rem;
 }
 
 .users {
-    border: var(--border-width) solid var(--neutral);
-    border-radius: var(--border-radius);
-    padding: 0.5rem;
 
     max-height: 25rem;
     overflow-y: auto;
+
+    .user {
+        padding: 0.5rem;
+        border-bottom: var(--border-width) solid var(--neutral);
+    }
 }
 </style>

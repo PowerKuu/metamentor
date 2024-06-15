@@ -48,11 +48,10 @@ const dropdownOpen = ref(false)
 
     padding: 0.5rem 1rem;
 
-    background-color: var(--neutral);
     border: var(--border-width) solid var(--neutral);
 
     &:hover, &[data-open="true"] {
-        border: var(--border-width) solid var(--weak-primary);
+        background-color: var(--neutral);
     }
 }
 </style>

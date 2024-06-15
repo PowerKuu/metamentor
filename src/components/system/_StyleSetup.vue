@@ -14,13 +14,13 @@
 
 
 :root {
-	--primary: #473864;
-	--weak-primary: #8c8b8d;
-	--secondary: #1c1824;
+	--primary: #583c34;
+	--weak-primary: #8d8c8b;
+	--secondary: #241d18;
 	--background: #ffffff;
-	--neutral: #f8f7f9;
-	--text: #1c1824;
-	--weak-text: #8c8b8d;
+	--neutral: hsl(30, 10%, 96%);
+	--text: #241d18;
+	--weak-text: #8d8c8b;
 	--error: #d22222;
 
 	--page-padding: 8vw;
@@ -125,13 +125,15 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--text);
+  background-color: var(--secondary);
   border-radius: var(--border-radius);
+
+  cursor: pointer;
 
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text);
+  background-color: var(--secondary);
 }
 </style>
