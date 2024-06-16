@@ -9,7 +9,7 @@ const open = useModel(props, "open")
 <template>
     <Icon @click="open = !open" name="solar:hamburger-menu-linear" class="hamburger"></Icon>
 
-    <SystemOverlay :zIndex="120" @click="open = false" :open="open">
+    <SystemOverlay :zIndex="120" @click="open = false" v-model:open="open">
         <SystemFlex class="hamburger-menu" gap="1.5rem" direction="column">
             <Icon @click="open = !open" color="var(--text)" name="akar-icons:cross" class="cross"></Icon>
             

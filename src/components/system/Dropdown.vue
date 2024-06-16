@@ -6,7 +6,6 @@ const props = defineProps<{
 
 const openModel = useModel(props, "open")
 
-// Fix this ref
 const element = ref<HTMLElement | null>(null)
 
 const bottom = ref(0)
@@ -24,30 +23,30 @@ function toggle(event: Event) {
 
 const margin = 5
 
-// Add debounce and only on openModels
+function updatePosition() {
+    if (element.value && openModel.value) {
+        const rect = element.value.getBoundingClientRect()
+
+        bottom.value = rect.bottom
+        left.value = rect.left
+    }
+}
+
 onMounted(() => {
-    window.addEventListener("resize", () => {
-        if (openModel.value) {
-            console.log("resize", element.value)
+    window.addEventListener("resize", () => updatePosition())
+    window.addEventListener("scroll", () => updatePosition())
 
-            const rect = element.value?.getBoundingClientRect()
-
-            if (rect) {
-                bottom.value = rect.bottom
-                left.value = rect.left
-            }
-        }
-    })
+    watch(() => openModel.value, () => updatePosition())
 })
 </script>
 
 <template>
     <SystemFlex class="dropdown" :data-open="open" align="center">
-        <SystemFlex align="center" justify="center" class="element" ref="element" @click="toggle">
+        <div class="element" ref="element" @click="toggle">
             <slot></slot>
-        </SystemFlex>
+        </div>
 
-        <SystemOverlay :transparent="true" :zIndex="140" :open="openModel" @click="close">
+        <SystemOverlay :transparent="true" :zIndex="140" v-model:open="openModel" @click="close">
             <SystemFlex 
                 class="dropdown-content" 
                 direction="column"
@@ -65,7 +64,11 @@ onMounted(() => {
 <style scoped lang="scss">
 .element {
     cursor: pointer;
-    user-select: none
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dropdown {

@@ -19,7 +19,7 @@ function close() {
 </script>
 
 <template>
-    <SystemOverlay :open="openModel" :zIndex="zIndex ?? 100" @click="close">
+    <SystemOverlay v-model:open="openModel" :zIndex="zIndex ?? 100" @click="close">
         <SystemFlex class="popup" align="center" justify="center">
             <slot></slot>
         </SystemFlex>

@@ -36,12 +36,14 @@ const locale = useLocale()
                     </SystemP>
                 </NuxtLink>
                 
-                <NuxtLink href="/chat">
-                    <SystemButton gap="0.5rem" icon="material-symbols:chat-paste-go">
-                        Chat
-                    </SystemButton>
-                </NuxtLink>
-                <SystemUserIcon></SystemUserIcon>
+                <SystemFlex align="center" gap="0.5rem">
+                    <NuxtLink href="/chat">
+                        <SystemButton gap="0.5rem" icon="material-symbols:chat-paste-go">
+                            Chat
+                        </SystemButton>
+                    </NuxtLink>
+                    <SystemUserIcon></SystemUserIcon>
+                </SystemFlex>
             </SystemFlex>
         </template>
     </SystemTopNav>
