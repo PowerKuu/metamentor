@@ -14,21 +14,35 @@ for (let i = 0; i < 20; i++) {
         name: `Chat ${i}`,
         updatedAt: new Date(),
         createdAt: new Date(),
-        
-        userId: "1",
+        copyOfId: null
     })
+}
+
+function openEditChat(chat: Chat) {
+    openEditChatPopup.value = true
+}
+
+function openShareChat(chat: Chat) {
+    openShareChatPopup.value = true
+}
+
+function openLeaveChat(chat: Chat) {
+    openLeaveModelPopup.value = true
 }
 
 const openNewChatPopup = ref(false)
 
-const openDeleteModelPopup = ref(false)
+const openLeaveModelPopup = ref(false)
 const openShareChatPopup = ref(false)
+const openEditChatPopup = ref(false)
 </script>
 
 <template>
-    <PopupModelBrowser :newChat="true" v-model:open=openNewChatPopup></PopupModelBrowser>
+    <PopupModelBrowser :newChat="true" v-model:open="openNewChatPopup"></PopupModelBrowser>
+    <PopupModelBrowser :newChat="false" v-model:open="openEditChatPopup"></PopupModelBrowser>
 
-    <PopupConfirm heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="openDeleteModelPopup">
+
+    <PopupConfirm heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="openLeaveModelPopup">
         <SystemP>Are you sure you want to leave this chat?</SystemP>
         <SystemP>You <SystemPBold>cannot join</SystemPBold> this chat again unless invited back.</SystemP>
     </PopupConfirm>
@@ -44,7 +58,15 @@ const openShareChatPopup = ref(false)
             </SystemInput>
 
             <SystemFlex class="chats border" direction="column">
-                <ChatListItem v-for="chat in chats" :key="chat.id" :chat="chat" />
+                <ChatListItem 
+                    v-for="chat in chats" 
+                    :key="chat.id" 
+                    :chat="chat"
+
+                    @edit="() => openEditChat(chat)"
+                    @share="() => openShareChat(chat)"
+                    @leave="() => openLeaveChat(chat)"
+                />
             </SystemFlex>
 
 

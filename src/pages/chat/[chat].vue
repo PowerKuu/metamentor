@@ -6,7 +6,7 @@ const resizeElem = ref(null)
 
 
 
-// Add debounce
+
 const { height: resizeHeight } = useElementBounding(resizeElem)
 const { height: windowHeight } = useWindowSize()
 
@@ -82,6 +82,7 @@ async function test() {
 
     .model-resize {
         width: 100% !important;
+        background-color: var(--neutral);
     }
 
     .dragbar {

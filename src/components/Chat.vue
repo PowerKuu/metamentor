@@ -19,11 +19,7 @@ const openDeleteModelPopup = ref(false)
     <SystemFlex grow="1" class="chat-wrapper" direction="column">
         <SystemFlex class="chat" justify="end" grow="1">
             <SystemFlex class="reset-button-wrapper" justify="end">
-                <SystemIconButton
-                    class="reset-button"
-                    icon="material-symbols:refresh-rounded"
-                    @click="() => openDeleteModelPopup = true"
-                ></SystemIconButton>
+
             </SystemFlex>
             
             <SystemFlex direction="column" grow="1" gap="0.5rem">
@@ -52,6 +48,13 @@ const openDeleteModelPopup = ref(false)
                     </SystemIconButton>
 
                     <SystemIconButton icon="material-symbols:mic-rounded"></SystemIconButton>
+
+                    <SystemIconButton
+                        class="reset-button"
+                        icon="material-symbols:refresh-rounded"
+
+                        @click="() => openDeleteModelPopup = true"
+                    ></SystemIconButton>
                 </SystemFlex>
             </SystemFlex>
         </SystemFlex>
@@ -61,7 +64,6 @@ const openDeleteModelPopup = ref(false)
 <style scoped lang="scss">
 .chat-wrapper {
     overflow-y: auto;
-    background-color: var(--neutral);
 }
 
 .chat {

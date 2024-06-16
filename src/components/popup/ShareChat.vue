@@ -92,13 +92,16 @@ const openDeleteModelPopup = ref(false)
 }
 
 .users {
-
     max-height: 25rem;
     overflow-y: auto;
 
     .user {
         padding: 0.5rem;
         border-bottom: var(--border-width) solid var(--neutral);
+
+        &:last-child {
+            border: 0;
+        }
     }
 }
 </style>

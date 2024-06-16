@@ -117,7 +117,8 @@ a {
 
 /* custom scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 4px !important;
+  height: 4px !important;
 }
 
 ::-webkit-scrollbar-track {
@@ -125,7 +126,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);
+  background-color: var(--primary);
   border-radius: var(--border-radius);
 
   cursor: pointer;
@@ -134,6 +135,6 @@ a {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--secondary);
+  background-color: var(--primary);
 }
 </style>

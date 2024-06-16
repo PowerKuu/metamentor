@@ -72,10 +72,11 @@ onMounted(() => {
     }
 
     const color = getCSSVariable('--primary')
+    const backgroundColor = getCSSVariable('--neutral')
 
     
     audioMotionAnalyzer.registerGradient("gradient", {
-        bgColor: '#ffffff',
+        bgColor: backgroundColor,
         colorStops: [
             { color: color, level: .0 },  // use `level` to set the max bar amplitude (0 to 1) to use this color
         ]

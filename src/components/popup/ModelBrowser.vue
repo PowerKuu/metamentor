@@ -5,10 +5,12 @@ const props = defineProps<{
     newChat: boolean
 }>()
 
+defineEmits<{
+    (e: "save"): void
+}>()
+
 const openModel = useModel(props, "open")
 const search = ref("")
-
-//const dropdownOpenId = ref<string | null>(null)
 
 const options = ref<{
     id: string
@@ -169,7 +171,13 @@ function resetSelected() {
                     <SystemPSmall class="weak-text">{{ options.filter(option => option.selected).length }} models selected (max 4)</SystemPSmall>
                     <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                 </SystemFlex>
-                <SystemButton :disabled="!hasSelected">{{ newChat ? "Create chat" : "Save chat" }}</SystemButton>
+                <SystemButton 
+                    :disabled="!hasSelected"
+                    @click="() => {
+                        openModel = false
+                        $emit(`save`)
+                    }"
+                >{{ newChat ? "Create chat" : "Save chat" }}</SystemButton>
             </SystemFlex>
         </SystemFlex>
 </SystemPopupStandard>

@@ -5,6 +5,13 @@ defineProps<{
     chat: Chat
 }>()
 
+defineEmits<{
+    (e: "edit"): void
+    (e: "share"): void
+    (e: "duplicate"): void
+    (e: "leave"): void
+}>()
+
 const icon = ref(null)
 const dropdownOpen = ref(false)
 </script>
@@ -33,7 +40,10 @@ const dropdownOpen = ref(false)
                 <SystemFlex direction="column">
                     <SystemDropdownOption 
                         icon="material-symbols:edit-rounded" 
-                        @click="dropdownOpen = false"
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`edit`)
+                        }"
                     >
                         Edit
                     </SystemDropdownOption>
@@ -42,7 +52,7 @@ const dropdownOpen = ref(false)
                         icon="mdi:share" 
                         @click="() => {
                             dropdownOpen = false
-                            //openShareChatPopup = true
+                            $emit(`share`)
                         }"
                     >
                         Share
@@ -50,7 +60,10 @@ const dropdownOpen = ref(false)
 
                     <SystemDropdownOption 
                         icon="material-symbols:copy-all-rounded"
-                        @click="dropdownOpen = false"
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`duplicate`)
+                        }"
                     >
                         Duplicate
                     </SystemDropdownOption>
@@ -60,7 +73,7 @@ const dropdownOpen = ref(false)
                         icon="material-symbols:delete-outline-rounded" 
                         @click="() => {
                             dropdownOpen = false
-                            //openDeleteModelPopup = true
+                            $emit(`leave`)
                         }"
                     >
                         Leave
@@ -82,6 +95,10 @@ const dropdownOpen = ref(false)
     height: 4rem;
 
     border-bottom: var(--border-width) solid var(--neutral);
+
+    &:last-child {
+        border-bottom: none;
+    }
 
     &:hover {
         background-color: var(--neutral)
