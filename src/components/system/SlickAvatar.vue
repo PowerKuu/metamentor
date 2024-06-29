@@ -80,8 +80,8 @@ function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
 
 
 function getRandomPerson(): Person {
-    const isBlackRace = randomItem([true, false] as const)
-    const hasSpecialHair = randomItem([false, false, true] as const)
+    const isBlackRace = randomItem([true, false, false] as const)
+    const hasSpecialHair = randomItem([false, false, false, true] as const)
     const hasEarrings = randomItem([false, false, true] as const)
     const hasGlasses = randomItem([false, false, true] as const)
     const hasTop = randomItem([true, true, true, true, false] as const)
