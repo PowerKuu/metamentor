@@ -80,11 +80,11 @@ function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
 
 
 function getRandomPerson(): Person {
-    const isBlackRace = randomItem([true, false, false] as const)
-    const hasSpecialHair = randomItem([false, false, false, true] as const)
+    const isBlackRace = randomItem([true, false] as const)
+    const hasSpecialHair = randomItem([false, false, false, false, false, false, true] as const)
     const hasEarrings = randomItem([false, false, true] as const)
     const hasGlasses = randomItem([false, false, true] as const)
-    const hasTop = randomItem([true, true, true, true, false] as const)
+    const hasTop = randomItem([true, true, true, true, true, true, true, false] as const)
 
     const blackSkinColor = [
         "#D2B48C", // Tan
@@ -149,6 +149,8 @@ function getRandomPerson(): Person {
 
     person.face.color = skinColor
     person.ears.color = skinColor
+
+    console.log(hasSpecialHair)
 
     if (!hasSpecialHair) {
         person.eyebrows.color = hairColor
@@ -237,7 +239,7 @@ watchEffect(async () => {
 <template>
     <div
         ref="avatarRef"
-        class="vue-color-avatar"
+        class="slick-avatar"
         :style="{
             minWidth: sizeCSS,
             minHeight: sizeCSS,
@@ -250,13 +252,11 @@ watchEffect(async () => {
 </template>
 
 <style scoped lang="scss">
-.vue-color-avatar {
+.slick-avatar {
     position: relative;
     overflow: hidden;
 
     .avatar-payload {
-        position: relative;
-        z-index: 2;
         width: 100%;
         height: 100%;
     }

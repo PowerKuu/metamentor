@@ -1,14 +1,16 @@
 <script setup lang="ts">
 defineProps<{
     sent: boolean
+    sentIcon?: string
 }>()
 
 const avatar = ref(null)
 </script>
 
 <template>
-    <SystemFlex class="chat-message" :direction="sent ? `row-reverse` : `row`" align="end">
-        <SystemSlickAvatar :size="60" class="avatar" v-model="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+    <SystemFlex class="chat-message" :data-sent="sent" :direction="sent ? `row-reverse` : `row`" align="end" :gap="sent ? `0.25rem` : `0`">
+        <SystemSlickAvatar v-if="!sent" :size="60" class="avatar" v-model="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+        <SystemUserIcon v-else :url="sentIcon" background="var(--neutral)"></SystemUserIcon>
 
         <SystemFlex class="message" direction="column" gap="0.5rem">
             <SystemPBold class="text">You</SystemPBold>
@@ -25,9 +27,21 @@ const avatar = ref(null)
         max-width: 50%;
         padding: 0.5rem;
         
-        background-color: var(--background);
+        background-color: var(--neutral);
 
         border-radius: var(--border-radius);
+    }
+
+    &[data-sent="true"] {
+        .message {
+            border-bottom-right-radius: 0;
+        }
+    }
+
+    &[data-sent="false"] {
+        .message {
+            border-bottom-left-radius: 0;
+        }
     }
 }
 </style>
