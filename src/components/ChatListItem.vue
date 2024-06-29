@@ -5,13 +5,21 @@ defineProps<{
     chat: Chat
 }>()
 
+defineEmits<{
+    (e: "edit"): void
+    (e: "share"): void
+    (e: "duplicate"): void
+    (e: "leave"): void
+}>()
+
 const icon = ref(null)
+const dropdownOpen = ref(false)
 </script>
 
 <template>
-    <SystemFlex class="chat-list-item border" gap="2rem" align="center" justify="space-between">
+    <SystemFlex class="chat-list-item" gap="2rem" align="center" justify="space-between">
         <SystemFlex gap="0.5rem" align="center">
-            <SystemSlickAvatar :size="60" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+            <SystemSlickAvatar :size="62" v-model="icon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
 
             <SystemFlex direction="column">
                 <SystemFlex class="top-text" align="center">
@@ -25,13 +33,60 @@ const icon = ref(null)
             </SystemFlex>
         </SystemFlex>
 
-        <Icon class="dots" name="mdi:dots-vertical"></Icon>
+        <SystemDropdown v-model:open="dropdownOpen">
+            <Icon :data-open="dropdownOpen" class="dots" name="mdi:dots-vertical"></Icon>
+
+            <template #content>
+                <SystemFlex direction="column">
+                    <SystemDropdownOption 
+                        icon="material-symbols:edit-rounded" 
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`edit`)
+                        }"
+                    >
+                        Edit
+                    </SystemDropdownOption>
+
+                    <SystemDropdownOption 
+                        icon="mdi:share" 
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`share`)
+                        }"
+                    >
+                        Share
+                    </SystemDropdownOption>
+
+                    <SystemDropdownOption 
+                        icon="material-symbols:copy-all-rounded"
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`duplicate`)
+                        }"
+                    >
+                        Duplicate
+                    </SystemDropdownOption>
+
+                    <SystemDropdownOption
+                        :delete="true" 
+                        icon="material-symbols:delete-outline-rounded" 
+                        @click="() => {
+                            dropdownOpen = false
+                            $emit(`leave`)
+                        }"
+                    >
+                        Leave
+                    </SystemDropdownOption>
+                </SystemFlex>
+            </template>
+        </SystemDropdown>
     </SystemFlex>
 </template>
 
 <style scoped lang="scss">
 .chat-list-item {
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s;
 
@@ -39,11 +94,15 @@ const icon = ref(null)
 
     height: 4rem;
 
+    border-bottom: var(--border-width) solid var(--neutral);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
     &:hover {
         background-color: var(--neutral)
     }
-
-    border-radius: var(--border-radius);
 
     .dots {
         font-size: 1.5rem;
@@ -55,7 +114,11 @@ const icon = ref(null)
         color: var(--weak-primary);
 
         &:hover {
-            color: var(--primary);
+            color: var(--secondary);
+        }
+
+        &[data-open="true"] {
+            color: var(--secondary);
         }
     }
 

@@ -32,7 +32,7 @@ defineProps<{
 
     transition: 0.2s;
 
-    z-index: 100;
+    z-index: 150;
 
     p {
         white-space: nowrap;
@@ -57,7 +57,7 @@ defineProps<{
     background-color: var(--secondary);
     padding: 0.3rem 0.7rem;
     border-radius: 5px;
-    z-index: 100;
+    z-index: 150;
 }
 
 .tooltip::after {

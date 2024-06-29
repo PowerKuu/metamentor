@@ -13,21 +13,21 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.7.0",
-    "@prisma/client": "^5.14.0",
-    "@vueuse/components": "^10.10.0",
-    "@vueuse/nuxt": "^10.10.0",
+    "@prisma/client": "^5.15.0",
+    "@vueuse/components": "^10.11.0",
+    "@vueuse/nuxt": "^10.11.0",
     "audiomotion-analyzer": "^4.5.0",
     "moment": "^2.30.1",
-    "nuxt": "^3.10.3",
+    "nuxt": "^3.12.1",
     "nuxt-icon": "^0.6.9",
-    "sass": "^1.77.2",
+    "sass": "^1.77.5",
     "serve": "^14.2.3",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.0"
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.14",
-    "prisma": "^5.14.0"
+    "prisma": "^5.15.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.18.0"

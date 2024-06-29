@@ -14,14 +14,14 @@
 
 
 :root {
-	--primary: #18181b;
-	--weak-primary: #696969;
-	--secondary: #18181b;
+	--primary: #583c34;
+	--weak-primary: #8d8c8b;
+	--secondary: #241d18;
 	--background: #ffffff;
-	--neutral: #f9f8f7;
-	--text: #18181b;
-	--weak-text: #696969;
-	--error: #FF0000;
+	--neutral: hsl(30, 10%, 96%);
+	--text: #241d18;
+	--weak-text: #8d8c8b;
+	--error: #d22222;
 
 	--page-padding: 8vw;
 	
@@ -117,7 +117,8 @@ a {
 
 /* custom scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 4px !important;
+  height: 4px !important;
 }
 
 ::-webkit-scrollbar-track {
@@ -125,13 +126,15 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--text);
+  background-color: var(--primary);
   border-radius: var(--border-radius);
+
+  cursor: pointer;
 
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text);
+  background-color: var(--primary);
 }
 </style>
