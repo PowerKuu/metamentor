@@ -5,17 +5,15 @@ export default defineEventHandler(async (event) => {
 
     console.log(event.context.params)
 
-    const operation = functions[operationName]
+    const operation: Function = functions[operationName]
 
     if (!operation) return setResponseStatus(event, 404)
 
-    const body = await readBody(event)
+    const bodyArgs = await readBody(event)
 
-    console.log(body)
+    if (!bodyArgs) return setResponseStatus(event, 400)
 
-    if (!body) return setResponseStatus(event, 400)
-
-    const status = await operation(body)
+    const status = await operation(...(bodyArgs || []))
     if (typeof status === "number") return setResponseStatus(event, status)
     return status
 })

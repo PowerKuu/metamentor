@@ -24,7 +24,7 @@ const avatar = ref(null)
 <style scoped lang="scss">
 .chat-message {
     .message {
-        max-width: 50%;
+        max-width: 70%;
         padding: 0.5rem;
         
         background-color: var(--neutral);

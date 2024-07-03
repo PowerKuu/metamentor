@@ -18,12 +18,12 @@
 	--weak-primary: #8d8c8b;
 	--secondary: #241d18;
 	--background: #ffffff;
-	--neutral: hsl(30, 10%, 96%);
+	--neutral: hsl(30, 10%, 98%);
 	--text: #241d18;
 	--weak-text: #8d8c8b;
 	--error: #d22222;
 
-	--page-padding: 8vw;
+	--page-padding: 5vw;
 	
 	--normal-height: 2.8rem;
 	--border-radius: 5px;
@@ -122,11 +122,11 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--neutral);
+  background-color: #00000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--primary);
+  background-color: var(--secondary);
   border-radius: var(--border-radius);
 
   cursor: pointer;

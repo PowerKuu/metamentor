@@ -14,7 +14,7 @@ for (let i = 0; i < 20; i++) {
         name: `Chat ${i}`,
         updatedAt: new Date(),
         createdAt: new Date(),
-        copyOfId: null
+        userId: "s"
     })
 }
 
@@ -49,15 +49,20 @@ const openEditChatPopup = ref(false)
 
     <PopupShareChat v-model:open="openShareChatPopup"></PopupShareChat>
 
-    <SystemFlex grow="1" gap="0.5rem" class="wrapper">
-        <SystemFlex gap="0.5rem" direction="column" class="sidebar border">
-            <SystemInput value="" placeholder="Search">
-                <template #icon>
-                    <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
-                </template>
-            </SystemInput>
+    <SystemFlex grow="1" class="wrapper border">
+        <SystemFlex direction="column" class="sidebar">
+            <SystemFlex class="buttons" gap="0.25rem">
+                <SystemInput class="search" value="" placeholder="Search">
+                    <template #icon>
+                        <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
+                    </template>
+                </SystemInput>
 
-            <SystemFlex class="chats border" direction="column">
+                <SystemIconButton @click="openNewChatPopup = true" justify="space-between" icon="material-symbols:chat-add-on">
+                </SystemIconButton>
+            </SystemFlex>
+
+            <SystemFlex class="chats" direction="column">
                 <ChatListItem 
                     v-for="chat in chats" 
                     :key="chat.id" 
@@ -69,10 +74,6 @@ const openEditChatPopup = ref(false)
                 />
             </SystemFlex>
 
-
-            <SystemButton @click="openNewChatPopup = true" class="seperator"justify="space-between" icon="material-symbols:chat-add-on">
-                New chat
-            </SystemButton>
         </SystemFlex>
 
         <NuxtPage></NuxtPage>
@@ -82,21 +83,24 @@ const openEditChatPopup = ref(false)
 <style scoped lang="scss">
 .sidebar {
     height: 100%;
-    padding: 0.5rem;
-
-    .seperator {
-        margin-top: auto;
-    }
-
+    border-right: var(--border-width) solid var(--neutral);
     .chats {
         flex: 1;
 
         overflow-y: auto;
     }
+
+    .buttons {
+        padding: 0.5rem;
+        border-bottom: var(--border-width) solid var(--neutral);
+        .search {
+            flex: 1;
+        }
+    }
 }
 
 .wrapper {
-    height: 87vh;
+    max-height: 40rem;
     min-height: 30rem;
 }
 </style>

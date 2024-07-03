@@ -21,7 +21,7 @@ model User {
     token String @unique
 
     chats      Chat[]
-    chatModels ChatModel[]
+    Models Model[]
 
     messages Message[]
 
@@ -35,7 +35,7 @@ enum Plan {
     ENTERPRISE
 }
 
-model ChatModel {
+model Model {
     id String @id @default(cuid())
 
     name   String
@@ -60,7 +60,7 @@ model Chat {
     users User[]
 
     messages Message[]
-    models   ChatModel[]
+    models   Model[]
 
     copyOf Chat? @relation("ChatToChat", fields: [copyOfId], references: [id], onDelete: SetNull)
     copyOfId String?
@@ -77,7 +77,7 @@ model Message {
     chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
     chatId String
 
-    sentByModel   ChatModel? @relation(fields: [sentByModelId], references: [id], onDelete: Cascade)
+    sentByModel   Model? @relation(fields: [sentByModelId], references: [id], onDelete: Cascade)
     sentByModelId String?
 
     sentByUser   User?   @relation(fields: [sentByUserId], references: [id], onDelete: Cascade)

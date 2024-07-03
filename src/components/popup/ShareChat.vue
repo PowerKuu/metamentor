@@ -7,12 +7,14 @@ const openModel = useModel(props, "open")
 
 const permissionOptions = [
     { label: "Edit", value: "edit", icon: "material-symbols:edit-rounded" },
-    { label: "Duplicate", value: "independent", icon: "material-symbols:copy-all-rounded"},
     { label: "Read only", value: "read-only", icon: "material-symbols:visibility-rounded" },
+    { label: "Independent", value: "independent", icon: "material-symbols:copy-all-rounded"},
     { label: "Remove", value: "remove", icon: "material-symbols:delete-outline-rounded", delete: true, overideClick: () => {
         openDeleteModelPopup.value = true
     }}
 ]
+
+serverFunction("status", 2, "jd")
 
 const selectedPermission = ref(permissionOptions[0])
 const input = ref("")

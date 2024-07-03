@@ -72,7 +72,7 @@ onMounted(() => {
     }
 
     const color = getCSSVariable('--primary')
-    const backgroundColor = getCSSVariable('--neutral')
+    const backgroundColor = getCSSVariable('--background')
 
     
     audioMotionAnalyzer.registerGradient("gradient", {

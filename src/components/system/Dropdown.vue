@@ -7,9 +7,15 @@ const props = defineProps<{
 const openModel = useModel(props, "open")
 
 const element = ref<HTMLElement | null>(null)
+const contentElement = ref<HTMLElement | null>(null)
 
-const bottom = ref(0)
-const left = ref(0)
+const contentTop = ref()
+const contentBottom = ref()
+const contentRight = ref()
+const contentLeft = ref()
+
+let useContentDown = true
+let useContentRight = true
 
 function close() {
     openModel.value = false
@@ -21,22 +27,47 @@ function toggle(event: Event) {
     openModel.value = !openModel.value
 }
 
-const margin = 5
+const contentMargin = 5
 
-function updatePosition() {
-    if (element.value && openModel.value) {
-        const rect = element.value.getBoundingClientRect()
+async function recomputeDropdownPosition() {
+    if (!openModel.value || !contentElement.value) return
 
-        bottom.value = rect.bottom
-        left.value = rect.left
-    }
+    useContentDown = true
+    useContentRight = true
+
+    await updateDropdownPosition()
+
+    const contentRect = contentElement.value.getBoundingClientRect()
+
+    useContentDown = contentRect.bottom <= window.innerHeight
+    useContentRight = contentRect.right <= window.innerWidth
+    
+    await updateDropdownPosition()
 }
 
-onMounted(() => {
-    window.addEventListener("resize", () => updatePosition())
-    window.addEventListener("scroll", () => updatePosition())
+async function updateDropdownPosition() {
+    if (!openModel.value || !element.value) return
 
-    watch(() => openModel.value, () => updatePosition())
+    const elementRect = element.value.getBoundingClientRect()
+
+    if (useContentDown) contentTop.value = elementRect.bottom
+    else contentBottom.value = elementRect.top
+
+
+    if (useContentRight) contentLeft.value = elementRect.right
+    else contentRight.value = elementRect.left
+
+    return new Promise((resolve) => {
+        nextTick(() => resolve(0))
+    })
+}
+
+
+onMounted(() => {
+    window.addEventListener("resize", () => recomputeDropdownPosition())
+    window.addEventListener("scroll", () => recomputeDropdownPosition())
+
+    watch(() => openModel.value, () => recomputeDropdownPosition())
 })
 </script>
 
@@ -47,16 +78,16 @@ onMounted(() => {
         </div>
 
         <SystemOverlay :transparent="true" :zIndex="140" v-model:open="openModel" @click="close">
-            <SystemFlex 
+            <div 
                 class="dropdown-content" 
-                direction="column"
+                ref="contentElement"
                 :style="{
-                    top: `${bottom + margin}px`,
-                    left: `${left}px`
+                    top: `${contentTop + contentMargin}px`,
+                    left: `${contentLeft}px`
                 }"
             >
                 <slot name="content"></slot>
-            </SystemFlex>
+            </div>
         </SystemOverlay>
     </SystemFlex>
 </template>
@@ -76,7 +107,8 @@ onMounted(() => {
 }
 
 .dropdown-content {
+    display: flex;
+    flex-direction: column;
     position: absolute;
-
 }
 </style>

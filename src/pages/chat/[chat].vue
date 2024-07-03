@@ -56,9 +56,9 @@ async function test() {
 </script>
 
 <template>
-    <SystemFlex direction="column" class="border chat" grow="1">
+    <SystemFlex direction="column" class="chat-dashboard" grow="1">
         <SystemFlex direction="column">
-            <SystemResizable handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
+            <SystemResizable v-if="true" handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
                 <SystemFlex direction="column" align="center" class="model">
                     <SystemSlickAvatar class="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]" :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
 
@@ -71,18 +71,20 @@ async function test() {
             <SystemHDragbar class="dragbar"></SystemHDragbar>
         </SystemFlex>
 
-        <Chat @send="openMouth"></Chat>
+        <ChatMessages></ChatMessages>
+
+        <ChatInputBar @send="openMouth"></ChatInputBar>
     </SystemFlex>
 </template>
 
 <style scoped lang="scss">
-.chat {
-    flex: 1;
+.chat-dashboard {
     height: 100%;
+    max-height: 100%;
 
     .model-resize {
         width: 100% !important;
-        background-color: var(--neutral);
+        background-color: var(--background);
     }
 
     .dragbar {

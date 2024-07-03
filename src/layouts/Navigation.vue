@@ -55,7 +55,7 @@ const locale = useLocale()
 
 <style scoped lang="scss">
 .wrapper {
-    padding: 6rem var(--page-padding);
+    padding: 5.8rem var(--page-padding);
     padding-bottom: 0;
 }
 
