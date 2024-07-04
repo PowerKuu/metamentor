@@ -11,7 +11,7 @@
 <style scoped lang="scss">
 b {
     font-size: 1.125rem;
-    color: var(--secondary);
+    color: var(--text);
     font-weight: 600;
 }
 </style>

@@ -53,8 +53,8 @@ defineProps<{
 
 .tooltip {
     color: white;
-    border: var(--secondary) solid 1px;
-    background-color: var(--secondary);
+    border: var(--primary) solid 1px;
+    background-color: var(--primary);
     padding: 0.3rem 0.7rem;
     border-radius: 5px;
     z-index: 150;
@@ -67,7 +67,7 @@ defineProps<{
     left: 50%;
     border-width: 5px;
     border-style: solid;
-    border-color: var(--secondary) transparent transparent transparent;
+    border-color: var(--primary) transparent transparent transparent;
 
     transform: translateX(-50%);
 }
@@ -76,7 +76,7 @@ defineProps<{
     position: relative;
     cursor: pointer;
 
-    background-color: var(--weak-primary);
+    background-color: var(--weak-text);
     padding: 0.1rem;
 
     border-radius: 50%;

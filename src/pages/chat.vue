@@ -49,34 +49,43 @@ const openEditChatPopup = ref(false)
 
     <PopupShareChat v-model:open="openShareChatPopup"></PopupShareChat>
 
-    <SystemFlex grow="1" class="wrapper border">
-        <SystemFlex direction="column" class="sidebar">
-            <SystemFlex class="buttons" gap="0.25rem">
-                <SystemInput class="search" value="" placeholder="Search">
-                    <template #icon>
-                        <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
-                    </template>
-                </SystemInput>
+    <SystemFlex grow="1" class="wrapper">
+        <SystemFlex grow="1" class="border">
+            <SystemFlex direction="column" class="sidebar">
+                <SystemFlex class="buttons" gap="0.25rem">
+                    <SystemInput class="search" value="" placeholder="Search">
+                        <template #icon>
+                            <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
+                        </template>
+                    </SystemInput>
 
-                <SystemIconButton @click="openNewChatPopup = true" justify="space-between" icon="material-symbols:chat-add-on">
-                </SystemIconButton>
+                    <SystemIconButton
+                        background="var(--primary)"
+                        border="var(--primary)"
+                        color="var(--background)"
+                        :default-hover="false"
+                        @click="openNewChatPopup = true" 
+                        icon="material-symbols:chat-add-on"
+                    >
+                    </SystemIconButton>
+                </SystemFlex>
+
+                <SystemFlex class="chats" direction="column">
+                    <ChatListItem 
+                        v-for="chat in chats" 
+                        :key="chat.id" 
+                        :chat="chat"
+
+                        @edit="() => openEditChat(chat)"
+                        @share="() => openShareChat(chat)"
+                        @leave="() => openLeaveChat(chat)"
+                    />
+                </SystemFlex>
+
             </SystemFlex>
 
-            <SystemFlex class="chats" direction="column">
-                <ChatListItem 
-                    v-for="chat in chats" 
-                    :key="chat.id" 
-                    :chat="chat"
-
-                    @edit="() => openEditChat(chat)"
-                    @share="() => openShareChat(chat)"
-                    @leave="() => openLeaveChat(chat)"
-                />
-            </SystemFlex>
-
+            <NuxtPage></NuxtPage>
         </SystemFlex>
-
-        <NuxtPage></NuxtPage>
     </SystemFlex>
 </template>
 
@@ -100,7 +109,9 @@ const openEditChatPopup = ref(false)
 }
 
 .wrapper {
-    max-height: 40rem;
-    min-height: 30rem;
+    padding-top: 5.5rem;
+    padding-bottom: 0.5rem;
+    min-height: 100vh;
+    max-height: 100vh;
 }
 </style>

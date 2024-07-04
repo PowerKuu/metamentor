@@ -27,7 +27,7 @@ defineProps<{
     border: var(--border-width) solid var(--neutral);
 
     .dropdown-option-icon {
-        color: var(--secondary);
+        color: var(--text);
         font-size: 1.5rem;
     }
 
@@ -44,7 +44,7 @@ defineProps<{
 
     &:hover {
         background: var(--neutral);
-        border-bottom-color: var(--secondary);
+        border-bottom-color: var(--primary);
 
         &[data-delete="true"] {
             border-bottom-color: var(--error);

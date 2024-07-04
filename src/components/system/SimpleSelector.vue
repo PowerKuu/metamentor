@@ -24,7 +24,7 @@ const dropdownOpen = ref(false)
             <SystemP>{{ selectedModel.label }}</SystemP>
             <Icon 
                 size="1.5rem" 
-                color="var(--secondary)" 
+                color="var(--text)" 
                 :name="displayIcon && selectedModel.icon ? selectedModel.icon : `material-symbols:arrow-drop-down-rounded`">
             </Icon>
         </SystemFlex>

@@ -14,7 +14,7 @@ const modelIcon = ref(null)
         <SystemFlex class="edit-popup" gap="0.5rem" direction="column">
             <SystemNamed tooltip="Icon to differentiate the model" name="Icon">
                 <SystemFlex class="border" align="center" justify="center">
-                    <SystemSlickAvatar :size="225" v-model="modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+                    <SystemSlickAvatar :size="225" v-model="modelIcon" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
                     <SystemIconButton 
                         @click="modelIcon = null" 
                         icon="material-symbols:refresh-rounded"
@@ -38,7 +38,6 @@ const modelIcon = ref(null)
             <SystemFlex align="center" justify="space-between">
                 <SystemIconButton 
                     icon="material-symbols:upload"
-
                 ></SystemIconButton>
                 <SystemButton>{{ newModel ? "Create" : "Save" }}</SystemButton>
             </SystemFlex>

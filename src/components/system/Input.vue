@@ -168,7 +168,7 @@ onMounted(() => {
         &:-webkit-autofill:active {
             -webkit-background-clip: text;
             transition: background-color 5000s ease-in-out 0s;
-            box-shadow: inset 0 0 20px 20px var(--weak-primary);
+            box-shadow: inset 0 0 20px 20px var(--secondary);
         }
     }
 

@@ -10,8 +10,6 @@ const element = ref<HTMLElement | null>(null)
 const contentElement = ref<HTMLElement | null>(null)
 
 const contentTop = ref()
-const contentBottom = ref()
-const contentRight = ref()
 const contentLeft = ref()
 
 let useContentDown = true
@@ -29,37 +27,36 @@ function toggle(event: Event) {
 
 const contentMargin = 5
 
+
 async function recomputeDropdownPosition() {
-    if (!openModel.value || !contentElement.value) return
-
-    useContentDown = true
-    useContentRight = true
-
-    await updateDropdownPosition()
+    if (!openModel.value || !contentElement.value || !element.value) return
 
     const contentRect = contentElement.value.getBoundingClientRect()
-
-    useContentDown = contentRect.bottom <= window.innerHeight
-    useContentRight = contentRect.right <= window.innerWidth
-    
-    await updateDropdownPosition()
-}
-
-async function updateDropdownPosition() {
-    if (!openModel.value || !element.value) return
-
     const elementRect = element.value.getBoundingClientRect()
 
-    if (useContentDown) contentTop.value = elementRect.bottom
-    else contentBottom.value = elementRect.top
+    const downOffset = useContentDown ? 0 : 
+        (contentRect.height + elementRect.height) + contentMargin * 2
+
+  
+    const rightOffset = useContentRight ? 0 : 
+        contentRect.width - elementRect.width
+
+    useContentDown = contentRect.bottom + downOffset <= window.innerHeight
+
+    useContentRight = contentRect.right + rightOffset <= window.innerWidth
+    
+    await updateContentPosition(elementRect, contentRect)
+}
+
+async function updateContentPosition(elementRect: DOMRect, contentRect: DOMRect) {
+    if (useContentDown) contentTop.value = elementRect.bottom + contentMargin
+    else contentTop.value = elementRect.top - contentRect.height - contentMargin
 
 
-    if (useContentRight) contentLeft.value = elementRect.right
-    else contentRight.value = elementRect.left
+    if (useContentRight) contentLeft.value = elementRect.left
+    else contentLeft.value = elementRect.right - contentRect.width
 
-    return new Promise((resolve) => {
-        nextTick(() => resolve(0))
-    })
+    await asyncNextTick()
 }
 
 
@@ -67,7 +64,11 @@ onMounted(() => {
     window.addEventListener("resize", () => recomputeDropdownPosition())
     window.addEventListener("scroll", () => recomputeDropdownPosition())
 
-    watch(() => openModel.value, () => recomputeDropdownPosition())
+    watch(() => openModel.value, () => {
+        useContentDown = true
+        useContentRight = true
+        recomputeDropdownPosition().then(recomputeDropdownPosition)
+    })
 })
 </script>
 
@@ -82,8 +83,8 @@ onMounted(() => {
                 class="dropdown-content" 
                 ref="contentElement"
                 :style="{
-                    top: `${contentTop + contentMargin}px`,
-                    left: `${contentLeft}px`
+                    top: `${contentTop}px`,
+                    left: `${contentLeft}px`,
                 }"
             >
                 <slot name="content"></slot>

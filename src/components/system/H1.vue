@@ -11,7 +11,7 @@
 <style scoped lang="scss">
 h1 {
     font-size: 3.123rem;
-    color: var(--secondary);
+    color: var(--text);
     font-weight: 600;
 }
 </style>

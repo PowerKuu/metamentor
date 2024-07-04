@@ -82,3 +82,9 @@ export function dateFromNow(date: Date) {
 export function capatalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+export function asyncNextTick() {
+    return new Promise((resolve) => {
+        nextTick(() => resolve(0))
+    })
+}

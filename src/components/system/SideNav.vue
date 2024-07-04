@@ -19,7 +19,7 @@
 
     padding: 1rem;
 
-    background-color: var(--secondary);
+    background-color: var(--primary);
     z-index: 50;
 
     color: var(--background);

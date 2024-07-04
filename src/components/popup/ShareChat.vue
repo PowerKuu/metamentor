@@ -14,8 +14,6 @@ const permissionOptions = [
     }}
 ]
 
-serverFunction("status", 2, "jd")
-
 const selectedPermission = ref(permissionOptions[0])
 const input = ref("")
 const hasValidInput = computed(() => {

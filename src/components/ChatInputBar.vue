@@ -24,9 +24,9 @@ const openDeleteModelPopup = ref(false)
         </SystemInput>
 
         <SystemIconButton 
-            :background="hasInput ? `var(--primary)` : undefined"
-            :border="hasInput ? `var(--primary)` : undefined"
-            :color="hasInput ? `var(--background)` : undefined"
+            background="var(--primary)"
+            border="var(--primary)"
+            color="var(--background)"
             :default-hover="false"
             icon="material-symbols:send"
             :disabled="!hasInput"

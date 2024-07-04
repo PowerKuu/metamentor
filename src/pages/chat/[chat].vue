@@ -60,7 +60,7 @@ async function test() {
         <SystemFlex direction="column">
             <SystemResizable v-if="true" handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
                 <SystemFlex direction="column" align="center" class="model">
-                    <SystemSlickAvatar class="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]" :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
+                    <SystemSlickAvatar class="avatar" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]" :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
 
                     <KeepAlive>
                         <AudioVisualizerBar :audio="modelAudio"></AudioVisualizerBar>

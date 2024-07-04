@@ -14,20 +14,21 @@
 
 
 :root {
-	--primary: #583c34;
-	--weak-primary: #8d8c8b;
-	--secondary: #241d18;
-	--background: #ffffff;
-	--neutral: hsl(30, 10%, 98%);
-	--text: #241d18;
+	--primary: #B8574B;
+	--neutral: #faf6f5;
+	
+	--text: #050609;
 	--weak-text: #8d8c8b;
+	
+	--background: #ffffff;
+	
 	--error: #d22222;
-
+	
 	--page-padding: 5vw;
 	
 	--normal-height: 2.8rem;
-	--border-radius: 5px;
-
+	--border-radius: 4px;
+	
 	--border-width: 2px;
 }
 
@@ -35,14 +36,14 @@ html, body {
 	overflow-x: hidden;
 	overflow-y: auto;
 	scroll-behavior: smooth;
-
+	
 	max-width: 100%;
 }
 
 * {
 	font-family: "Lato", sans-serif;
 	font-weight: 500;
-
+	
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -103,38 +104,37 @@ a {
 }
 
 .hide-overflow {
-    overflow-y: scroll; /* Add the ability to scroll the y axis */
-
-    /* Hide the scrollbar for Internet Explorer, Edge and Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer and Edge */
-    scrollbar-width: none;  /* Firefox */
-
-    /* Hide the scrollbar for Chrome, Safari and Opera */
-    &::-webkit-scrollbar {
-       display: none;
-    }
+	overflow-y: scroll; /* Add the ability to scroll the y axis */
+	
+	/* Hide the scrollbar for Internet Explorer, Edge and Firefox */
+	-ms-overflow-style: none;  /* Internet Explorer and Edge */
+	scrollbar-width: none;  /* Firefox */
+	
+	/* Hide the scrollbar for Chrome, Safari and Opera */
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 /* custom scrollbar */
 ::-webkit-scrollbar {
-  width: 4px !important;
-  height: 4px !important;
+	width: var(--border-width) !important;
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #00000000;
+	background-color: #00000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);
-  border-radius: var(--border-radius);
-
-  cursor: pointer;
-
-  background-clip: content-box;
+	background-color: hsl(30, 10%, 90%);
+	border-radius: var(--border-radius);
+	
+	cursor: pointer;
+	
+	background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--primary);
+	transition: 0.2s;
 }
 </style>

@@ -25,7 +25,7 @@
 
     &:hover {
         background-color: var(--neutral);
-        border-color: var(--weak-primary);
+        border-color: var(--primary);
     }
 }
 </style>

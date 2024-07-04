@@ -35,9 +35,15 @@ const locale = useLocale()
                         Plans
                     </SystemP>
                 </NuxtLink>
+
+                <NuxtLink href="/chat">
+                    <SystemP>
+                        Chat
+                    </SystemP>
+                </NuxtLink>
                 
                 <SystemFlex align="center" gap="0.5rem">
-                    <NuxtLink href="/chat">
+                    <NuxtLink v-if="false" href="/chat">
                         <SystemButton gap="0.5rem" icon="material-symbols:chat-paste-go">
                             Chat
                         </SystemButton>
@@ -55,7 +61,7 @@ const locale = useLocale()
 
 <style scoped lang="scss">
 .wrapper {
-    padding: 5.8rem var(--page-padding);
+    padding: 0 var(--page-padding);
     padding-bottom: 0;
 }
 

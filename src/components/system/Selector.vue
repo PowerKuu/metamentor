@@ -63,7 +63,7 @@ if (props.value) {
             <SystemInput @input="inputSearch" :focus="open" @focusin="open = true" :preventValid="!model && requireSelection" class="input" :placeholder="placeholder" v-model:value="searchModel">
                 <template #icon>
                     <NuxtImg v-if="model?.img" :src="model?.img" class="option-icon" />
-                    <Icon v-else name="material-symbols:search" color="var(--secondary)" class="search-icon" />
+                    <Icon v-else name="material-symbols:search" color="var(--primary)" class="search-icon" />
                 </template>
             </SystemInput>
 
@@ -152,7 +152,7 @@ if (props.value) {
 
     &:hover {
         background-color: var(--neutral);
-        border-color: var(--secondary);
+        border-color: var(--primary);
     }
 }
 </style>

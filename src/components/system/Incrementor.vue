@@ -29,7 +29,7 @@ function add(value: number) {
 <template>
     <SystemFlex class="incrementor" align="center">
         <SystemFlex class="minus" @click="add(-(props.step ?? 1))" align="center" justify="center">
-            <Icon name="material-symbols:remove-rounded" color="var(--secondary)"></Icon>
+            <Icon name="material-symbols:remove-rounded" color="var(--primary)"></Icon>
         </SystemFlex>
 
         <input 
@@ -44,7 +44,7 @@ function add(value: number) {
         >
         
         <SystemFlex class="plus" @click="add(props.step ?? 1)" align="center" justify="center">
-            <Icon name="material-symbols:add-rounded" color="var(--secondary)"></Icon>
+            <Icon name="material-symbols:add-rounded" color="var(--primary)"></Icon>
         </SystemFlex>
     </SystemFlex>
 </template>

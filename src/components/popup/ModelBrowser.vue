@@ -12,6 +12,10 @@ defineEmits<{
 const openModel = useModel(props, "open")
 const search = ref("")
 
+
+const chatName = ref("")
+const hasChatName = computed(() => !!chatName.value)
+
 const options = ref<{
     id: string
     name: string
@@ -91,16 +95,22 @@ function resetSelected() {
         <SystemP>This action is <SystemPBold>irreversible</SystemPBold>.</SystemP>
     </PopupConfirm>
 
-    <SystemPopupStandard maxWidth="37rem" heading="Browse models" subheading="Select one of the models below to create a new chat" v-model:open="openModel">
+    <SystemPopupStandard maxWidth="37rem" :heading="newChat ? `New chat` : `Edit chat`" subheading="Select one of the models below to create a new chat" v-model:open="openModel">
         <SystemFlex class="browser" gap="0.5rem" direction="column">
-            <SystemFlex gap="0.5rem">
-                <SystemInput class="search" v-model:value="search" placeholder="Search">
-                    <template #icon>
-                        <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
-                    </template>
-                </SystemInput>
-                <SystemButton icon="material-symbols:add-rounded" @click="openEditChat">Add model</SystemButton>
-            </SystemFlex>
+            <SystemNamed name="Name">
+                <SystemInput placeholder="My chat" v-model:value="chatName"></SystemInput>
+            </SystemNamed>
+
+            <SystemNamed name="Models">
+                <SystemFlex gap="0.5rem">
+                    <SystemInput class="search" v-model:value="search" placeholder="Search">
+                        <template #icon>
+                            <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
+                        </template>
+                    </SystemInput>
+                    <SystemButton icon="material-symbols:add-rounded" @click="openEditChat">Add model</SystemButton>
+                </SystemFlex>
+            </SystemNamed>
 
             <SystemFlex class="cards border" direction="column">
                 <SystemFlex direction="column" class="no-models" v-if="options.length <= 0">
@@ -115,7 +125,7 @@ function resetSelected() {
                     class="model-card"
                     @click="(event: Event) => filterClickAndToggleSelected(event, option)"
                 >
-                    <SystemSlickAvatar class="avatar" :size="100" v-model="option.modelIcon" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+                    <SystemSlickAvatar class="avatar" :size="100" v-model="option.modelIcon" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
                     
                     <SystemFlex grow="1" align="center" justify="space-between">
                         <SystemFlex direction="column" class="card-contents" gap="0.25rem">
@@ -127,7 +137,7 @@ function resetSelected() {
 
                         <SystemFlex class="card-options">
                             <SystemDropdown v-model:open="option.dropdownOpen">
-                                <Icon :data-open="option.dropdownOpen" class="icon-option dropdown-icon" name="mdi:dots-vertical"></Icon>
+                                <SystemDropdownDots :open="option.dropdownOpen"></SystemDropdownDots>
 
                                 <template #content>
                                     <SystemFlex direction="column">
@@ -159,7 +169,7 @@ function resetSelected() {
                                 </template>
                             </SystemDropdown>
                             
-                            <Icon v-if="option.selected" color="var(--secondary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
+                            <Icon v-if="option.selected" color="var(--primary)" class="icon-option" name="material-symbols:check-rounded"></Icon>
                             <Icon v-else class="icon-option" name="material-symbols:add-rounded"></Icon>
                         </SystemFlex>
                     </SystemFlex>
@@ -172,7 +182,7 @@ function resetSelected() {
                     <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                 </SystemFlex>
                 <SystemButton 
-                    :disabled="!hasSelected"
+                    :disabled="!hasSelected || !hasChatName"
                     @click="() => {
                         openModel = false
                         $emit(`save`)
@@ -221,6 +231,7 @@ function resetSelected() {
 
     &[data-selected="true"] {
         background: var(--neutral);
+        border-color: var(--primary)
     }
 
     &:not([data-selected="true"]) {
@@ -240,15 +251,11 @@ function resetSelected() {
 
     transition: 0.2s;
 
-    color: var(--weak-primary);
+    color: var(--weak-text);
 
     &:hover {
-        color: var(--secondary);
+        color: var(--primary);
     }
-}
-
-.dropdown-icon[data-open="true"] {
-    color: var(--secondary);
 }
 
 .search {

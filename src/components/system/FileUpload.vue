@@ -51,7 +51,7 @@ watch(() => props.disabled, () => {
             {{ label }}
         </SystemP>
 
-        <Icon color="var(--secondary)" class="upload-icon" name="material-symbols:drive-folder-upload"></Icon>
+        <Icon color="var(--primary)" class="upload-icon" name="material-symbols:drive-folder-upload"></Icon>
     
         <input :multiple="multiple" :accept="accept" :name="multiple ? `files[]` : undefined" @input="selectFile" ref="fileElement" type="file" class="file-input" />
     </SystemFlex>
@@ -92,7 +92,7 @@ watch(() => props.disabled, () => {
     }
 
     &[data-has-value="true"] {
-        border-color: var(--weak-primary);
+        border-color: var(--primary);
     }
 
     &:hover {

@@ -40,13 +40,13 @@ function close() {
 
 .close {
     cursor: pointer;
-    color: var(--weak-primary);
+    color: var(--weak-text);
     font-size: 1.5rem;
 
     transition: 0.2s;
 
     &:hover {
-        color: var(--secondary);
+        color: var(--text);
     }
 }
 </style>

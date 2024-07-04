@@ -9,7 +9,7 @@ const avatar = ref(null)
 
 <template>
     <SystemFlex class="chat-message" :data-sent="sent" :direction="sent ? `row-reverse` : `row`" align="end" :gap="sent ? `0.25rem` : `0`">
-        <SystemSlickAvatar v-if="!sent" :size="60" class="avatar" v-model="avatar" color="var(--secondary)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
+        <SystemSlickAvatar v-if="!sent" :size="60" class="avatar" v-model="avatar" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]"></SystemSlickAvatar>
         <SystemUserIcon v-else :url="sentIcon" background="var(--neutral)"></SystemUserIcon>
 
         <SystemFlex class="message" direction="column" gap="0.5rem">

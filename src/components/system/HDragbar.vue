@@ -4,7 +4,7 @@
 
 <template>
     <SystemFlex align="center" justify="center" class="dragbar">
-        <Icon name="material-symbols:drag-handle-rounded" color="var(--secondary)" size="1.4rem"></Icon>
+        <Icon name="material-symbols:drag-handle-rounded" color="var(--weak-text)" size="1.4rem"></Icon>
     </SystemFlex>
 </template>
 
