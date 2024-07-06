@@ -108,7 +108,7 @@ function resetSelected() {
                             <Icon color="var(--weak-text)" name="material-symbols:search-rounded" size="1.25rem"></Icon>
                         </template>
                     </SystemInput>
-                    <SystemButton icon="material-symbols:add-rounded" @click="openEditChat">Add model</SystemButton>
+                    <SystemButton icon="material-symbols:add-rounded" @click="openEditChat">New model</SystemButton>
                 </SystemFlex>
             </SystemNamed>
 
