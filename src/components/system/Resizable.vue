@@ -30,10 +30,25 @@ let initialHeight = 0
 
 let lastDirection: "x" | "y" = "x"
 
+let minXDelta = 0
+let minYDelta = 0
+
 let maxXDelta = 0
 let maxYDelta = 0
 
-let snapDeleteThreshold = 50
+
+const snapDeleteThreshold = 35
+
+function resetDelta() {
+    if (props.width) {
+        minXDelta = Math.abs(initialWidth - props.width.min) * -1
+        maxXDelta = Math.abs(initialWidth - props.width.max)
+    }
+    if (props.height) {
+        minYDelta = Math.abs(initialHeight - props.height.min) * -1
+        maxYDelta = Math.abs(initialHeight - props.height.max)
+    }
+}
 
 function resetDrag(mx: number, my: number, direction: "x" | "y") {
     if (direction == "x") {
@@ -44,9 +59,7 @@ function resetDrag(mx: number, my: number, direction: "x" | "y") {
         initialHeight = currentHeight.value
     }
 
-    if (props.width) maxXDelta = Math.abs(initialWidth - props.width.min) * -1
-    if (props.height) maxYDelta = Math.abs(initialHeight - props.height.min) * -1
-
+    resetDelta()
 
     isResizing = true
     lastDirection = direction
@@ -73,19 +86,22 @@ function mouseUp(e: MouseEvent) {
 
 function mouseMove(e: MouseEvent) {
     if (!isResizing) return
+
+    const yDelta = e.clientY - initialY
+    const xDelta = e.clientX - initialX
     
     if (lastDirection === "x" && props.width) {
-        const xDelta = e.clientX - initialX
-
         if (isSnapDeleted.value) {
             currentWidth.value = 0
 
-            if (xDelta > snapDeleteThreshold) {
+            if (xDelta > props.width.min) {
                 isSnapDeleted.value = false
+
                 currentWidth.value = props.width.min
                 initialHeight = props.width.min
-
                 initialX = e.clientX
+
+                resetDelta()
             }
             
             return
@@ -94,25 +110,27 @@ function mouseMove(e: MouseEvent) {
         const newWidth = initialWidth + xDelta
         currentWidth.value = Math.max(props.width.min, Math.min(newWidth, props.width.max))
     
-        if (xDelta < maxXDelta - snapDeleteThreshold) {
+        if (xDelta < minXDelta - snapDeleteThreshold) {
             isSnapDeleted.value = true
+
             currentWidth.value = 0
+            initialWidth = 0
             initialX = e.clientX
         }
     }
 
     if (lastDirection === "y" && props.height) {
-        const yDelta = e.clientY - initialY
-
         if (isSnapDeleted.value) {
             currentHeight.value = 0
 
             if (yDelta > snapDeleteThreshold) {
                 isSnapDeleted.value = false
+                
                 currentHeight.value = props.height.min
                 initialHeight = props.height.min
-
                 initialY = e.clientY
+
+                resetDelta()
             }
             
             return
@@ -121,9 +139,11 @@ function mouseMove(e: MouseEvent) {
         const newHeight = initialHeight + yDelta
         currentHeight.value = Math.max(props.height.min, Math.min(newHeight, props.height.max))
         
-        if (yDelta < maxYDelta - snapDeleteThreshold) {
+        if (yDelta < minYDelta - snapDeleteThreshold) {
             isSnapDeleted.value = true
+
             currentHeight.value = 0
+            initialHeight = 0
             initialY = e.clientY
         }
     }
