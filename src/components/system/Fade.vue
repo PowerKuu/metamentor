@@ -4,11 +4,30 @@ const props = defineProps<{
 }>()
 
 const isInitial = ref(true)
-watch(() => props.open, () => isInitial.value = false)
+const remove = ref(!props.open)
+
+let currentTimeout: NodeJS.Timeout | null = null
+const timeout = 200
+
+watch(() => props.open, (value) => {
+    isInitial.value = false
+
+    if (!value) {
+        currentTimeout = setTimeout(() => {
+            if (props.open) return
+            remove.value = true
+        }, timeout)
+    } else {
+        if (currentTimeout) clearTimeout(currentTimeout)
+        remove.value = false
+    }
+}, {
+    immediate: true
+})
 </script>
 
 <template>
-    <div class="fade" :data-show="open" :data-initial="isInitial">
+    <div v-if="!remove" class="fade" :data-show="open" :data-initial="isInitial">
         <slot></slot>
     </div>
 </template>
@@ -52,7 +71,6 @@ watch(() => props.open, () => isInitial.value = false)
     to {
         opacity: 0;
         display: none;
-    }
-    
+    } 
 }
 </style>

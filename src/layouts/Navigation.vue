@@ -1,5 +1,23 @@
 <script setup lang="ts">
 const locale = useLocale()
+
+const dropdownOpen = ref(false)
+
+
+function login() {
+    dropdownOpen.value = false
+    navigateTo("/login")
+}
+
+function logout() {
+    dropdownOpen.value = false
+    navigateTo("/logout")
+}
+
+function settings() {
+    dropdownOpen.value = false
+    navigateTo("/settings")
+}
 </script>
 
 <template>
@@ -48,7 +66,33 @@ const locale = useLocale()
                             Chat
                         </SystemButton>
                     </NuxtLink>
-                    <SystemUserIcon></SystemUserIcon>
+                    <SystemDropdown :preferRight="false" v-model:open="dropdownOpen">
+                        <SystemUserIcon></SystemUserIcon>
+
+                        <template #content>
+                            <SystemFlex direction="column">
+                                <SystemDropdownOption 
+                                    icon="material-symbols:settings-rounded" 
+                                    @click="settings"
+                                >
+                                    Settings
+                                </SystemDropdownOption>
+                                <SystemDropdownOption 
+                                    icon="material-symbols:login-rounded" 
+                                    @click="login"
+                                >
+                                    Login
+                                </SystemDropdownOption>
+                                <SystemDropdownOption 
+                                    icon="material-symbols:logout-rounded"
+                                    :delete="true"
+                                    @click="logout"
+                                >
+                                    Logout
+                                </SystemDropdownOption>
+                            </SystemFlex>
+                        </template>
+                    </SystemDropdown>
                 </SystemFlex>
             </SystemFlex>
         </template>

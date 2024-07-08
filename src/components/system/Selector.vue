@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { OnClickOutside } from "@vueuse/components"
-
 export type SelectOption = {
     label: string,
     img?: string,
@@ -58,7 +56,7 @@ if (props.value) {
 </script>
 
 <template>
-    <OnClickOutside @trigger="open = false">
+    <SystemOverlay :passthrough="true" :transparent="true" :zIndex="140" v-model:open="open" @click="open = false">
         <SystemFlex class="selector" direction="column">
             <SystemInput @input="inputSearch" :focus="open" @focusin="open = true" :preventValid="!model && requireSelection" class="input" :placeholder="placeholder" v-model:value="searchModel">
                 <template #icon>
@@ -79,7 +77,7 @@ if (props.value) {
                 </SystemFlex>
             </SystemFlex>
         </SystemFlex>
-    </OnClickOutside>
+    </SystemOverlay>
 </template>
 
 <style scoped lang="scss">

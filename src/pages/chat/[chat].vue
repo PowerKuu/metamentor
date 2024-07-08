@@ -4,9 +4,6 @@ import type { PersonProp, Widget  } from '@/components/system/SlickAvatar.vue'
 
 const resizeElem = ref(null)
 
-
-
-
 const { height: resizeHeight } = useElementBounding(resizeElem)
 const { height: windowHeight } = useWindowSize()
 
@@ -27,12 +24,14 @@ let lastMouth: Widget<"mouth"> | null = null
 function openMouth() {
     if (!activeAvatar.value) return
 
-    lastMouth = activeAvatar.value.mouth.widget
-    activeAvatar.value.mouth.widget = "surprised"
-
     test().then(() => {
         closeMouth()
     })
+
+    if (activeAvatar.value.mouth.widget === "surprised") return
+
+    lastMouth = activeAvatar.value.mouth.widget
+    activeAvatar.value.mouth.widget = "surprised"
 }
 
 function closeMouth() {
