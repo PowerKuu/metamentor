@@ -16,7 +16,7 @@ const avatar = ref(null)
             <SystemPBold class="text">You</SystemPBold>
 
             <SystemP class="text">Hello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfjHello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfjHello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfjHello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfjHello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfjHello world wfwwlkfwfwlfwjklwfjwlkwj wlkfjwflkwjflwkfjwlk wjwlkfj</SystemP>
-            <SystemPSmall class="time weak-text">12:00</SystemPSmall>
+            <SystemPSmall class="time text-weak">12:00</SystemPSmall>
         </SystemFlex>
     </SystemFlex>
 </template>

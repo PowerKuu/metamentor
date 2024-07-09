@@ -26,11 +26,11 @@ const dropdownOpen = ref(false)
                     <SystemFlex class="top-text" align="center">
                         <SystemP class="name text-nowrap">{{ chat.name }}</SystemP>
 
-                        <SystemPSmall class="weak-text">(</SystemPSmall>
-                        <SystemPSmall class="weak-text text-overflow text-nowrap">Håkon kleven</SystemPSmall>
-                        <SystemPSmall class="weak-text">)</SystemPSmall>
+                        <SystemPSmall class="text-weak">(</SystemPSmall>
+                        <SystemPSmall class="text-weak text-overflow text-nowrap">Håkon kleven</SystemPSmall>
+                        <SystemPSmall class="text-weak">)</SystemPSmall>
                     </SystemFlex>
-                    <SystemPSmall class="weak-text text-overflow text-nowrap">{{ dateFromNow(chat.updatedAt) }}</SystemPSmall>
+                    <SystemPSmall class="text-weak text-overflow text-nowrap">{{ dateFromNow(chat.updatedAt) }}</SystemPSmall>
                 </SystemFlex>
             </SystemFlex>
 

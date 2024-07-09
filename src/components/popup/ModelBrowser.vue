@@ -114,7 +114,7 @@ function resetSelected() {
 
             <SystemFlex class="cards border" direction="column">
                 <SystemFlex direction="column" class="no-models" v-if="options.length <= 0">
-                    <SystemPSmall class="weak-text">No models found {{ search ? `searching "${search}"` : ""}}</SystemPSmall>
+                    <SystemPSmall class="text-weak">No models found {{ search ? `searching "${search}"` : ""}}</SystemPSmall>
                     <SystemPSmall @click="openEditChat" class="link">Create a new model +</SystemPSmall>
                 </SystemFlex>
 
@@ -132,7 +132,7 @@ function resetSelected() {
                             <SystemFlex align="center" justify="space-between">
                                 <SystemH4>{{ option.name }}</SystemH4>
                             </SystemFlex>
-                            <SystemPSmall class="weak-text hide-overflow">{{ option.description }}</SystemPSmall>
+                            <SystemPSmall class="text-weak hide-overflow">{{ option.description }}</SystemPSmall>
                         </SystemFlex>
 
                         <SystemFlex class="card-options">
@@ -178,7 +178,7 @@ function resetSelected() {
 
             <SystemFlex justify="space-between" align="center">
                 <SystemFlex gap="0.25rem">
-                    <SystemPSmall class="weak-text">{{ options.filter(option => option.selected).length }} models selected (max 4)</SystemPSmall>
+                    <SystemPSmall class="text-weak">{{ options.filter(option => option.selected).length }} models selected (max 4)</SystemPSmall>
                     <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                 </SystemFlex>
                 <SystemButton 

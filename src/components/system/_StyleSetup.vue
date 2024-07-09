@@ -76,6 +76,10 @@ html, body {
 	color: var(--background) !important;
 }
 
+.text-weak {
+	color: var(--weak-text) !important;
+}
+
 .pointer {
 	cursor: pointer;
 }
@@ -89,9 +93,6 @@ html, body {
 	display: none;
 }
 
-.weak-text {
-	color: var(--weak-text) !important;
-}
 
 a {
 	text-decoration: none;

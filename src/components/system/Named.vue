@@ -8,7 +8,7 @@ defineProps<{
 <template>
     <SystemFlex direction="column" gap="0.25rem">
         <SystemFlex gap="0.25rem" align="end">
-            <SystemPSmall class="weak-text">
+            <SystemPSmall class="text-weak">
                 {{ name }}
             </SystemPSmall>
             <SystemTooltip v-if="tooltip" :text="tooltip"></SystemTooltip>

@@ -51,7 +51,7 @@ const openDeleteModelPopup = ref(false)
                         <SystemUserIcon icon="material-symbols:group"></SystemUserIcon>
                         <SystemFlex direction="column" justify="center">
                             <SystemPBold>General</SystemPBold>
-                            <SystemPSmall class="weak-text">Everyone invited with the link</SystemPSmall>
+                            <SystemPSmall class="text-weak">Everyone invited with the link</SystemPSmall>
                         </SystemFlex>
                     </SystemFlex>
 
@@ -62,7 +62,7 @@ const openDeleteModelPopup = ref(false)
             </SystemFlex>
 
             <SystemFlex gap="0.5rem" align="center" justify="space-between"> 
-                <SystemPSmall class="weak-text">1 users invited (max 4)</SystemPSmall>
+                <SystemPSmall class="text-weak">1 users invited (max 4)</SystemPSmall>
 
                 <SystemFlex gap="0.5rem">
                     <SystemFlex>

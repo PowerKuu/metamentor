@@ -21,7 +21,7 @@ function close() {
             <SystemFlex justify="space-between" align="center" gap="3rem">
                 <SystemFlex direction="column">
                     <SystemH3>{{ heading }}</SystemH3>
-                    <SystemPSmall v-if="subheading" class="weak-text">{{ subheading }}</SystemPSmall>
+                    <SystemPSmall v-if="subheading" class="text-weak">{{ subheading }}</SystemPSmall>
                 </SystemFlex>
                 
                 <Icon @click="close" class="close" name="material-symbols:close-rounded"></Icon>
