@@ -4,9 +4,7 @@
 
 <template>
     <SystemStaticPopup>
-        <SystemBox>
-            <slot></slot>
-        </SystemBox>
+        <slot></slot>
     </SystemStaticPopup>
 </template>
 
