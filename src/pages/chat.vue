@@ -14,7 +14,7 @@ for (let i = 0; i < 20; i++) {
         name: `Chat ${i}`,
         updatedAt: new Date(),
         createdAt: new Date(),
-        userId: "s"
+        copyOfId: null
     })
 }
 

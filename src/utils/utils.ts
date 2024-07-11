@@ -21,7 +21,7 @@ export async function serverFunction<T extends FunctionNames>(operation: T, ...d
         return returned.status as ServerFunctionResult<T>
     }
 
-    const returnedData = await returned?.json()
+    const returnedData = await returned?.json().catch(() => {})
 
     return returnedData as ServerFunctionResult<T>
 }
