@@ -14,7 +14,7 @@ async function purgeVerificationCodes() {
     })
 }
 
-export async function requestLogin(email: string) {
+export async function requestVerification(email: string, username?: string) {
     if (!validator.isEmail(email)) {
         return 400
     }
@@ -27,11 +27,12 @@ export async function requestLogin(email: string) {
 
     let user: User | null = null
 
-    if (!requestedUser) {
+    if (!requestedUser && username) {
         user = await prisma.user.create({
             data: {
                 email,
-                token: generateToken()
+                token: generateToken(),
+                username
             }
         })
     } else {
@@ -40,7 +41,7 @@ export async function requestLogin(email: string) {
 
 
 
-    if (!user) return 401
+    if (!user) return 404
 
     const emailVerification = await prisma.verification.create({
         data: {
@@ -58,9 +59,11 @@ export async function requestLogin(email: string) {
 
     // Purge old verification codes
     purgeVerificationCodes()
+
+
 }
 
-export async function verifyLogin(email: string, code: string) {
+export async function verify(email: string, code: string) {
     if (!validator.isEmail(email)) {
         return 400
     }
@@ -80,10 +83,23 @@ export async function verifyLogin(email: string, code: string) {
         }
     })
 
+    if (!user?.registered) {
+        return 403
+    }
+
     if (!user) return 401
 
-    return  {
-        token: user.token,
-        registered: user.registered
-    }
+    return user
+}
+
+export async function getUser(token: string) {
+    const user = await prisma.user.findUnique({
+        where: {
+            token
+        }
+    })
+
+    if (!user) return 401
+
+    return user
 }

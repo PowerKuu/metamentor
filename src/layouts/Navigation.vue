@@ -6,7 +6,7 @@ const dropdownOpen = ref(false)
 
 function login() {
     dropdownOpen.value = false
-    navigateTo("/login")
+    navigateTo("/auth/login")
 }
 
 function logout() {
