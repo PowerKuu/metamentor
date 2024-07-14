@@ -17,7 +17,7 @@ model Verification {
     id String @id @default(cuid())
 
     code String @unique
-    email String @unique
+    email String
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String

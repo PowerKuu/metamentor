@@ -6,7 +6,6 @@ definePageMeta({
 const route = useRoute()
 
 const email = route.query.email as string
-const back = route.query.ref as string
 
 const statusMessage = ref("")
 const statusMessageColor = ref("")
@@ -15,19 +14,8 @@ const emailCode = ref("")
 
 const token = useCookie("token")
 
-function goBack() {
-    statusMessageColor.value = "var(--text)"
-    statusMessage.value = ""
-
-    if (back) {
-        navigateTo(back)
-    } else {
-        navigateTo("/")
-    }
-}
-
 if (!email) {
-    goBack()
+    useRouter().go(-1)
 }
 
 async function verify() {
@@ -43,6 +31,8 @@ async function verify() {
     }
 
     token.value = response.token
+
+    navigateTo("/chat")
 }
 </script>
 
@@ -65,12 +55,12 @@ async function verify() {
             <SystemFlex direction="column" gap="0.25rem">
                 <SystemP>
                     <SystemHighlight>
-                        • <NuxtLink target="_blank" class="text-underline" href="https://mail.google.com/">Gmail.com</NuxtLink>
+                        • <a target="_blank" class="text-underline" href="https://mail.google.com/">Gmail.com</a>
                     </SystemHighlight>
                 </SystemP>
                 <SystemP>
                     <SystemHighlight>
-                        • <NuxtLink target="_blank" class="text-underline" href="https://outlook.live.com/">Outlook.com</NuxtLink>
+                        • <a target="_blank" class="text-underline" href="https://outlook.live.com/">Outlook.com</a>
                     </SystemHighlight>
                 </SystemP>
             </SystemFlex>
@@ -86,7 +76,7 @@ async function verify() {
                     visibility: statusMessage ? 'visible' : 'hidden'
                 }">{{ statusMessage || "-" }}</SystemP>
 
-                <SystemPSmall class="text-underline text-weak pointer" @click="goBack">< Go back</SystemPSmall>
+                <SystemPSmall class="text-underline text-weak pointer" @click="$router.go(-1)">< Go back</SystemPSmall>
             </SystemFlex>
         </SystemFlex>
     </SystemBox>

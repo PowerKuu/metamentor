@@ -11,7 +11,7 @@ function login() {
 
 function logout() {
     dropdownOpen.value = false
-    navigateTo("/logout")
+    navigateTo("/auth/logout")
 }
 
 function settings() {

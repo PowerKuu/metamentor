@@ -13,11 +13,19 @@ async function sendVerify() {
     statusMessageColor.value = "var(--text)"
     statusMessage.value = "Sending email..."
 
-    const response = await serverFunction("requestVerification", email.value, username.value)
+    const response = await serverFunction("requestVerification", email.value, {
+        username: username.value
+    })
 
     if (isServerError(response)) {
-        statusMessage.value = "Failed to send email. Please try again."
         statusMessageColor.value = "var(--error)"
+
+        if (response == 409) {
+            statusMessage.value = "Email already in use. Please try again."
+            return
+        }
+
+        statusMessage.value = "Failed to send email. Please try again."
         return
     }
 
@@ -25,7 +33,7 @@ async function sendVerify() {
         "path": "/auth/verify",
         "query": {
             "email": email.value,
-            "ref": "/login"
+            "ref": "/auth/register"
         }
     })
 }
@@ -71,7 +79,7 @@ function goBack() {
                     visibility: statusMessage ? 'visible' : 'hidden'
                 }">{{ statusMessage || "-" }}</SystemP>
 
-                <SystemPSmall class="text-underline text-weak pointer" @click="goBack">< Go back</SystemPSmall>
+                <SystemPSmall class="text-underline text-weak pointer" @click="$router.go(-1)">< Go back</SystemPSmall>
             </SystemFlex>
         </SystemFlex>
     </SystemBox>

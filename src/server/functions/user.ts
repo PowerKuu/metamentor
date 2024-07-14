@@ -14,7 +14,9 @@ async function purgeVerificationCodes() {
     })
 }
 
-export async function requestVerification(email: string, username?: string) {
+export async function requestVerification(email: string, newUser?: {
+    username: string
+}) {
     if (!validator.isEmail(email)) {
         return 400
     }
@@ -27,19 +29,33 @@ export async function requestVerification(email: string, username?: string) {
 
     let user: User | null = null
 
-    if (!requestedUser && username) {
+    if (!requestedUser) {
+        if (!newUser) return 404
+
         user = await prisma.user.create({
             data: {
                 email,
                 token: generateToken(),
-                username
+                username: newUser.username
             }
         })
     } else {
         user = requestedUser
+
+        if (newUser){
+            if (requestedUser.registered) return 409
+
+            user = await prisma.user.update({
+                where: {
+                    id: requestedUser.id
+                },
+
+                data: {
+                    username: newUser.username
+                }
+            })
+        }
     }
-
-
 
     if (!user) return 404
 
@@ -59,8 +75,6 @@ export async function requestVerification(email: string, username?: string) {
 
     // Purge old verification codes
     purgeVerificationCodes()
-
-
 }
 
 export async function verify(email: string, code: string) {
@@ -83,11 +97,25 @@ export async function verify(email: string, code: string) {
         }
     })
 
-    if (!user?.registered) {
-        return 403
+    if (!user) return 404
+
+    if (!user.registered) {
+        await prisma.user.update({
+            where: {
+                id: user.id
+            },
+
+            data: {
+                registered: true
+            }
+        })
     }
 
-    if (!user) return 401
+    await prisma.verification.delete({
+        where: {
+            id: verification.id
+        }
+    })
 
     return user
 }
