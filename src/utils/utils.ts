@@ -30,6 +30,7 @@ export function isServerError<T>(data: T | number): data is number {
     return typeof data === "number"
 }
 
+/*
 export function useJsonStorage<T>(key: string, defaultValue: T) {
     // Global computer for all storages
     const recomputer = ref(0)
@@ -73,7 +74,7 @@ export function useJsonStorage<T>(key: string, defaultValue: T) {
 
 
     return newListener
-}
+}*/
 
 export function dateFromNow(date: Date) {
     return moment(date).fromNow()
