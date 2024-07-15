@@ -2,7 +2,8 @@ import moment from "moment"
 import en from "./locales/en"
 //import no from "./locales/no"
 
-
+// Rewrite the following code
+/*
 export type LocaleDataBlueprint = typeof en
 
 type Locale = {
@@ -69,3 +70,4 @@ export async function detectLocaleKey() {
         })
     })
 }
+*/
