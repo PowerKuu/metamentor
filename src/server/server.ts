@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { Prisma, PrismaClient } from "@prisma/client"
 import crypto from "crypto"
 
 
@@ -46,5 +46,14 @@ export async function sendEmail(email: string, subject: string, body: string) {
         to: email,
         subject,
         text: body
+    })
+}
+
+export async function verifyAuth<I extends Prisma.UserInclude>(token: string, include?: I) {
+    return prisma.user.findFirst({
+        where: {
+            token
+        },
+        include: include as I
     })
 }

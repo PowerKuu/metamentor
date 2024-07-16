@@ -1,5 +1,5 @@
 import validator from "validator"
-import { prisma, sendEmail, generateToken, generateVerificationCode } from "../server"
+import { prisma, sendEmail, generateToken, generateVerificationCode, verifyAuth } from "../server"
 import type { User } from "@prisma/client"
 
 async function purgeVerificationCodes() {
@@ -72,9 +72,6 @@ export async function requestVerification(email: string, newUser?: {
     })
 
     sendEmail(email, "Verification Code", emailVerification.code)
-
-    // Purge old verification codes
-    purgeVerificationCodes()
 }
 
 export async function verify(email: string, code: string) {
@@ -117,15 +114,14 @@ export async function verify(email: string, code: string) {
         }
     })
 
+    // Purge old verification codes
+    purgeVerificationCodes()
+
     return user
 }
 
 export async function getUser(token: string) {
-    const user = await prisma.user.findUnique({
-        where: {
-            token
-        }
-    })
+    const user = verifyAuth(token)
 
     if (!user) return 401
 

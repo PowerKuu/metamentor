@@ -9,6 +9,13 @@ const username = ref("")
 const statusMessage = ref("")
 const statusMessageColor = ref("")
 
+const user = useAuth()
+
+watch(user, () => {
+    if (user.value) navigateTo("/chat")
+})
+
+
 async function sendVerify() {
     statusMessageColor.value = "var(--text)"
     statusMessage.value = "Sending email..."
@@ -36,13 +43,6 @@ async function sendVerify() {
             "ref": "/auth/register"
         }
     })
-}
-
-function goBack() {
-    statusMessageColor.value = "var(--text)"
-    statusMessage.value = ""
-
-    navigateTo("/")
 }
 </script>
 

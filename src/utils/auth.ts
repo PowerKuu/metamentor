@@ -1,18 +1,27 @@
 import type { User } from "@prisma/client"
 
-const token = useCookie("token")
+export function useAuth() {
+    const token = useCookie("auth")
 
-export const user = asyncComputed<User | null>(async () => {
-    if (!token.value) {
-        return null
-    }
+    const user = asyncComputed<User | null>(async () => {
+        if (!token.value) return null
 
-    const user = await serverFunction("getUser", token.value)
+        const data = await serverFunction("getUser", token.value)
 
-    if (isServerError(user)) {
-        return null
-    }
+        if (isServerError(data)) {
+            return null
+        }
+
+        return data
+    }, undefined)
 
     return user
-})
-    
+}
+
+export function logout() {
+    useCookie("auth").value = ""
+}
+
+export function login(token: string) {
+    useCookie("auth").value = token
+}

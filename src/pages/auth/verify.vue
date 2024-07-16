@@ -12,7 +12,11 @@ const statusMessageColor = ref("")
 
 const emailCode = ref("")
 
-const token = useCookie("token")
+const user = useAuth()
+
+watch(user, () => {
+    if (user.value) navigateTo("/chat")
+})
 
 if (!email) {
     useRouter().go(-1)
@@ -30,9 +34,7 @@ async function verify() {
         return
     }
 
-    token.value = response.token
-
-    navigateTo("/chat")
+    login(response.token)
 }
 </script>
 

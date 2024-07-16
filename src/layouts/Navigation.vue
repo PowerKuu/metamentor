@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const locale = useLocale()
-
 const dropdownOpen = ref(false)
-
 
 function login() {
     dropdownOpen.value = false
@@ -11,7 +8,9 @@ function login() {
 
 function logout() {
     dropdownOpen.value = false
-    navigateTo("/auth/logout")
+
+    logout()
+    navigateTo("/auth/login")
 }
 
 function settings() {
@@ -26,7 +25,7 @@ function settings() {
             <NuxtLink href="/">
                 <SystemFlex gap="0.5rem" align="center">
                     <SystemP class="name">
-                        {{ locale.name }}
+                        Metamentor
                     </SystemP>
 
                     <Icon color="var(--primary)" name="streamline:artificial-intelligence-spark-solid" size="1.5rem"></Icon>

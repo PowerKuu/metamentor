@@ -5,6 +5,12 @@ definePageMeta({
     layout: "navigation"
 })
 
+const user = useAuth()
+
+watch(user, () => {
+    if (!user.value) navigateTo("/auth/login")
+})
+
 const chats = ref<Chat[]>([])
 
 // Mock data

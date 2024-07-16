@@ -1,9 +1,7 @@
-//import { useLocale } from "~/locale/locale"
 import type { FunctionNames, Functions } from "@/server/server"
 import moment from "moment"
 
 // Add autoimport
-export { useLocale }
 export type ServerFunctionResult<T extends FunctionNames> = Awaited<ReturnType<Functions[T]>> | number
 export type NoServerFunctionErrors<T> = T extends number ? never : T
 
