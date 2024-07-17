@@ -9,9 +9,13 @@ const backgroundCSS = computed(() => props.background ?? `var(--neutral)`)
 </script>
 
 <template>
-    <SystemFlex align="center" justify="center" gap="0.5rem" class="system-icon border">
-        <img class="img" v-if="url" :src="url" alt="">
-        <Icon color="var(--primary)" class="icon" v-else :name="icon ?? `material-symbols:person`"></Icon>
+    <SystemFlex :style="{
+        borderColor: backgroundCSS
+    }" align="center" justify="center" gap="0.5rem" class="system-icon border">
+        <img v-if="url" class="img" :src="url" alt="">
+        <Icon v-else :style="{
+            backgroundColor: backgroundCSS
+        }" color="var(--primary)" class="icon" :name="icon ?? `material-symbols:person`"></Icon>
     </SystemFlex>
 </template>
 
@@ -19,8 +23,6 @@ const backgroundCSS = computed(() => props.background ?? `var(--neutral)`)
 .system-icon {
     width: 2.75rem;
     height: 2.75rem;
-
-    border-color: v-bind(backgroundCSS);
 
     img {
         width: 100%;
@@ -32,7 +34,6 @@ const backgroundCSS = computed(() => props.background ?? `var(--neutral)`)
         width: 100%;
         height: 100%;
 
-        background-color: v-bind(backgroundCSS);
         padding: 0.25rem;
     }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Chat } from '@prisma/client'
+import type { Chat, Model } from "@prisma/client"
 
 definePageMeta({
     layout: "navigation"
@@ -11,20 +11,53 @@ watch(user, () => {
     if (!user.value) navigateTo("/auth/login")
 })
 
-const chats = ref<Chat[]>([])
+const chats = ref<ServerFunctionData<"getChats">>([])
+const userModels = ref<ServerFunctionData<"getModels">>([])
 
-// Mock data
-for (let i = 0; i < 20; i++) {
-    chats.value.push({
-        id: i.toString(),
-        name: `Chat ${i}`,
-        updatedAt: new Date(),
-        createdAt: new Date(),
-        copyOfId: null
-    })
+
+async function getChats() {
+    if (!user.value) return
+
+    const newChats = await serverFunction("getChats", user.value.token)
+
+    if (isServerError(newChats)) {
+        console.error(newChats)
+        return
+    }
+
+    chats.value = newChats
+}
+
+async function getModels() {
+    if (!user.value) return
+
+    const newModels = await serverFunction("getModels", user.value.token)
+
+    if (isServerError(newModels)) {
+        console.error(newModels)
+        return
+    }
+
+    userModels.value = newModels
+}
+
+const editingChat = ref<Chat | null>(null)
+const editingChatSelectedModels = ref<string[]>([])
+
+const newChat = ref(false)
+
+
+function saveEditChat() {
+
 }
 
 function openEditChat(chat: Chat) {
+    newChat.value = false
+    openEditChatPopup.value = true
+}
+
+function openNewChat() {
+    newChat.value = true
     openEditChatPopup.value = true
 }
 
@@ -36,16 +69,18 @@ function openLeaveChat(chat: Chat) {
     openLeaveModelPopup.value = true
 }
 
-const openNewChatPopup = ref(false)
-
 const openLeaveModelPopup = ref(false)
 const openShareChatPopup = ref(false)
 const openEditChatPopup = ref(false)
+
+
+
+getChats()
+getModels()
 </script>
 
 <template>
-    <PopupModelBrowser :newChat="true" v-model:open="openNewChatPopup"></PopupModelBrowser>
-    <PopupModelBrowser :newChat="false" v-model:open="openEditChatPopup"></PopupModelBrowser>
+    <PopupEditChat v-model:selected-models="editingChatSelectedModels" @update:models="getModels" :models="userModels" :newChat="newChat" v-model:open="openEditChatPopup"></PopupEditChat>
 
 
     <PopupConfirm heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="openLeaveModelPopup">
@@ -70,21 +105,21 @@ const openEditChatPopup = ref(false)
                         border="var(--primary)"
                         color="var(--background)"
                         :default-hover="false"
-                        @click="openNewChatPopup = true" 
+                        @click="openNewChat" 
                         icon="material-symbols:chat-add-on"
                     >
                     </SystemIconButton>
                 </SystemFlex>
 
                 <SystemFlex class="chats" direction="column">
-                    <ChatListItem 
+                    <ChatListItem
                         v-for="chat in chats" 
                         :key="chat.id" 
-                        :chat="chat"
+                        :chat="chat.chat"
 
-                        @edit="() => openEditChat(chat)"
-                        @share="() => openShareChat(chat)"
-                        @leave="() => openLeaveChat(chat)"
+                        @edit="() => openEditChat(chat.chat)"
+                        @share="() => openShareChat(chat.chat)"
+                        @leave="() => openLeaveChat(chat.chat)"
                     />
                 </SystemFlex>
 
@@ -112,6 +147,8 @@ const openEditChatPopup = ref(false)
             flex: 1;
         }
     }
+
+    width: 20rem;
 }
 
 .wrapper {

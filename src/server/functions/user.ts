@@ -120,10 +120,38 @@ export async function verify(email: string, code: string) {
     return user
 }
 
-export async function getUser(token: string) {
-    const user = verifyAuth(token)
+export async function getUser(auth: string) {
+    const user = verifyAuth(auth)
 
     if (!user) return 401
 
     return user
+}
+
+
+
+
+
+export async function getChats(auth: string) {
+    const user = await verifyAuth(auth, {
+        chats: {
+            include: {
+                chat: true
+            }
+        }
+    })
+
+    if (!user) return 401
+
+    return user.chats
+}
+
+export async function getModels(auth: string) {
+    const user = await verifyAuth(auth, {
+        models: true
+    })
+
+    if (!user) return 401
+
+    return user.models
 }

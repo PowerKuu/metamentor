@@ -35,6 +35,7 @@ async function verify() {
     }
 
     login(response.token)
+    navigateTo("/chat")
 }
 </script>
 

@@ -30,9 +30,10 @@ model Model {
     id String @id @default(cuid())
 
     name   String
+    description String
     system String
 
-    icon String
+    avatar String
 
     owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
     ownerId String?

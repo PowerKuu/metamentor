@@ -1,19 +1,19 @@
 <script setup lang="ts">
 const dropdownOpen = ref(false)
 
-function login() {
+function navigateLogin() {
     dropdownOpen.value = false
     navigateTo("/auth/login")
 }
 
-function logout() {
+function navigateLogout() {
     dropdownOpen.value = false
 
     logout()
     navigateTo("/auth/login")
 }
 
-function settings() {
+function navigateSettings() {
     dropdownOpen.value = false
     navigateTo("/settings")
 }
@@ -72,20 +72,20 @@ function settings() {
                             <SystemFlex direction="column">
                                 <SystemDropdownOption 
                                     icon="material-symbols:settings-rounded" 
-                                    @click="settings"
+                                    @click="navigateSettings"
                                 >
                                     Settings
                                 </SystemDropdownOption>
                                 <SystemDropdownOption 
                                     icon="material-symbols:login-rounded" 
-                                    @click="login"
+                                    @click="navigateLogin"
                                 >
                                     Login
                                 </SystemDropdownOption>
                                 <SystemDropdownOption 
                                     icon="material-symbols:logout-rounded"
                                     :delete="true"
-                                    @click="logout"
+                                    @click="navigateLogout"
                                 >
                                     Logout
                                 </SystemDropdownOption>

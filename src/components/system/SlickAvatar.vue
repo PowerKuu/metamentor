@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Buffer } from "buffer"
+
 // Place widgets in this folder(public) and name them as `widgetType/widgetName.svg`
 const widgetsPath = "/slick-avatar"
 
@@ -23,7 +25,7 @@ const widgets = {
 export type WidgetType = keyof typeof widgets
 export type Widget<T extends WidgetType> = typeof widgets[T][number]
 
-type Person = {
+export type Avatar = {
     [K in WidgetType]: {
         color: string
         widget: Widget<K>
@@ -31,28 +33,61 @@ type Person = {
     }
 }
 
-export type PersonProp = Person | null
-
 const widgetType = Object.keys(widgets) as WidgetType[]
 const widgetCache = new Map<string, string>()
 
 const props = defineProps<{
-    modelValue: PersonProp
+    avatar?: Avatar
+    avatarString?: string
     size: number
     randomBlacklist?: Widget<WidgetType>[]
     color?: string
 }>()
 
 const emit = defineEmits<{
-    (e: "update:modelValue", value: Person): void
+    (e: "update:avatar", value: Avatar): void
+    (e: "update:avatarString", value: string): void
 }>()
 
-watch(() => props.modelValue, (person) => {
-    if (!person) {
-        return emit("update:modelValue", getRandomPerson())
-    }
-}, { immediate: true })
+const currentAvatar = computed(() => {
+    if (props.avatar) return props.avatar
+    if (props.avatarString) return avatarFromString(props.avatarString)
+})
 
+watchEffect(() => {
+    if (!props.avatar && !props.avatarString) {
+        const avatar = getRandomAvatar()
+        emit("update:avatar", avatar)
+        emit("update:avatarString", avatarToString(avatar))
+    }
+
+    if (props.avatarString && !props.avatar) {
+        const avatar = avatarFromString(props.avatarString)
+
+        if (avatar) emit("update:avatar", avatar)
+    }
+
+    if (props.avatar && !props.avatarString) {
+        emit("update:avatarString", avatarToString(props.avatar))
+    }
+})
+
+
+function avatarFromString(str: string): Avatar | null {
+    let data: Avatar
+
+    try {
+        data = JSON.parse(Buffer.from(str, "base64").toString())
+    } catch {
+        return null
+    }
+
+    return data
+}
+
+function avatarToString(avatar: Avatar): string {
+    return Buffer.from(JSON.stringify(avatar)).toString("base64")
+}
 
 async function getWidgetSVG<T extends WidgetType>(widgetType: T, widget: Widget<T>) {
     const path = `${widgetsPath}/${widgetType}/${widget}.svg?raw`
@@ -79,7 +114,7 @@ function getRandomWidget<T extends WidgetType>(widgetType: T): Widget<T> {
 }
 
 
-function getRandomPerson(): Person {
+function getRandomAvatar(): Avatar {
     const isBlackRace = randomItem([true, false, false] as const)
     const hasSpecialHair = randomItem([false, false, false, false, false, false, true] as const)
     const hasEarrings = randomItem([false, false, true] as const)
@@ -131,9 +166,9 @@ function getRandomPerson(): Person {
         return "#" + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, "0")
     }
     
-    const person: Person = Object.fromEntries(widgetType.map((widgetType) => {        
+    const avatar: Avatar = Object.fromEntries(widgetType.map((widgetType) => {        
         let color = randomColor()
-
+ 
         return [[widgetType], {
             color: color,
             widget: getRandomWidget(widgetType)
@@ -147,41 +182,39 @@ function getRandomPerson(): Person {
         hairColor = randomColor()
     }
 
-    person.face.color = skinColor
-    person.ears.color = skinColor
-
-    console.log(hasSpecialHair)
+    avatar.face.color = skinColor
+    avatar.ears.color = skinColor
 
     if (!hasSpecialHair) {
-        person.eyebrows.color = hairColor
-        person.top.color = hairColor
+        avatar.eyebrows.color = hairColor
+        avatar.top.color = hairColor
     }
 
-    person.earrings.disabled = !hasEarrings
-    person.glasses.disabled = !hasGlasses
-    person.top.disabled = !hasTop
+    avatar.earrings.disabled = !hasEarrings
+    avatar.glasses.disabled = !hasGlasses
+    avatar.top.disabled = !hasTop
 
-    return person
+    return avatar
 }
 
-async function getPersonSVG(person: Person): Promise<Record<WidgetType, {
+async function getAvatarSVG(avatar: Avatar): Promise<Record<WidgetType, {
     color: string
     svg: string
 }>> {
-    const personSVG = await Promise.all(widgetType.map(async (widgetType) => {
-        const personWidgetType = person[widgetType]
+    const avatarSVG = await Promise.all(widgetType.map(async (widgetType) => {
+        const avatarWidgetType = avatar[widgetType]
 
-        const getSVG = () => getWidgetSVG(widgetType, personWidgetType.widget)
+        const getSVG = () => getWidgetSVG(widgetType, avatarWidgetType.widget)
 
         const svg = [widgetType, {
-            color: personWidgetType.color,
-            svg: personWidgetType.disabled ? "" : await getSVG()
+            color: avatarWidgetType.color,
+            svg: avatarWidgetType.disabled ? "" : await getSVG()
         }]
 
         return svg
     }))
 
-    return Object.fromEntries(personSVG)
+    return Object.fromEntries(avatarSVG)
 }
 
 
@@ -194,13 +227,13 @@ watchEffect(async () => {
     // Use effect
     sizeCSS.value
 
-    if (!props.modelValue) return null
+    if (!currentAvatar.value) return
 
-    const personWithSVG = await getPersonSVG(props.modelValue)
+    const avatarWithSVG = await getAvatarSVG(currentAvatar.value)
     
-    const svgRawList = Object.entries(personWithSVG).map(([widget, personWithSVG]) => {
-        const svg = personWithSVG.svg
-        const color = personWithSVG.color
+    const svgRawList = Object.entries(avatarWithSVG).map(([widget, avatarWithSVG]) => {
+        const svg = avatarWithSVG.svg
+        const color = avatarWithSVG.color
 
         const content = svg
             .slice(svg.indexOf(">", svg.indexOf("<svg")) + 1)

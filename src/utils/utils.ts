@@ -2,10 +2,11 @@ import type { FunctionNames, Functions } from "@/server/server"
 import moment from "moment"
 
 // Add autoimport
-export type ServerFunctionResult<T extends FunctionNames> = Awaited<ReturnType<Functions[T]>> | number
-export type NoServerFunctionErrors<T> = T extends number ? never : T
+export type StripError<T> = T extends number ? never : T
+export type ServerFunctionResponse<T extends FunctionNames> = Awaited<ReturnType<Functions[T]>> | number
+export type ServerFunctionData<T extends FunctionNames> = StripError<ServerFunctionResponse<T>>
 
-export async function serverFunction<T extends FunctionNames>(operation: T, ...data: Parameters<Functions[T]>): Promise<ServerFunctionResult<T>> {
+export async function serverFunction<T extends FunctionNames>(operation: T, ...data: Parameters<Functions[T]>): Promise<ServerFunctionResponse<T>> {
     const returned = await fetch(`/api/${operation as string}`, {
         method: "POST",
         headers: {
@@ -16,12 +17,12 @@ export async function serverFunction<T extends FunctionNames>(operation: T, ...d
     })
 
     if (!returned.ok) {
-        return returned.status as ServerFunctionResult<T>
+        return returned.status as ServerFunctionResponse<T>
     }
 
     const returnedData = await returned?.json().catch(() => {})
 
-    return returnedData as ServerFunctionResult<T>
+    return returnedData as ServerFunctionResponse<T>
 }
 
 export function isServerError<T>(data: T | number): data is number {

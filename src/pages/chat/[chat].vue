@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Chat } from '@prisma/client'
-import type { PersonProp, Widget  } from '@/components/system/SlickAvatar.vue'
+import type { Widget, Avatar  } from '@/components/system/SlickAvatar.vue'
 
 const resizeElem = ref(null)
 
@@ -17,7 +17,7 @@ const resizeHeightOptions = computed(() => {
 
 const modelAudio: HTMLAudioElement = new Audio()
 
-const activeAvatar = ref<PersonProp>(null)
+const activeAvatar = ref<Avatar | null>(null)
 let lastMouth: Widget<"mouth"> | null = null
 
 
