@@ -1,3 +1,5 @@
+
+# Database url "postgresql://johndoe:randompassword@localhost:1206/mydb"
 services:
   postgres:
     container_name: metamentor-postgres
