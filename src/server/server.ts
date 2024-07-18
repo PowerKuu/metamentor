@@ -7,15 +7,21 @@ import * as chat_ from "./functions/chat"
 import * as model_ from "./functions/model"
 import * as user_ from "./functions/user"
 
+import * as websocketChat_ from "./websocket/chat"
+
 import { createTransport } from "nodemailer"
 
 
 export const prisma = new PrismaClient()
 
 export const functions = { ...status_, ...chat_, ...model_, ...user_ }
+export const webscoketFunctions = { ...websocketChat_ }
 
 export type Functions = typeof functions
 export type FunctionNames = keyof Functions
+
+export type WebSocketFunctions = typeof webscoketFunctions
+export type WebSocketFunctionNames = keyof WebSocketFunctions
 
 
 export function generateToken() {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Chat, Model, UserOnChat } from "@prisma/client"
+import type { Chat, Model } from "@prisma/client"
 import type { NormalizePartial } from "~/utils/utils";
 
 definePageMeta({

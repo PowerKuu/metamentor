@@ -4,5 +4,11 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     telemetry: false,
 
-    modules: ["@vueuse/nuxt", "@nuxt/image", "nuxt-icon"]
+    modules: ["@vueuse/nuxt", "@nuxt/image", "nuxt-icon"],
+
+    nitro: {
+        experimental: {
+            websocket: true
+        }
+    }
 })
