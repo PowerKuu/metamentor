@@ -132,26 +132,98 @@ export async function getUser(auth: string) {
 
 
 
-export async function getChats(auth: string) {
-    const user = await verifyAuth(auth, {
-        chats: {
-            include: {
-                chat: true
+export async function getChats(auth: string, search?: string) {
+    const user = await verifyAuth(auth)
+
+    if (!user) return 401
+
+    const maxSearch = 64
+
+    const chats = await prisma.userOnChat.findMany({
+        where: {
+            userId: user.id,
+            chat: {
+                name: {
+                    contains: search || undefined
+                }
             }
+        },
+
+        orderBy: {
+            chat: {
+                createdAt: "desc"
+            }
+        },
+
+        include: {
+            chat: {
+                include: {
+                    models: true
+                }
+            },
+        },
+
+        take: maxSearch
+    })
+
+    console.log(chats, search)
+
+    return chats
+}
+
+export async function getModels(auth: string, search?: string) {
+    const user = await verifyAuth(auth)
+
+    if (!user) return 401
+
+    const maxSearch = 64
+
+    const models = await prisma.model.findMany({
+        where: {
+            ownerId: user.id,
+            name: {
+                contains: search || undefined
+            }
+        },
+
+        orderBy: {
+            createdAt: "desc"
+        },
+
+        take: maxSearch
+    })
+
+    console.log(models, search)
+
+    return models
+}
+
+export async function leaveChat(auth: string, chatId: string) {
+    const user = await verifyAuth(auth)
+
+    if (!user) return 401
+
+    const chat = await prisma.chat.findFirst({
+        where: {
+            id: chatId
         }
     })
 
-    if (!user) return 401
+    if (!chat) return 404
 
-    return user.chats
-}
-
-export async function getModels(auth: string) {
-    const user = await verifyAuth(auth, {
-        models: true
+    const chatUser = await prisma.userOnChat.findFirst({
+        where: {
+            chatId: chat.id,
+            userId: user.id
+        }
     })
 
-    if (!user) return 401
+    if (!chatUser) return 404
 
-    return user.models
+    return prisma.userOnChat.delete({
+        where: {
+            id: chatUser.id
+        }
+    })
+
 }

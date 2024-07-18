@@ -2,11 +2,12 @@ import type { Model } from "@prisma/client"
 import { prisma, verifyAuth } from "../server"
 
 export async function editModel(auth: string, {
+    id,
     name,
     description,
     system,
     avatar
-}: Partial<Model>, editModel?: string) {
+}: Partial<Model>) {
     const maxName = 64
     const maxDescription = 256
     const maxAvatar = 1000
@@ -22,8 +23,8 @@ export async function editModel(auth: string, {
     if (system && system.length > maxSystem) return 413
 
 
-    if (!editModel) {
-        if (!name || !description || !system || !avatar) return 400
+    if (!id) {
+        if (!name || !system || !avatar) return 400
 
 
         return prisma.model.create({
@@ -44,7 +45,7 @@ export async function editModel(auth: string, {
 
     const existingModel = await prisma.model.findFirst({
         where: {
-            id: editModel,
+            id,
             ownerId: user.id
         }
     })
@@ -53,7 +54,7 @@ export async function editModel(auth: string, {
 
     return prisma.model.update({
         where: {
-            id: editModel
+            id
         },
 
         data: {
@@ -61,6 +62,27 @@ export async function editModel(auth: string, {
             description: description,
             system: system,
             avatar: avatar
+        }
+    })
+}
+
+export async function deleteModel(auth: string, id: string) {
+    const user = await verifyAuth(auth)
+
+    if (!user) return 401
+
+    const existingModel = await prisma.model.findFirst({
+        where: {
+            id,
+            ownerId: user.id
+        }
+    })
+
+    if (!existingModel) return 404
+
+    return prisma.model.delete({
+        where: {
+            id
         }
     })
 }

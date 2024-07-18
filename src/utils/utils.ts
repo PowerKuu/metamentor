@@ -1,7 +1,20 @@
 import type { FunctionNames, Functions } from "@/server/server"
 import moment from "moment"
 
+
 // Add autoimport
+export type NormalizePartial<T> = { [P in keyof T]?: NonNullable<T[P]> | undefined }
+
+export function normalizePartial<T>(data: T) {
+    for (const key in data) {
+        if (data[key] === null) {
+            delete data[key]
+        }
+    }
+
+    return data as NormalizePartial<T>
+}
+
 export type StripError<T> = T extends number ? never : T
 export type ServerFunctionResponse<T extends FunctionNames> = Awaited<ReturnType<Functions[T]>> | number
 export type ServerFunctionData<T extends FunctionNames> = StripError<ServerFunctionResponse<T>>

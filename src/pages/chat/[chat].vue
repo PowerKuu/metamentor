@@ -15,9 +15,9 @@ const resizeHeightOptions = computed(() => {
     }
 })
 
-const modelAudio: HTMLAudioElement = new Audio()
+let modelAudio: HTMLAudioElement | null = null
 
-const activeAvatar = ref<Avatar | null>(null)
+const activeAvatar = ref<Avatar>()
 let lastMouth: Widget<"mouth"> | null = null
 
 
@@ -42,30 +42,42 @@ function closeMouth() {
 
 // Mock data
 async function test() {
+    if (!modelAudio) return
+
     modelAudio.src = "/test.mp3"
 
     modelAudio.play()
 
     return new Promise<void>((resolve) => {
+        if (!modelAudio) return
+
         modelAudio.onended = () => {
             resolve()
         }
     })
 }
+
+onMounted(() => {
+    modelAudio = new Audio()
+})
 </script>
 
 <template>
     <SystemFlex direction="column" class="chat-dashboard" grow="1">
         <SystemFlex direction="column">
-            <SystemResizable v-if="true" handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
-                <SystemFlex direction="column" align="center" class="model">
-                    <SystemSlickAvatar class="avatar" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]" :size="resizeHeight" v-model="activeAvatar"></SystemSlickAvatar>
+            <ClientOnly>
+                <SystemResizable v-if="true" handleSize="2rem" ref="resizeElem" class="model-resize" :height="resizeHeightOptions">
+                    <SystemFlex direction="column" align="center" class="model">
+                        <SystemSlickAvatar class="avatar" color="var(--text)" :randomBlacklist="[`surprised`, `fonze`]" :size="resizeHeight" v-model:avatar="activeAvatar"></SystemSlickAvatar>
 
-                    <KeepAlive>
-                        <AudioVisualizerBar :audio="modelAudio"></AudioVisualizerBar>
-                    </KeepAlive>
-                </SystemFlex>
-            </SystemResizable>
+                        <KeepAlive>
+                            <ClientOnly>
+                                <AudioVisualizerBar v-if="modelAudio" :audio="modelAudio"></AudioVisualizerBar>
+                            </ClientOnly>
+                        </KeepAlive>
+                    </SystemFlex>
+                </SystemResizable>
+            </ClientOnly>
 
             <SystemHDragbar class="dragbar"></SystemHDragbar>
         </SystemFlex>

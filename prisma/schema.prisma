@@ -6,6 +6,8 @@
 
 generator client {
     provider = "prisma-client-js"
+    
+    previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -30,7 +32,7 @@ model Model {
     id String @id @default(cuid())
 
     name   String
-    description String
+    description String?
     system String
 
     avatar String
@@ -40,11 +42,9 @@ model Model {
 
     chats    Chat[]
     messages Message[]
+
+    createdAt DateTime @default(now())
 }
-
-
-
-
 
 
 model User {
@@ -80,8 +80,7 @@ model UserOnChat {
 
     chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
     chatId String
-    
-    name String
+
 
     permission PermissionOnChat
     messages Message[]
@@ -96,7 +95,7 @@ enum PermissionOnChat {
 
 model Chat {
     id   String @id @default(cuid())
-    defaultName String
+    name String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @default(now())

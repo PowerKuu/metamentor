@@ -42,6 +42,8 @@ const props = defineProps<{
     size: number
     randomBlacklist?: Widget<WidgetType>[]
     color?: string
+
+    unknownAvatar?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -49,9 +51,15 @@ const emit = defineEmits<{
     (e: "update:avatarString", value: string): void
 }>()
 
+const unknownRandomAvatar = computed(() => {
+    if (!props.unknownAvatar) return
+    return getRandomAvatar()
+})
+
 const currentAvatar = computed(() => {
     if (props.avatar) return props.avatar
-    if (props.avatarString) return avatarFromString(props.avatarString)
+    else if (props.avatarString) return avatarFromString(props.avatarString)
+    else return unknownRandomAvatar.value
 })
 
 watchEffect(() => {
@@ -193,7 +201,7 @@ function getRandomAvatar(): Avatar {
     avatar.earrings.disabled = !hasEarrings
     avatar.glasses.disabled = !hasGlasses
     avatar.top.disabled = !hasTop
-
+    
     return avatar
 }
 
@@ -221,7 +229,7 @@ async function getAvatarSVG(avatar: Avatar): Promise<Record<WidgetType, {
 const svgContent = ref<string | null>(null)
 const sizeCSS = computed<string>(() => props.size ? `${props.size}px` : "100px")
 
-const avatarID = crypto.randomUUID()
+const avatarID = Math.random().toString(36)
 
 watchEffect(async () => {
     // Use effect
@@ -280,7 +288,7 @@ watchEffect(async () => {
             maxHeight: sizeCSS
         }"
     >
-        <div class="avatar-payload" v-html="svgContent" />
+        <div class="avatar-payload" :data-unknown="unknownAvatar" v-html="svgContent" />
     </div>
 </template>
 
@@ -292,6 +300,10 @@ watchEffect(async () => {
     .avatar-payload {
         width: 100%;
         height: 100%;
+
+        &[data-unknown="true"] {
+            filter: grayscale(1) brightness(0.5);
+        }
     }
 }
 </style>

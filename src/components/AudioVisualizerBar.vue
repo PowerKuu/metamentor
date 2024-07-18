@@ -8,10 +8,12 @@ const props = defineProps<{
 const visualizer = ref<HTMLElement | null>(null)
 
 
+let audioMotionAnalyzer: AudioMotionAnalyzer | null = null
+
 onMounted(() => {
     if (!visualizer.value) return
 
-    const audioMotionAnalyzer = new AudioMotionAnalyzer(visualizer.value, {
+    audioMotionAnalyzer = new AudioMotionAnalyzer(visualizer.value, {
         mode: 2,
         //lumiBars: true,
         source: props.audio,
@@ -84,6 +86,13 @@ onMounted(() => {
 
     audioMotionAnalyzer.gradient = "gradient"
 })
+
+onUnmounted(() => {
+    if (audioMotionAnalyzer) {
+        audioMotionAnalyzer.destroy()
+    }
+})
+
 </script>
 
 <template>

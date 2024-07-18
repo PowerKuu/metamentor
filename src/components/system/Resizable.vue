@@ -170,7 +170,10 @@ const resizableStyle = computed(() => {
 })
 
 const handleSizeCSS = computed(() => props.handleSize ? props.handleSize : "1rem")
+const handeSizeCSSName = "--handle-size"
+
 const isSnapDeleted = ref(false)
+
 </script>
 
 <template>
@@ -179,16 +182,19 @@ const isSnapDeleted = ref(false)
             <SystemFlex v-show="!isSnapDeleted" class="slot" grow="1">
                 <slot></slot>
             </SystemFlex>
-            <div v-if="!!height && !disabled" class="height-resizer" @mousedown="(e) => mouseDown(e, 'y')"></div>
+            <div v-if="!!height && !disabled" :style="{
+                [handeSizeCSSName]: handleSizeCSS
+            }" class="height-resizer" @mousedown="(e) => mouseDown(e, 'y')"></div>
         </SystemFlex>
-        <div v-if="!!width && !disabled" class="width-resizer" @mousedown="(e) => mouseDown(e, 'x')"></div>
+        
+        <div :style="{
+            [handeSizeCSSName]: handleSizeCSS
+        }" v-if="!!width && !disabled" class="width-resizer" @mousedown="(e) => mouseDown(e, 'x')"></div>
     </SystemFlex>
 </template>
 
 <style scoped lang="scss">
 .height-resizer {
-    --handle-size: v-bind(handleSizeCSS);
-
     position: relative;
     min-width: 100%;
     cursor: row-resize;
@@ -210,8 +216,6 @@ const isSnapDeleted = ref(false)
 
 
 .width-resizer {
-    --handle-size: v-bind(handleSizeCSS);
-
     position: relative;
     min-height: 100%;
     cursor: col-resize;

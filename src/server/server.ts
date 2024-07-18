@@ -49,11 +49,10 @@ export async function sendEmail(email: string, subject: string, body: string) {
     })
 }
 
-export async function verifyAuth<I extends Prisma.UserInclude>(token: string, include?: I) {
-    return prisma.user.findFirst({
+export async function verifyAuth(token: string) {
+    return prisma.user.findUnique({
         where: {
             token
-        },
-        include: include as I
+        }
     })
 }

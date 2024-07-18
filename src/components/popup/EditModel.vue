@@ -2,10 +2,9 @@
 import type { Model } from "@prisma/client"
 
 const props = defineProps<{
-    model: Partial<Model>
+    model: NormalizePartial<Model>
 
     open: boolean
-    newModel: boolean
 }>()
 
 const modelModel = useModel(props, "model")
@@ -15,6 +14,9 @@ const emit = defineEmits<{
 }>()
 
 const openModel = useModel(props, "open")
+
+const disableSave = computed(() => !modelModel.value.name || !modelModel.value.system)
+const newModel = computed(() => !modelModel.value.id)
 </script>
 
 <template>
@@ -49,7 +51,12 @@ const openModel = useModel(props, "open")
                 <SystemIconButton 
                     icon="material-symbols:upload"
                 ></SystemIconButton>
-                <SystemButton @click="$emit(`save`)">{{ newModel ? "Create" : "Save" }}</SystemButton>
+                <SystemButton :disabled="disableSave" @click="() => {
+                    if (!disableSave) {
+                        openModel = false
+                        $emit(`save`)
+                    }
+                }">{{ newModel ? "Create" : "Save" }}</SystemButton>
             </SystemFlex>
         </SystemFlex>
 </SystemPopupStandard>
