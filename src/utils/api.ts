@@ -1,3 +1,6 @@
+import type { FunctionNames, Functions, WebSocketEmitterNames, WebSocketEmitters, WebSocketFunctionNames, WebSocketFunctions } from "@/server/server"
+import type { UseWebSocketReturn } from "@vueuse/core"
+
 export type StripError<T> = T extends number ? never : T
 
 export function isServerError<T>(data: T | number): data is number {
@@ -26,6 +29,27 @@ export async function serverFunction<T extends FunctionNames>(operation: T, ...d
     return returnedData as ServerFunctionResponse<T>
 }
 
-export async function webscoketFunction<T extends WebSocketFunctionNames>(websocket: UseWebSocketReturn, operation: T, ...data: Parameters<WebSocketFunctions[T]>) {
-    websocket.send(JSON.stringify({ operation, data }))
+type ParametersExceptFirst<T> = T extends (first: any, ...rest: infer P) => any ? P : never
+
+export async function webscoketFunction<T extends WebSocketFunctionNames>(websocket: WebSocket, operation: T, ...data: ParametersExceptFirst<WebSocketFunctions[T]>) {
+    websocket.send(JSON.stringify({
+        operation,
+        data
+    }))
+}
+
+export async function webscoketListener<T extends WebSocketEmitterNames>(websocket: WebSocket, listener: T, callback: (...data: Parameters<WebSocketEmitters[T]>) => void) {
+    websocket.addEventListener("message", (event) => {
+        const {
+            operation,
+            data
+        }: {
+            operation: WebSocketEmitterNames
+            data: Parameters<WebSocketEmitters[T]>
+        } = JSON.parse(event.data)
+
+        if (operation === listener) {
+            callback(...data)
+        }
+    })
 }

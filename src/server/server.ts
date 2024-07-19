@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client"
 import crypto from "crypto"
 
 
@@ -7,7 +7,9 @@ import * as chat_ from "./functions/chat"
 import * as model_ from "./functions/model"
 import * as user_ from "./functions/user"
 
-import * as websocketChat_ from "./websocket/chat"
+import * as websocketChat_ from "./websocket/functions"
+import * as websocketEmitters_ from "./websocket/emitters"
+
 
 import { createTransport } from "nodemailer"
 
@@ -16,12 +18,19 @@ export const prisma = new PrismaClient()
 
 export const functions = { ...status_, ...chat_, ...model_, ...user_ }
 export const webscoketFunctions = { ...websocketChat_ }
+export const websocketEmitters = { ...websocketEmitters_ }
 
 export type Functions = typeof functions
 export type FunctionNames = keyof Functions
 
 export type WebSocketFunctions = typeof webscoketFunctions
 export type WebSocketFunctionNames = keyof WebSocketFunctions
+
+export type WebSocketEmitters = typeof websocketEmitters
+export type WebSocketEmitterNames = keyof WebSocketEmitters
+
+export type WebSocketPeer = Parameters<NonNullable<Parameters<typeof defineWebSocket>[0]["open"]>>[0]
+
 
 
 export function generateToken() {
@@ -61,4 +70,18 @@ export async function verifyAuth(token: string) {
             token
         }
     })
+}
+
+export async function emitWebsocket<T extends WebSocketEmitterNames>(peer: WebSocketPeer, operation: T, topic: string | null, ...data: Parameters<WebSocketEmitters[T]>) {
+    if (topic) {
+        peer.publish(topic, {
+            operation,
+            data
+        })
+    } else {
+        peer.send({
+            operation,
+            data
+        })
+    }
 }
