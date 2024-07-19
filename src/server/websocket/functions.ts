@@ -43,12 +43,6 @@ export async function unsubscribeMultipleChatRoomSurfaces(peer: WebSocketPeer, c
 
 
 
-
-
-
-
-
-
 export async function subscribeChatRoom(peer: WebSocketPeer, auth: string, chatId: string) {
     const user = await verifyAuth(auth)
 
