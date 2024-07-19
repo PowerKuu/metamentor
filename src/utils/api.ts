@@ -1,5 +1,4 @@
 import type { FunctionNames, Functions, WebSocketEmitterNames, WebSocketEmitters, WebSocketFunctionNames, WebSocketFunctions } from "@/server/server"
-import type { UseWebSocketReturn } from "@vueuse/core"
 
 export type StripError<T> = T extends number ? never : T
 

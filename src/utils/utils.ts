@@ -2,7 +2,7 @@ import moment from "moment"
 
 
 // Add autoimport
-export type NormalizePartial<T> = { [P in keyof T]?: NonNullable<T[P]> | undefined }
+export type NormalizedPartial<T> = { [P in keyof T]?: NonNullable<T[P]> | undefined }
 
 export function normalizePartial<T>(data: T) {
     for (const key in data) {
@@ -11,7 +11,7 @@ export function normalizePartial<T>(data: T) {
         }
     }
 
-    return data as NormalizePartial<T>
+    return data as NormalizedPartial<T>
 }
 
 /*

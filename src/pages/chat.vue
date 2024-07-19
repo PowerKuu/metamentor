@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Chat, Model } from "@prisma/client"
-import type { NormalizePartial } from "~/utils/utils";
+import type { Chat, Model, UserOnChat } from "@prisma/client"
 
 definePageMeta({
     layout: "navigation"
@@ -15,59 +14,25 @@ watch(user, () => {
     if (!user.value) navigateTo("/auth/login")
 })
 
-const chatsQuary = ref<ServerFunctionData<"getChats">>([])
-const modelsQuary = ref<ServerFunctionData<"getModels">>([])
-
-async function getChats() {
-    if (!user.value) return
-
-    const chats = await serverFunction("getChats", user.value.token, chatSearch.value)
-
-    if (isServerError(chats)) {
-        console.error(chats)
-        return
-    }
-
-    chatsQuary.value = chats
-}
-
-async function getModels() {
-    if (!user.value) return
-
-    const models = await serverFunction("getModels", user.value.token, modelSearch.value)
-
-    if (isServerError(models)) {
-        console.error(models)
-        return
-    }
-
-    modelsQuary.value = models
-}
-
-
-watch(user, () => {
-    if (user.value) {
-        getChats()
-        getModels()
-    }
-})
-
 const chatSearch = ref("")
-const modelSearch = ref("")
 
-watch(modelSearch, () => getModels())
-watch(chatSearch, () => getChats())
+const chats = ref<(UserOnChat & {
+    chat: Chat
+})[]>([])
 
-const editingChat = ref<{    
-    chat: NormalizePartial<Chat>
+const models = ref<Model[]>([])
+
+
+
+const editingChat = ref<{
+    chat: NormalizedPartial<Chat>
     selectedModels: string[]
 }>({
     chat: {},
     selectedModels: []
 })
 
-const editingModel = ref<NormalizePartial<Model>>({})
-
+const editingModel = ref<NormalizedPartial<Model>>({})
 
 
 async function saveChat() {
@@ -79,8 +44,6 @@ async function saveChat() {
         console.error(newChat)
         return
     }
-
-    await getChats()
 }
 
 async function leaveChat() {
@@ -92,8 +55,6 @@ async function leaveChat() {
         console.error(leftChat)
         return
     }
-
-    await getChats()
 }
 
 async function saveModel() {
@@ -105,8 +66,6 @@ async function saveModel() {
         console.error(newModel)
         return
     }
-
-    getModels()
 }
 
 async function deleteModel() {
@@ -118,120 +77,27 @@ async function deleteModel() {
         console.error(deletedModel)
         return
     }
-
-    getModels()
-
-    // Update avatar in the chat
-    getChats()
 }
 
-function toogleSelectModel(model: Model) {
-    if (editingChat.value.selectedModels.includes(model.id)) {
-        editingChat.value.selectedModels = editingChat.value.selectedModels.filter((id) => id != model.id)
-    } else {
-        editingChat.value.selectedModels.push(model.id)
-    }
-}
-
-
-
-
-function openEditChatPopup(chat?: Chat, selectedModels?: string[]) {
-    modelSearch.value = ""
-
-    if (!chat || !selectedModels) {
-        editingChat.value = {
-            chat: {},
-            selectedModels: selectedModels || []
-        }
-    } else {
-        editingChat.value = {
-            chat: chat,
-            selectedModels: selectedModels
-        }
-    }
-
-    editChatPopup.value = true
-}
-
-function openLeaveChatPopup(chat: Chat) {
-    editingChat.value.chat = chat
-    leaveChatPopup.value = true
-}
-
-function openShareChat(chat: Chat) {
-    editingChat.value.chat = chat
-    shareChatPopup.value = true
-}
-
-
-function openEditModelPopup(model?: Model) {
-    if (!model) {
-        editingModel.value = {}
-    } else {
-        editingModel.value = normalizePartial(model)
-    }
-
-    editModelPopup.value = true
-}
-
-function openDeleteModelPopup(model: Model) {
-    editingModel.value = normalizePartial(model)
-    deleteModelPopup.value = true
-}
-
-
-
-const editModelPopup = ref(false)
-const deleteModelPopup = ref(false)
-
-
-
-const shareChatPopup = ref(false)
 const editChatPopup = ref(false)
 const leaveChatPopup = ref(false)
+const shareChatPopup = ref(false)
 </script>
 
 <template>
     <PopupEditChat
         v-model:open="editChatPopup"
-        v-model:modelSearch="modelSearch"
+        :models="models"
 
-        v-model:chat="editingChat.chat"
-
-        v-model:selectedModels="editingChat.selectedModels"
-        :models="modelsQuary"
-
-        :maxSelected="5"
-
-        @save="saveChat"
-
-        @toogleSelectModel="toogleSelectModel"
-
-        @openDeleteModelPopup="openDeleteModelPopup"
-        @openEditModelPopup="openEditModelPopup"
-        @openCreateModelPopup="openEditModelPopup"
+        :editingChat="editingChat"
+        :editingModel="editingModel"
     ></PopupEditChat>
 
-    <PopupEditModel
-        v-model:open="editModelPopup"
-        v-model:model="editingModel"
 
-        @save="saveModel"
-    ></PopupEditModel>
-
-
-    <PopupConfirm heading="Delete model" subheading="Select one of the buttons below to confirm" @confirm="deleteModel" v-model:open="deleteModelPopup">
-        <SystemP>Are you sure you want to permanently delete this model?</SystemP>
-        <SystemP>This action is <SystemPBold>irreversible</SystemPBold>.</SystemP>
-    </PopupConfirm>
-
-    <PopupConfirm @confirm="leaveChat" heading="Leave chat" subheading="Select one of the buttons below to confirm" v-model:open="leaveChatPopup">
+    <PopupConfirm @confirm="leaveChat" v-model:open="leaveChatPopup" heading="Leave chat" subheading="Select one of the buttons below to confirm">
         <SystemP>Are you sure you want to leave this chat?</SystemP>
         <SystemP>You <SystemPBold>cannot join</SystemPBold> this chat again unless invited back.</SystemP>
     </PopupConfirm>
-
-    <PopupShareChat v-model:open="shareChatPopup"></PopupShareChat>
 
     <SystemFlex grow="1" class="wrapper">
         <SystemFlex grow="1" class="border">
@@ -248,7 +114,14 @@ const leaveChatPopup = ref(false)
                         border="var(--primary)"
                         color="var(--background)"
                         :default-hover="false"
-                        @click="openEditChatPopup" 
+                        @click="() => {
+                            editingChat = {
+                                chat: {},
+                                selectedModels: []
+                            }
+
+                            editChatPopup = true
+                        }" 
                         icon="material-symbols:chat-add-on"
                     >
                     </SystemIconButton>
@@ -256,16 +129,32 @@ const leaveChatPopup = ref(false)
 
                 <SystemFlex class="chats" direction="column">
                     <ChatListItem
-                        v-for="chat in chatsQuary"
+                        v-for="chat in chats"
                         :key="chat.id"
                         :chat="chat.chat"
                         :active="chat.chatId == openChatId"
 
-                        :avatar="chat.chat.models[0]?.avatar"
+                        avatar=""
 
-                        @edit="() => openEditChatPopup(chat.chat, chat.chat.models.map((model) => model.id))"
-                        @share="() => openShareChat(chat.chat)"
-                        @leave="() => openLeaveChatPopup(chat.chat)"
+
+                        @edit="() => {
+                            editingChat = {
+                                chat: normalizePartial(chat.chat),
+                                selectedModels: []
+                            }
+
+                            editChatPopup = true
+                        }"
+                        @leave="() => {
+                            editingChat = {
+                                chat: normalizePartial(chat.chat),
+                                selectedModels: []
+                            }
+
+                            leaveChatPopup = true
+                        }"
+
+                        @share="() => {}"
                     />
                 </SystemFlex>
 
