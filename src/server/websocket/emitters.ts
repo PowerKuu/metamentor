@@ -1,9 +1,11 @@
-import type { Message, Model } from "@prisma/client"
+import type { Chat, Message, Model, UserOnChat } from "@prisma/client"
 
 export function newChatMessage(chatId: string, message: Message) {
     
 }
 
-export function editChat(chatId: string) {
-    
+export function chatSurface(chat: (UserOnChat & {
+    chat: Chat
+})[]) {
+
 }

@@ -20,6 +20,10 @@ export async function subscribeMultipleChatRoomsSurfaces(peer: WebSocketPeer, au
             chatId: {
                 in: chatIds
             }
+        },
+
+        include: {
+            chat: true
         }
     })
 
@@ -30,6 +34,8 @@ export async function subscribeMultipleChatRoomsSurfaces(peer: WebSocketPeer, au
             getChatRoomSurfaceId(userOnChat.chatId)
         )
     }
+
+    emitWebsocket(peer, "chatSurface", null, userOnChats)
 }
 
 
@@ -80,7 +86,7 @@ export async function unsubscribeChatRoom(peer: WebSocketPeer, chatId: string) {
 
 
 
-export async function editChat(peer: WebSocketPeer, auth: string, chatId: string) {
+export async function chatSurface(peer: WebSocketPeer, auth: string, chatId: string) {
     const user = await verifyAuth(auth)
 
     if (!user) return
@@ -93,12 +99,16 @@ export async function editChat(peer: WebSocketPeer, auth: string, chatId: string
             permission: {
                 in: ["WRITE", "OWNER"]
             }
+        },
+
+        include: {
+            chat: true
         }
     })
 
     if (!userOnChat) return
 
-    await emitWebsocket(peer, "editChat", getChatRoomSurfaceId(chatId), chatId)
+    await emitWebsocket(peer, "chatSurface", getChatRoomSurfaceId(chatId), [userOnChat])
 }
 
 export async function sendMessage(peer: WebSocketPeer, auth: string, chatId: string, message: string) {
