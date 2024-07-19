@@ -1,4 +1,3 @@
-import type { Message } from "@prisma/client";
 import { emitWebsocket, prisma, verifyAuth, websocketEmitters, type WebSocketPeer } from "../server"
 
 
