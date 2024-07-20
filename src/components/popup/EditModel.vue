@@ -2,7 +2,7 @@
 import type { Model } from "@prisma/client"
 
 const props = defineProps<{
-    model: NormalizePartial<Model>
+    model: NormalizedPartial<Model>
 
     open: boolean
 }>()

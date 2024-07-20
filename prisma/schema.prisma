@@ -37,10 +37,12 @@ model Model {
 
     avatar String
 
-    owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-    ownerId String?
+    owner   User? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+    creatorId String?
 
-    chats    Chat[]
+    chat    Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+    chatId String
+
     messages Message[]
 
     createdAt DateTime @default(now())
@@ -55,7 +57,7 @@ model User {
     token String @unique
 
     chats UserOnChat[]
-    models Model[]
+    createdModels Model[]
 
     plan Plan @default(FREE)
     

@@ -131,7 +131,7 @@ export async function getUser(auth: string) {
 
 
 
-
+/*
 export async function getChats(auth: string, search?: string) {
     const user = await verifyAuth(auth)
 
@@ -197,7 +197,7 @@ export async function getModels(auth: string, search?: string) {
 
     return models
 }
-
+*/
 export async function leaveChat(auth: string, chatId: string) {
     const user = await verifyAuth(auth)
 

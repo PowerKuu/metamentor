@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import type { Chat, Model } from "@prisma/client"
+import type { ChatRoomTopLevel } from "@/server/websocket/functions"
 
 const props = defineProps<{
     open: boolean
     
     models: Model[]
-    selectedModels: string[]
-    chat: NormalizePartial<Chat>
+    chat: NormalizedPartial<ChatRoomTopLevel>
 
     modelSearch: string
     maxSelected: number
 }>()
 
-const selectedModels = useModel(props, "selectedModels")
 const chatModel = useModel(props, "chat")
 const modelSearchModel = useModel(props, "modelSearch")
 
@@ -31,14 +30,21 @@ const openModel = useModel(props, "open")
 
 const hasChatName = computed(() => !!chatModel.value.name)
 
-const hasSelected = computed(() => selectedModels.value.length > 0)
-const hasMaxSelected = computed(() => selectedModels.value.length >= props.maxSelected)
+const hasSelected = computed(() => {
+    if (chatModel.value.models) return chatModel.value.models.length > 0
+    return false
+})
+
+const hasMaxSelected = computed(() => {
+    if (chatModel.value.models) return chatModel.value.models.length >= props.maxSelected
+    return true
+})
 
 const disableSave = computed(() => !hasSelected.value || !hasChatName.value)
 
 
 function resetSelected() {
-    selectedModels.value = []
+    chatModel.value.models = []
 }
 </script>
 
@@ -70,7 +76,7 @@ function resetSelected() {
                     :key="model.id"
                     :model="model"
                     :disabled="hasMaxSelected"
-                    :selected="selectedModels.includes(model.id)"
+                    :selected="chatModel.models?.includes(model) || false"
 
                     @toogleSelect="$emit(`toogleSelectModel`, model)"
                     @edit="$emit(`openEditModelPopup`, model)"
@@ -80,7 +86,7 @@ function resetSelected() {
 
             <SystemFlex justify="space-between" align="center">
                 <SystemFlex gap="0.25rem">
-                    <SystemPSmall class="text-weak">{{ selectedModels.length }} models selected (max 4)</SystemPSmall>
+                    <SystemPSmall class="text-weak">{{ chatModel.models?.length || 0 }} models selected (max 4)</SystemPSmall>
                     <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                 </SystemFlex>
                 

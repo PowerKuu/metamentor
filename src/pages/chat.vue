@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Chat, Model, UserOnChat } from "@prisma/client"
+import type { Model } from "@prisma/client"
+import type { ChatRoomTopLevel, NewTemporaryModel } from "@/server/websocket/functions"
 
 definePageMeta({
     layout: "navigation"
@@ -16,40 +17,36 @@ watch(user, () => {
 
 const chatSearch = ref("")
 
-const chats = ref<(UserOnChat & {
-    chat: Chat
-})[]>([])
+const chats = ref<Map<string, ChatRoomTopLevel>>(new Map())
+const chatValues = computed(() => Array.from(chats.value.values()))
 
-const models = ref<Model[]>([])
-
-
-
-const editingChat = ref<{
-    chat: NormalizedPartial<Chat>
-    selectedModels: string[]
-}>({
-    chat: {},
-    selectedModels: []
-})
-
+const editingChat = ref<NormalizedPartial<ChatRoomTopLevel>>({})
 const editingModel = ref<NormalizedPartial<Model>>({})
+
+const newTemporaryModels = ref<NewTemporaryModel[]>([])
+
+const isNewChat = computed(() => !editingChat.value.id)
+const isNewModel = computed(() => !editingModel.value.id)
+
+const websocket = ref<WebSocket>()
 
 
 async function saveChat() {
-    if (!user.value) return
+    if (!user.value || !websocket.value) return
 
-    const newChat = await serverFunction("editChat", user.value.token, editingChat.value.chat, editingChat.value.selectedModels)
-
-    if (isServerError(newChat)) {
-        console.error(newChat)
-        return
+    if (isNewChat.value) {
+        await webscoketFunction(websocket.value, "editChat", user.value.token, editingChat.value, editingChat.value.models?.map(model => model.id) || [])
+    } else {
+        if (!editingChat.value.name) return
+        await webscoketFunction(websocket.value, "createChat", user.value.token, editingChat.value.name, newTemporaryModels.value)
     }
+
 }
 
 async function leaveChat() {
-    if (!user.value || !editingChat.value.chat.id) return
+    if (!user.value || !editingChat.value.id) return
 
-    const leftChat = await serverFunction("leaveChat", user.value.token, editingChat.value.chat.id)
+    const leftChat = await serverFunction("leaveChat", user.value.token, editingChat.value.id)
 
     if (isServerError(leftChat)) {
         console.error(leftChat)
@@ -60,10 +57,13 @@ async function leaveChat() {
 async function saveModel() {
     if (!user.value) return
 
-    const newModel = await serverFunction("editModel", user.value.token, editingModel.value)
+    if (isNewModel.value && isNewChat.value) {
+        const { name, description, system, avatar } = editingModel.value
 
-    if (isServerError(newModel)) {
-        console.error(newModel)
+        if (!name || !system || !avatar) return
+
+        newTemporaryModels.value.push({ name, description, system, avatar })
+
         return
     }
 }
@@ -82,15 +82,48 @@ async function deleteModel() {
 const editChatPopup = ref(false)
 const leaveChatPopup = ref(false)
 const shareChatPopup = ref(false)
+
+async function websocketReady(readyWebsocket: WebSocket) {
+    if (!user.value) return
+
+    websocket.value = readyWebsocket
+
+    await webscoketListener(readyWebsocket, "editChatTopLevel", (newChats) => {
+        for (const chat of newChats) {
+            chats.value.set(chat.id, chat)
+        }
+    })
+
+    await webscoketFunction(readyWebsocket, "subscribeAllChatRoomsTopLevel", user.value.token)
+}
+
+onMounted(() => {
+    const websocket = new WebSocket("ws://localhost:3000/api/websocket/websocket")
+    websocket.onopen = () => {
+        const checkUser = () => { if (user.value) websocketReady(websocket) }
+
+        watch(user, () => checkUser(), { once: true })
+        checkUser()
+    }
+
+    websocket.onerror = (error) => {
+        console.error(error)
+    }
+})
 </script>
 
 <template>
     <PopupEditChat
         v-model:open="editChatPopup"
-        :models="models"
+        :models="editingChat.models || []"
 
-        :editingChat="editingChat"
-        :editingModel="editingModel"
+        v-model:editingChat="editingChat"
+        v-model:editingModel="editingModel"
+
+        @saveChat="saveChat"
+        @saveModel="saveModel"
+
+        @deleteModel="deleteModel"
     ></PopupEditChat>
 
 
@@ -115,10 +148,7 @@ const shareChatPopup = ref(false)
                         color="var(--background)"
                         :default-hover="false"
                         @click="() => {
-                            editingChat = {
-                                chat: {},
-                                selectedModels: []
-                            }
+                            editingChat = {}
 
                             editChatPopup = true
                         }" 
@@ -129,27 +159,22 @@ const shareChatPopup = ref(false)
 
                 <SystemFlex class="chats" direction="column">
                     <ChatListItem
-                        v-for="chat in chats"
+                        v-for="chat in chatValues"
+
                         :key="chat.id"
-                        :chat="chat.chat"
-                        :active="chat.chatId == openChatId"
+                        :chat="chat"
+                        :active="chat.id == openChatId"
 
-                        avatar=""
-
+                        :avatar="chat.models[0]?.avatar"
 
                         @edit="() => {
-                            editingChat = {
-                                chat: normalizePartial(chat.chat),
-                                selectedModels: []
-                            }
+                            editingChat = normalizePartial({...chat})
 
                             editChatPopup = true
                         }"
+                        
                         @leave="() => {
-                            editingChat = {
-                                chat: normalizePartial(chat.chat),
-                                selectedModels: []
-                            }
+                            editingChat = normalizePartial({...chat})
 
                             leaveChatPopup = true
                         }"

@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import type { Chat, Model } from "@prisma/client"
+import type { ChatRoomTopLevel } from "@/server/websocket/functions"
+
 
 const props = defineProps<{
     open: boolean
     models: Model[],
 
-    editingChat: {
-        chat: NormalizedPartial<Chat>
-        selectedModels: string[]
-    }
+    editingChat: NormalizedPartial<ChatRoomTopLevel>
     editingModel: NormalizedPartial<Model>
 }>()
 
 const editingChatModel = useModel(props, "editingChat")
 const editingModelModel = useModel(props, "editingModel")
+
+const openModel = useModel(props, "open")
 
 
 const modelSearch = ref("")
@@ -22,15 +23,13 @@ defineEmits<{
     (e: "saveChat"): void
     (e: "saveModel"): void
     (e: "deleteModel"): void
-
-    (e: "openLeaveChat"): void
 }>()
 
 function toogleSelectModel(model: Model) {
-    if (editingChatModel.value.selectedModels.includes(model.id)) {
-        editingChatModel.value.selectedModels = editingChatModel.value.selectedModels.filter(id => id !== model.id)
+    if (editingChatModel.value.models?.includes(model)) {
+        editingChatModel.value.models = editingChatModel.value.models?.filter(m => m.id !== model.id)
     } else {
-        editingChatModel.value.selectedModels.push(model.id)
+        editingChatModel.value.models = [...editingChatModel.value.models ?? [], model]
     }
 }
 
@@ -51,16 +50,13 @@ function openDeleteModelPopup(model: Model) {
 
 const editModelPopup = ref(false)
 const deleteModelPopup = ref(false)
-
-const modelBrowserPopup = ref(false)
 </script>
 
 <template>
 <PopupModelSelector
-    v-model:open="modelBrowserPopup"
-    v-model:chat="editingChat.chat"
+    v-model:open="openModel"
+    v-model:chat="editingChatModel"
 
-    v-model:selectedModels="editingChat.selectedModels"
     :models="models"
     :modelSearch="modelSearch"
 
@@ -75,7 +71,7 @@ const modelBrowserPopup = ref(false)
 
 <PopupEditModel
     v-model:open="editModelPopup"
-    v-model:model="editingModel"
+    v-model:model="editingModelModel"
 ></PopupEditModel>
 
 

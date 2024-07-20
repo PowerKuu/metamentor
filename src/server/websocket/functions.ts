@@ -1,25 +1,81 @@
-import { emitWebsocket, prisma, verifyAuth, websocketEmitters, type WebSocketPeer } from "../server"
+import type { Chat, Model, PermissionOnChat } from "@prisma/client"
+import { emitWebsocket, prisma, verifyAuth, type WebSocketPeer } from "../server"
 
+export type ChatRoomTopLevel = Chat & {
+    users: {
+        userId: string,
+        permission: PermissionOnChat
+    }[],
+    
+    models: Model[]
+}
 
-function getChatRoomSurfaceId(chatId: string) {
-    return `chatRoomSurface:${chatId}`
+export type NewTemporaryModel = {
+    name: string,
+    description?: string,
+    system: string,
+    avatar: string
+}
+
+function getChatRoomTopLevelId(chatId: string) {
+    return `chatRoomTopLevel:${chatId}`
 }
 
 function getChatRoomId(chatId: string) {
     return `chatRoom:${chatId}`
 }
 
-export async function subscribeMultipleChatRoomsSurfaces(peer: WebSocketPeer, auth: string, chatIds: string[]) {
+function getModelId(modelId: string) {
+    return `model:${modelId}`
+}
+
+export async function subscribeAllChatRoomsTopLevel(peer: WebSocketPeer, auth: string) {
     const user = await verifyAuth(auth)
 
     if (!user) return
 
+    const chats: ChatRoomTopLevel[] = await prisma.chat.findMany({
+        where: {
+            users: {
+                some: {
+                    userId: user.id
+                }
+            }
+        },
+
+        include: {
+            users: {
+                select: {
+                    userId: true,
+                    permission: true
+                }
+            },
+            models: true
+        }
+    })
+
+    if (!chats) return
+
+    for (const chat of chats) {
+        peer.subscribe(
+            getChatRoomTopLevelId(chat.id)
+        )
+    }
+
+    emitWebsocket(peer, "editChatTopLevel", null, chats)
+}
+
+
+export async function unsubscribeAllChatRoomsTopLevel(peer: WebSocketPeer, auth: string) {
+    const user = await verifyAuth(auth)
+
+    if (!user) return
+
+    // More efficient to query for userOnChats directly
+
     const userOnChats = await prisma.userOnChat.findMany({
         where: {
-            userId: user.id,
-            chatId: {
-                in: chatIds
-            }
+            userId: user.id
         },
 
         include: {
@@ -30,21 +86,12 @@ export async function subscribeMultipleChatRoomsSurfaces(peer: WebSocketPeer, au
     if (!userOnChats) return
 
     for (const userOnChat of userOnChats) {
-        peer.subscribe(
-            getChatRoomSurfaceId(userOnChat.chatId)
-        )
-    }
-
-    emitWebsocket(peer, "chatSurface", null, userOnChats)
-}
-
-
-export async function unsubscribeMultipleChatRoomSurfaces(peer: WebSocketPeer, chatIds: string[]) {
-    for (const chatId of chatIds) {
         peer.unsubscribe(
-            getChatRoomSurfaceId(chatId)
+            getChatRoomTopLevelId(userOnChat.chatId)
         )
     }
+
+    emitWebsocket(peer, "editChatTopLevel", null, [])
 }
 
 
@@ -80,30 +127,109 @@ export async function unsubscribeChatRoom(peer: WebSocketPeer, chatId: string) {
 
 
 
-export async function chatSurface(peer: WebSocketPeer, auth: string, chatId: string) {
+export async function editChat(peer: WebSocketPeer, auth: string, {
+    id,
+    name
+}: Partial<Chat>, selectedModels: string[]) {
+    const maxName = 64
+
     const user = await verifyAuth(auth)
 
-    if (!user) return
+    if (!user) return 401
 
-    const userOnChat = await prisma.userOnChat.findFirst({
+    if (name && name.length > maxName) return 413
+
+    const existingModel = await prisma.chat.findFirst({
         where: {
-            chatId: chatId,
-            userId: user.id,
+            id,
+            
+            users: {
+                some: {
+                    userId: user.id,
+                    permission: {
+                        in: ["OWNER", "WRITE"]
+                    }
+                }
+            }
+        }
+    })
 
-            permission: {
-                in: ["WRITE", "OWNER"]
+    if (!existingModel) return 404
+
+    const newChat = await prisma.chat.update({
+        where: {
+            id
+        },
+
+        data: {
+            name: name,
+
+            models: {
+                set: selectedModels?.map(model => ({
+                    id: model
+                }))
             }
         },
 
         include: {
-            chat: true
+            users: {
+                select: {
+                    userId: true,
+                    permission: true
+                }
+            },
+            models: true
         }
     })
 
-    if (!userOnChat) return
-
-    await emitWebsocket(peer, "chatSurface", getChatRoomSurfaceId(chatId), [userOnChat])
+    await emitWebsocket(peer, "editChatTopLevel", getChatRoomTopLevelId(newChat.id), [newChat])
 }
+
+export async function createChat(peer: WebSocketPeer, auth: string, name: string, newModels: NewTemporaryModel[]) {
+    const maxName = 64
+
+    const user = await verifyAuth(auth)
+
+    if (!user) return 401
+
+    if (name && name.length > maxName) return 413
+
+    for (const model of newModels) {
+        if (model.name.length > 64) return 413
+        if (model.system.length > 64) return 413
+        if (model.avatar.length > 64) return 413
+    }
+
+
+    const newChat = await prisma.chat.create({
+        data: {
+            name: name,
+
+            models: {
+                create: newModels.map(model => ({
+                    avatar: model.avatar,
+                    name: model.name,
+                    description: model.description,
+                    system: model.system
+                }))
+            }
+        },
+
+        include: {
+            users: {
+                select: {
+                    userId: true,
+                    permission: true
+                }
+            },
+            models: true
+        }
+    })
+
+    await emitWebsocket(peer, "editChatTopLevel", getChatRoomTopLevelId(newChat.id), [newChat])
+}
+
+
 
 export async function sendMessage(peer: WebSocketPeer, auth: string, chatId: string, message: string) {
     const user = await verifyAuth(auth)
