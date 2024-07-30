@@ -23,8 +23,6 @@ const chatValues = computed(() => Array.from(chats.value.values()))
 const editingChat = ref<NormalizedPartial<ChatRoomTopLevel>>({})
 const editingModel = ref<NormalizedPartial<Model>>({})
 
-const newTemporaryModels = ref<NewTemporaryModel[]>([])
-
 const isNewChat = computed(() => !editingChat.value.id)
 const isNewModel = computed(() => !editingModel.value.id)
 
@@ -34,13 +32,7 @@ const websocket = ref<WebSocket>()
 async function saveChat() {
     if (!user.value || !websocket.value) return
 
-    if (isNewChat.value) {
-        await webscoketFunction(websocket.value, "editChat", user.value.token, editingChat.value, editingChat.value.models?.map(model => model.id) || [])
-    } else {
-        if (!editingChat.value.name) return
-        await webscoketFunction(websocket.value, "createChat", user.value.token, editingChat.value.name, newTemporaryModels.value)
-    }
-
+    await webscoketFunction(websocket.value, "editChat", user.value.token, editingChat.value, editingChat.value.models?.map(model => model.id) || [])
 }
 
 async function leaveChat() {
@@ -66,6 +58,8 @@ async function saveModel() {
 
         return
     }
+
+    
 }
 
 async function deleteModel() {
