@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Model } from "@prisma/client"
-import type { ChatRoomTopLevel, NewTemporaryModel } from "@/server/websocket/functions"
+import type { ChatRoomTopLevel } from "@/server/websocket/functions"
 
 definePageMeta({
     layout: "navigation"
@@ -23,7 +23,6 @@ const chatValues = computed(() => Array.from(chats.value.values()))
 const editingChat = ref<NormalizedPartial<ChatRoomTopLevel>>({})
 const editingModel = ref<NormalizedPartial<Model>>({})
 
-const isNewChat = computed(() => !editingChat.value.id)
 const isNewModel = computed(() => !editingModel.value.id)
 
 const websocket = ref<WebSocket>()
@@ -33,6 +32,10 @@ async function saveChat() {
     if (!user.value || !websocket.value) return
 
     await webscoketFunction(websocket.value, "editChat", user.value.token, editingChat.value, editingChat.value.models?.map(model => model.id) || [])
+}
+
+async function newChat() {
+    
 }
 
 async function leaveChat() {
@@ -48,17 +51,6 @@ async function leaveChat() {
 
 async function saveModel() {
     if (!user.value) return
-
-    if (isNewModel.value && isNewChat.value) {
-        const { name, description, system, avatar } = editingModel.value
-
-        if (!name || !system || !avatar) return
-
-        newTemporaryModels.value.push({ name, description, system, avatar })
-
-        return
-    }
-
     
 }
 
@@ -74,6 +66,7 @@ async function deleteModel() {
 }
 
 const editChatPopup = ref(false)
+const newChatPopup = ref(false)
 const leaveChatPopup = ref(false)
 const shareChatPopup = ref(false)
 
@@ -120,6 +113,13 @@ onMounted(() => {
         @deleteModel="deleteModel"
     ></PopupEditChat>
 
+    <PopupNewChat
+        v-model:open="newChatPopup"
+        v-model:name="editingChat.name"
+
+        @save="saveChat"
+    ></PopupNewChat>
+
 
     <PopupConfirm @confirm="leaveChat" v-model:open="leaveChatPopup" heading="Leave chat" subheading="Select one of the buttons below to confirm">
         <SystemP>Are you sure you want to leave this chat?</SystemP>
@@ -144,7 +144,7 @@ onMounted(() => {
                         @click="() => {
                             editingChat = {}
 
-                            editChatPopup = true
+                            newChatPopup = true
                         }" 
                         icon="material-symbols:chat-add-on"
                     >

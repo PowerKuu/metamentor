@@ -15,8 +15,6 @@ const props = defineProps<{
 const chatModel = useModel(props, "chat")
 const modelSearchModel = useModel(props, "modelSearch")
 
-const newChat = computed(() => !chatModel.value.id)
-
 const emit = defineEmits<{
     (e: "save"): void
 
@@ -40,7 +38,7 @@ const hasMaxSelected = computed(() => {
     return true
 })
 
-const disableSave = computed(() => (!hasSelected.value && !newChat.value) || !hasChatName.value)
+const disableSave = computed(() => !hasSelected.value || !hasChatName.value)
 
 
 function resetSelected() {
@@ -49,13 +47,13 @@ function resetSelected() {
 </script>
 
 <template>
-    <SystemPopupStandard maxWidth="37rem" :heading="newChat ? `New chat` : `Edit chat`" :subheading="newChat ? `Enter a name to create a new chat` : `Edit chat`" v-model:open="openModel">
+    <SystemPopupStandard maxWidth="37rem" heading="Edit chat" subheading="Edit the name or models of a chat" v-model:open="openModel">
         <SystemFlex class="model-selector" gap="0.5rem" direction="column">
             <SystemNamed name="Name">
                 <SystemInput placeholder="My chat" v-model:value="chatModel.name"></SystemInput>
             </SystemNamed>
         
-            <SystemFlex v-if="!newChat" class="browser" gap="0.5rem" direction="column">                
+            <SystemFlex class="browser" gap="0.5rem" direction="column">                
                 <SystemNamed name="Models">
                     <SystemFlex gap="0.5rem">
                         <SystemInput class="search" v-model:value="modelSearchModel" placeholder="Search">
@@ -88,10 +86,8 @@ function resetSelected() {
 
             <SystemFlex justify="space-between" align="center">
                     <SystemFlex gap="0.25rem">
-                        <template v-if="!newChat">
-                            <SystemPSmall class="text-weak">{{ chatModel.models?.length || 0 }} models selected (max 4)</SystemPSmall>
-                            <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
-                        </template>
+                        <SystemPSmall class="text-weak">{{ chatModel.models?.length || 0 }} models selected (max 4)</SystemPSmall>
+                        <SystemPSmall @click="resetSelected" v-if="hasSelected" class="link">Reset</SystemPSmall>
                     </SystemFlex>
                     
                     <SystemButton
@@ -102,7 +98,7 @@ function resetSelected() {
                                 $emit(`save`)
                             }
                         }"
-                    >{{ newChat ? "Create chat" : "Save chat" }}</SystemButton>
+                    >Save chat</SystemButton>
                 </SystemFlex>
         </SystemFlex>
     </SystemPopupStandard>
@@ -117,7 +113,7 @@ function resetSelected() {
 }
 
 .model-selector {
-    min-width: 23rem;
+    min-width: 25rem;
 }
 
 .no-models {
