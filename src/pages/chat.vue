@@ -35,7 +35,9 @@ async function saveChat() {
 }
 
 async function newChat() {
-    
+    if (!user.value || !websocket.value || !editingChat.value.name) return
+
+    await webscoketFunction(websocket.value, "createChat", user.value.token, editingChat.value.name)
 }
 
 async function leaveChat() {

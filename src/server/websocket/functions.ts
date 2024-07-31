@@ -125,8 +125,6 @@ export async function unsubscribeChatRoom(peer: WebSocketPeer, chatId: string) {
 
 
 
-
-
 export async function editChat(peer: WebSocketPeer, auth: string, {
     id,
     name
@@ -185,7 +183,7 @@ export async function editChat(peer: WebSocketPeer, auth: string, {
     await emitWebsocket(peer, "editChatTopLevel", getChatRoomTopLevelId(newChat.id), [newChat])
 }
 
-export async function createChat(peer: WebSocketPeer, auth: string, name: string, newModels: NewTemporaryModel[]) {
+export async function createChat(peer: WebSocketPeer, auth: string, name: string) {
     const maxName = 64
 
     const user = await verifyAuth(auth)
@@ -194,25 +192,9 @@ export async function createChat(peer: WebSocketPeer, auth: string, name: string
 
     if (name && name.length > maxName) return 413
 
-    for (const model of newModels) {
-        if (model.name.length > 64) return 413
-        if (model.system.length > 64) return 413
-        if (model.avatar.length > 64) return 413
-    }
-
-
     const newChat = await prisma.chat.create({
         data: {
-            name: name,
-
-            models: {
-                create: newModels.map(model => ({
-                    avatar: model.avatar,
-                    name: model.name,
-                    description: model.description,
-                    system: model.system
-                }))
-            }
+            name: name
         },
 
         include: {
