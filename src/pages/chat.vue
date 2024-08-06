@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Model } from "@prisma/client"
-import type { ChatRoomTopLevel } from "@/server/websocket/functions"
 
 definePageMeta({
     layout: "navigation"
@@ -31,24 +30,14 @@ const websocket = ref<WebSocket>()
 async function saveChat() {
     if (!user.value || !websocket.value) return
 
-    await webscoketFunction(websocket.value, "editChat", user.value.token, editingChat.value, editingChat.value.models?.map(model => model.id) || [])
 }
 
 async function newChat() {
     if (!user.value || !websocket.value || !editingChat.value.name) return
-
-    await webscoketFunction(websocket.value, "createChat", user.value.token, editingChat.value.name)
 }
 
 async function leaveChat() {
     if (!user.value || !editingChat.value.id) return
-
-    const leftChat = await serverFunction("leaveChat", user.value.token, editingChat.value.id)
-
-    if (isServerError(leftChat)) {
-        console.error(leftChat)
-        return
-    }
 }
 
 async function saveModel() {
@@ -58,13 +47,6 @@ async function saveModel() {
 
 async function deleteModel() {
     if (!user.value || !editingModel.value.id) return
-
-    const deletedModel = await serverFunction("deleteModel", user.value.token, editingModel.value.id)
-
-    if (isServerError(deletedModel)) {
-        console.error(deletedModel)
-        return
-    }
 }
 
 const editChatPopup = ref(false)
@@ -76,28 +58,10 @@ async function websocketReady(readyWebsocket: WebSocket) {
     if (!user.value) return
 
     websocket.value = readyWebsocket
-
-    await webscoketListener(readyWebsocket, "editChatTopLevel", (newChats) => {
-        for (const chat of newChats) {
-            chats.value.set(chat.id, chat)
-        }
-    })
-
-    await webscoketFunction(readyWebsocket, "subscribeAllChatRoomsTopLevel", user.value.token)
 }
 
 onMounted(() => {
-    const websocket = new WebSocket("ws://localhost:3000/api/websocket/websocket")
-    websocket.onopen = () => {
-        const checkUser = () => { if (user.value) websocketReady(websocket) }
 
-        watch(user, () => checkUser(), { once: true })
-        checkUser()
-    }
-
-    websocket.onerror = (error) => {
-        console.error(error)
-    }
 })
 </script>
 

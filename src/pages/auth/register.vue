@@ -20,22 +20,6 @@ async function sendVerify() {
     statusMessageColor.value = "var(--text)"
     statusMessage.value = "Sending email..."
 
-    const response = await serverFunction("requestVerification", email.value, {
-        username: username.value
-    })
-
-    if (isServerError(response)) {
-        statusMessageColor.value = "var(--error)"
-
-        if (response == 409) {
-            statusMessage.value = "Email already in use. Please try again."
-            return
-        }
-
-        statusMessage.value = "Failed to send email. Please try again."
-        return
-    }
-
     navigateTo({
         "path": "/auth/verify",
         "query": {

@@ -14,52 +14,6 @@ export function normalizePartial<T>(data: T) {
     return data as NormalizedPartial<T>
 }
 
-/*
-export function useJsonStorage<T>(key: string, defaultValue: T) {
-    // Global computer for all storages
-    const recomputer = ref(0)
-
-    const newListener = computed<T>({
-        get() {
-            // Recompute when recomputer changes
-            recomputer.value
-
-
-            const data = localStorage.getItem(key)
-
-            if (!data) {
-                localStorage.setItem(key, JSON.stringify(defaultValue))
-
-                return defaultValue
-            }
-
-            try {
-                return JSON.parse(data) as T
-            } catch (e) {
-                console.error(e)
-
-                // Reset to default value
-                newListener.value = defaultValue
-
-                return defaultValue
-            }
-        },
-        
-        set(value: T) {
-            try {
-                localStorage.setItem(key, JSON.stringify(value))
-
-                recomputer.value++
-            } catch (e) {
-                console.error(e)
-            }
-        }
-    })
-
-
-    return newListener
-}*/
-
 export function dateFromNow(date: Date) {
     return moment(date).fromNow()
 }

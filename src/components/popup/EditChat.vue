@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Model } from "@prisma/client"
-import type { ChatRoomTopLevel } from "@/server/websocket/functions"
 
 
 const props = defineProps<{

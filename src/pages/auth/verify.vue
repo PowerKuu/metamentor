@@ -26,14 +26,6 @@ async function verify() {
     statusMessageColor.value = "var(--text)"
     statusMessage.value = "Verifying email..."
 
-    const response = await serverFunction("verify", email, emailCode.value)
-
-    if (isServerError(response)) {
-        statusMessage.value = response == 404 ? "Test" : "Failed to verify email. Please try again."
-        statusMessageColor.value = "var(--error)"
-        return
-    }
-
     login(response.token)
     navigateTo("/chat")
 }

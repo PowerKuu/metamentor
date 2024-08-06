@@ -9,31 +9,11 @@ const statusMessage = ref("")
 const statusMessageColor = ref("")
 
 
-const user = useAuth()
-
-watch(user, () => {
-    if (user.value) navigateTo("/chat")
-})
 
 
 async function sendVerify() {
     statusMessageColor.value = "var(--text)"
     statusMessage.value = "Sending email..."
-
-    const response = await serverFunction("requestVerification", email.value)
-
-    if (isServerError(response)) {
-        statusMessageColor.value = "var(--error)"
-
-        if (response == 404) {
-            statusMessage.value = "Email not found. Please try again."
-            return
-        }
-
-        statusMessage.value = "Failed to send email. Please try again."
-
-        return
-    }
 
     navigateTo({
         "path": "/auth/verify",
